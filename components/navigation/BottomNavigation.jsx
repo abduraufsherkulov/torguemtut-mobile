@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 
 import { createAppContainer } from 'react-navigation';
@@ -12,32 +12,75 @@ const Placeholder = ({ text }) => (
   </View>
 );
 
-class A extends React.Component {
+class Home extends Component {
   static navigationOptions = {
-    tabBarLabel: 'Home!',
+    tabBarLabel: 'Главная!',
   };
 
   render() {
-    return <Placeholder text="A!" />;
+    return <Placeholder text="Главная" />;
   }
 }
 
-class B extends React.Component {
+class Favourites extends Component {
   static navigationOptions = {
-    tabBarLabel: 'Settings!',
+    tabBarLabel: 'Избранные!',
   };
 
   render() {
-    return <Placeholder text="B!" />;
+    return <Placeholder text="Избранные" />;
   }
 }
 
-let HomeStack = createStackNavigator({ A });
-let SettingsStack = createStackNavigator({ B });
 
-const AppNavigator = createAppContainer(createBottomTabNavigator({
-  HomeStack,
-  SettingsStack,
+class Sell extends Component {
+  static navigationOptions = {
+    tabBarLabel: 'Продать!',
+  };
+
+  render() {
+    return <Placeholder text="Продать" />;
+  }
+}
+
+
+class Top extends Component {
+  static navigationOptions = {
+    tabBarLabel: 'Топ!',
+  };
+
+  render() {
+    return <Placeholder text="Топ" />;
+  }
+}
+
+
+class Profile extends Component {
+  static navigationOptions = {
+    tabBarLabel: 'Профиль!',
+  };
+
+  render() {
+    return <Placeholder text="Профиль" />;
+  }
+}
+
+
+let HomeStack = createStackNavigator({ Home });
+let FavouriteStack = createStackNavigator({ Favourites });
+let SellStack = createStackNavigator({ Sell });
+let TopStack = createStackNavigator({ Top });
+let ProfileStack = createStackNavigator({ Profile });
+
+const AppNavigator = createAppContainer(createBottomTabNavigator(
+  {
+  HomeTab: {
+      screen: HomeStack
+  },
+  FavouriteStack,
+  SellStack,
+  TopStack,
+  ProfileStack
 }));
 
 export default AppNavigator;
