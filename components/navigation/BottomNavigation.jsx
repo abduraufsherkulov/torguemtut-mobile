@@ -6,66 +6,18 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationNativeContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { ListItem } from 'react-native-elements';
-import axios from 'axios';
+import MainScreen from '../homescreen/MainScreen';
+import MainSubScreen from '../homescreen/MainSubScreen';
 
 
 const Stack = createStackNavigator();
 
 
-function MainScreen() {
-  const [category, setCategory] = useState([]);
-  // https://ttuz.azurewebsites.net/api/category/get-all
-  useEffect(() => {
-    const endpoint = "https://ttuz.azurewebsites.net/api/category/get-with-children";
-    axios({
-      method: "get",
-      url: endpoint
-    })
-      .then(response => {
-        console.log(response.data);
-        setCategory(response.data);
-      })
-      .catch(error => {
-        console.log(error, "error in categories");
-      });
-
-  }, []);
-
-  const list = [
-    {
-      title: 'Appointments',
-      icon: 'av-timer'
-    },
-    {
-      title: 'Trips',
-      icon: 'flight-takeoff'
-    }
-  ]
-  const keyExtractor = (item, index) => index.toString()
-
-  const renderItem = ({ item, i }) => (
-    <ListItem
-      key={i}
-      title={item.title}
-      leftIcon={{ name: item.icon }}
-      bottomDivider
-      chevron
-    />
-  )
-
-  return (
-    <FlatList
-      keyExtractor={keyExtractor}
-      data={list}
-      renderItem={renderItem}
-    />
-  );
-}
-
 function Main() {
   return (
     <Stack.Navigator>
       <Stack.Screen name="MainScreen" component={MainScreen} />
+      <Stack.Screen name="MainSubScreen" component={MainSubScreen} />
     </Stack.Navigator>
   );
 }
