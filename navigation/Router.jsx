@@ -6,8 +6,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationNativeContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { ListItem } from 'react-native-elements';
-import MainScreen from '../homescreen/MainScreen';
-import MainSubScreen from '../homescreen/MainSubScreen';
+import MainScreen from '../components/homescreen/MainScreen';
+import MainSubScreen from '../components/homescreen/MainSubScreen';
+import MainSubSubScreen from '../components/homescreen/MainSubSubScreen';
+import ListProducts from '../components/homescreen/ListProducts';
 
 
 const Stack = createStackNavigator();
@@ -18,6 +20,8 @@ function Main() {
     <Stack.Navigator>
       <Stack.Screen name="MainScreen" component={MainScreen} />
       <Stack.Screen name="MainSubScreen" component={MainSubScreen} />
+      <Stack.Screen name="MainSubSubScreen" component={MainSubSubScreen} />
+      <Stack.Screen name="ListProducts" component={ListProducts} />
     </Stack.Navigator>
   );
 }

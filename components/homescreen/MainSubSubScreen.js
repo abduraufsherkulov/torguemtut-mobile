@@ -2,7 +2,7 @@ import React, { Component, useEffect, useState, useContext } from 'react';
 import { Text, View, FlatList } from 'react-native';
 import { ListItem } from 'react-native-elements';
 
-function MainSubScreen({ route, navigation }) {
+function MainSubSubScreen({ route, navigation }) {
     const list = [
         {
             title: 'Appointments',
@@ -16,7 +16,7 @@ function MainSubScreen({ route, navigation }) {
     const keyExtractor = (item, index) => index.toString()
 
     const renderItem = ({ item, index }) => {
-        return item.children.length > 0 ? (
+        return item.children != null ? (
             <ListItem
                 key={index}
                 title={item.label}
@@ -26,8 +26,8 @@ function MainSubScreen({ route, navigation }) {
                 button
                 onPress={() => {
                     /* 1. Navigate to the Details route with params */
-                    navigation.navigate('MainSubSubScreen', {
-                        data: item.children,
+                    navigation.navigate('ListProducts', {
+                        id: item.value,
                         otherParam: 'anything you want here',
                     });
                 }}
@@ -43,8 +43,8 @@ function MainSubScreen({ route, navigation }) {
                     button
                     onPress={() => {
                         /* 1. Navigate to the Details route with params */
-                        navigation.navigate('MainSubScreen', {
-                            itemId: index,
+                        navigation.navigate('ListProducts', {
+                            id: item.value,
                             otherParam: 'anything you want here',
                         });
                     }}
@@ -60,4 +60,4 @@ function MainSubScreen({ route, navigation }) {
     )
 }
 
-export default MainSubScreen
+export default MainSubSubScreen

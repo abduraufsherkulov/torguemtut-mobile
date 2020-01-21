@@ -1,10 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import AppNavigator from './components/navigation/BottomNavigation';
+import AppNavigator from './navigation/Router';
+import CategoryContextProvider from './contexts/CategoryContext';
 
 export default function App() {
   return (
-    <AppNavigator />
+    <CategoryContextProvider>
+      <AppNavigator />
+    </CategoryContextProvider>
   );
 }
 
