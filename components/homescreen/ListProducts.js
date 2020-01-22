@@ -1,7 +1,11 @@
 import React, { useEffect, useContext, useState } from 'react'
 import { Text, View, FlatList } from 'react-native';
-import { ListItem } from 'react-native-elements';
+import { ListItem, Avatar } from 'react-native-elements';
+import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
+import moment from 'moment';
+import 'moment/min/locales'
+moment.locale('ru')
 
 
 function MainList({ navigation, route }) {
@@ -10,15 +14,34 @@ function MainList({ navigation, route }) {
     let id = route.params.id;
 
     console.log(id)
+    function momentize(date) {
+        let today = new Date();
+        let timeDiff = moment(today).diff(moment(date), 'hours');
+        if (timeDiff < 24) {
+            return moment(date).fromNow();
+        }
+        return moment().format('L');
+    }
 
     const keyExtractor = (item, index) => index.toString()
 
     const renderItem = ({ item, index }) => (
         <ListItem
             key={index}
-            title={item.title}
-            roundAvatar
-            leftAvatar={{ title: item.title, source: { uri: typeof (item.images[0]) !== 'undefined' ? `https://ttuz.azurewebsites.net/${item.images[0].path}` : "" } }}
+            title={
+                <View style={{ flex: 1 }}>
+                    <View><Text>{item.title}</Text></View>
+                    <View>
+                        <Avatar size="xlarge" title={item.title} source={{ uri: `https://ttuz.azurewebsites.net/${item.images[0].path}` }} />
+                    </View>
+                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <View style={{ flex: 0.5 }}><Text><Ionicons name="ios-clock" size={16} color="green" />{momentize(item.updatedDate)}</Text></View>
+                        <View style={{ flex: 0.5 }}><Text><Ionicons name="ios-heart-empty" size={16} color="black" /></Text></View>
+                    </View>
+                </View>
+            }
+            // leftAvatar={{ containerStyle: { flex: 0.5, height: 100 }, rounded: false, title: item.title, source: { uri: `https://ttuz.azurewebsites.net/${item.images[0].path}` } }}
+            // subtitle={<Text><Ionicons name="ios-clock" size={16} color="green" />   {momentize(item.updatedDate)}</Text>}
             // avatar={{ uri: `https://ttuz.azurewebsites.net/${item.images[0].path}` }}
             // badge={{ value: 3, textStyle: { color: 'orange' }, containerStyle: { marginTop: -20 } }}
             bottomDivider
@@ -30,11 +53,11 @@ function MainList({ navigation, route }) {
                     otherParam: 'anything you want here',
                 });
             }}
-            chevron
         />
     )
 
     useEffect(() => {
+        const abortController = new AbortController();
         const data = JSON.stringify({
             categoryId: id
         })
@@ -49,7 +72,6 @@ function MainList({ navigation, route }) {
             }
         })
             .then(response => {
-                console.log(response.data)
                 setListData(response.data);
             })
             .catch(error => {
@@ -59,6 +81,10 @@ function MainList({ navigation, route }) {
                 // }
                 console.log(error.response, "error in categories");
             });
+
+        return () => {
+            abortController.abort();
+        };
     }, []);
     return (
         <FlatList

@@ -28,7 +28,7 @@ function MainSubScreen({ route, navigation }) {
                     /* 1. Navigate to the Details route with params */
                     navigation.navigate('MainSubSubScreen', {
                         data: item.children,
-                        otherParam: 'anything you want here',
+                        title: item.label
                     });
                 }}
                 chevron

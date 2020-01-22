@@ -17,7 +17,7 @@ function CategoryContextProvider(props) {
                 setCategory(response.data);
             })
             .catch(error => {
-                console.log(error, "error in categories");
+                console.log(error.response, "error in categories");
             });
 
     }, []);

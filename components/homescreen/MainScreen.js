@@ -5,6 +5,7 @@ import { CategoryContext } from '../../contexts/CategoryContext';
 import axios from 'axios';
 
 function MainScreen({ navigation }) {
+
     const { category } = useContext(CategoryContext)
 
     const list = [
@@ -32,7 +33,7 @@ function MainScreen({ navigation }) {
                     /* 1. Navigate to the Details route with params */
                     navigation.navigate('MainSubScreen', {
                         data: category[index].children,
-                        otherParam: 'anything you want here',
+                        title: item.label
                     });
                 }}
                 chevron

@@ -28,7 +28,7 @@ function MainSubSubScreen({ route, navigation }) {
                     /* 1. Navigate to the Details route with params */
                     navigation.navigate('ListProducts', {
                         id: item.value,
-                        otherParam: 'anything you want here',
+                        title: item.label
                     });
                 }}
                 chevron
@@ -45,7 +45,7 @@ function MainSubSubScreen({ route, navigation }) {
                         /* 1. Navigate to the Details route with params */
                         navigation.navigate('ListProducts', {
                             id: item.value,
-                            otherParam: 'anything you want here',
+                            title: item.label
                         });
                     }}
                 />
