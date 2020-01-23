@@ -13,9 +13,11 @@ import FavouriteScreen from '../components/favouriteScreen/FavouriteScreen';
 import SellScreen from '../components/sellScreen/SellScreen';
 import TopProductsScreen from '../components/topProductsScreen/TopProductsScreen';
 import ProfileScreen from '../components/profileScreen/ProfileScreen';
+import SignIn from '../components/auth/SignIn';
 
 
-const Stack = createStackNavigator();
+const MainStack = createStackNavigator();
+const ModalStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function getHeaderTitle(route) {
@@ -78,35 +80,48 @@ function MainTab() {
   )
 }
 
+function MainApp() {
+  return (
+    <MainStack.Navigator>
+      <MainStack.Screen
+        name="MainTab"
+        component={MainTab}
+        options={({ route }) => ({
+          headerTitle: getHeaderTitle(route),
+        })} />
+      <MainStack.Screen
+        name="MainSubScreen"
+        component={MainSubScreen}
+        options={({ route }) => ({
+          title: route.params.title,
+        })} />
+      <MainStack.Screen
+        name="MainSubSubScreen"
+        component={MainSubSubScreen}
+        options={({ route }) => ({
+          title: route.params.title,
+        })} />
+      <MainStack.Screen
+        name="ListProducts"
+        component={ListProducts}
+        options={({ route }) => ({
+          title: route.params.title,
+        })} />
+    </MainStack.Navigator>
+  )
+}
+
 export default function AppNavigator() {
   return (
     <NavigationNativeContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="MainTab"
-          component={MainTab}
-          options={({ route }) => ({
-            headerTitle: getHeaderTitle(route),
-          })} />
-        <Stack.Screen
-          name="MainSubScreen"
-          component={MainSubScreen}
-          options={({ route }) => ({
-            title: route.params.title,
-          })} />
-        <Stack.Screen
-          name="MainSubSubScreen"
-          component={MainSubSubScreen}
-          options={({ route }) => ({
-            title: route.params.title,
-          })} />
-        <Stack.Screen
-          name="ListProducts"
-          component={ListProducts}
-          options={({ route }) => ({
-            title: route.params.title,
-          })} />
-      </Stack.Navigator>
+      <ModalStack.Navigator mode="modal" headerMode="none">
+        <ModalStack.Screen
+          name="MainApp"
+          component={MainApp} />
+        <ModalStack.Screen
+          name="SignIn"
+          component={SignIn} />
+      </ModalStack.Navigator>
     </NavigationNativeContainer>
   );
 }

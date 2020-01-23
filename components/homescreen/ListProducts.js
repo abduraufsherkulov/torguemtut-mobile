@@ -9,7 +9,10 @@ moment.locale('ru')
 
 
 function MainList({ navigation, route }) {
-    const [listData, setListData] = useState([{ images: [{ path: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg' }] }]);
+    const [listData, setListData] = useState([{
+        images: [{ path: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg' }],
+        price: { amount: 10000, currencyLabel: 'UZS' }
+    }]);
 
     let id = route.params.id;
 
@@ -31,12 +34,17 @@ function MainList({ navigation, route }) {
             title={
                 <View style={{ flex: 1 }}>
                     <View><Text>{item.title}</Text></View>
-                    <View>
-                        <Avatar size="xlarge" title={item.title} source={{ uri: `https://ttuz.azurewebsites.net/${item.images[0].path}` }} />
+                    <View style={{ flex: 1, flexDirection: 'row' }}>
+                        <View style={{ flex: 0.5 }}>
+                            <Avatar size="xlarge" title={item.title} source={{ uri: `https://ttuz.azurewebsites.net/${item.images[0].path}` }} />
+                        </View>
+                        <View style={{ flex: 0.5 }}>
+                            <Text>{item.price.amount} {item.price.currencyLabel}</Text>
+                        </View>
                     </View>
-                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <View style={{ flex: 0.5 }}><Text><Ionicons name="ios-clock" size={16} color="green" />{momentize(item.updatedDate)}</Text></View>
-                        <View style={{ flex: 0.5 }}><Text><Ionicons name="ios-heart-empty" size={16} color="black" /></Text></View>
+                    <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+                        <View style={{ flex: 0.8 }}><Text><Ionicons name="ios-clock" size={18} color="green" />  {momentize(item.updatedDate)}</Text></View>
+                        <View style={{ flex: 0.2, alignItems: 'flex-end' }}><Ionicons onPress={() => navigation.navigate('SignIn')} name="ios-heart-empty" size={28} color="black" /></View>
                     </View>
                 </View>
             }
@@ -46,13 +54,13 @@ function MainList({ navigation, route }) {
             // badge={{ value: 3, textStyle: { color: 'orange' }, containerStyle: { marginTop: -20 } }}
             bottomDivider
             button
-            onPress={() => {
-                /* 1. Navigate to the Details route with params */
-                navigation.navigate('MainSubScreen', {
-                    itemId: index,
-                    otherParam: 'anything you want here',
-                });
-            }}
+            // onPress={() => {
+            //     /* 1. Navigate to the Details route with params */
+            //     navigation.navigate('MainSubScreen', {
+            //         itemId: index,
+            //         otherParam: 'anything you want here',
+            //     });
+            // }}
         />
     )
 
@@ -72,6 +80,7 @@ function MainList({ navigation, route }) {
             }
         })
             .then(response => {
+                // console.log(response.data[0])
                 setListData(response.data);
             })
             .catch(error => {
