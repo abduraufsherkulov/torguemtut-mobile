@@ -1,5 +1,5 @@
-import { Dimensions } from "react-native";
-
+import { StyleSheet, Platform, Dimensions } from 'react-native';
+import Constants from 'expo-constants';
 const { width, height } = Dimensions.get("window");
 
 export const colors = {
@@ -18,3 +18,11 @@ export const fonts = {
 export const getAdjustedFontSize = size => {
   return (parseInt(size) * width + height) / 400;
 };
+
+export const PolifySafeArea = (background) => {
+  return {
+    flex: 1,
+    backgroundColor: background,
+    paddingTop: Platform.OS === "android" ? Constants.statusBarHeight : 0
+  }
+}
