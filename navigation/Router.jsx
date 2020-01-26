@@ -1,5 +1,5 @@
 
-import React, { Component, useEffect, useState } from 'react';
+import React, { Component, useEffect, useState, useContext } from 'react';
 import { Text, View, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -14,6 +14,7 @@ import SellScreen from '../components/sellScreen/SellScreen';
 import TopProductsScreen from '../components/topProductsScreen/TopProductsScreen';
 import ProfileScreen from '../components/profileScreen/ProfileScreen';
 import SignIn from '../components/auth/SignIn';
+import { CategoryContext } from '../contexts/CategoryContext';
 
 
 const MainStack = createStackNavigator();
@@ -112,6 +113,8 @@ function MainApp() {
 }
 
 export default function AppNavigator() {
+  const { toastRef } = useContext(CategoryContext)
+  console.log(toastRef, 'called')
   return (
     <NavigationNativeContainer>
       <ModalStack.Navigator mode="modal" headerMode="none">

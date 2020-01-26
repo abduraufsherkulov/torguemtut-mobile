@@ -1,24 +1,33 @@
-import React, { useState, useEffect } from 'react'
-import { View, StyleSheet, Image, ScrollView, Dimensions, SafeAreaView, Platform } from 'react-native';
-import { Input, Text } from 'react-native-elements'
+import React, { useState, useEffect, useRef, useContext } from 'react'
+import { View, StyleSheet, Image, Dimensions, SafeAreaView, Platform, ToastAndroid, Alert } from 'react-native';
+import { Input, Text, Button } from 'react-native-elements'
 import { Ionicons } from '@expo/vector-icons';
 import * as Font from 'expo-font';
 import Constants from 'expo-constants';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { PolifySafeArea } from '../../assets/styles/styles';
 import logo from '../../assets/images/logo.png'
+import Toast, { DURATION } from 'react-native-easy-toast'
+import { ToastContext, ToastComponent } from '../../contexts/ToastContext';
 
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
-
-function SignIn({ navigation }) {
+// ToastAndroid.show('A pikachu appeared nearby !', ToastAndroid.SHORT);
+function SignIn({ navigation, route }) {
+    const { toastRef } = useContext(ToastContext)
     const [fontLoad, setFontLoad] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [phone, setPhone] = useState(null);
+    const [password, setPassword] = useState(null);
+    // let toast = React.createRef();
+    // const toastRef = useRef();
 
 
     async function loadFont() {
         await Font.loadAsync({
             'regular': require('../../assets/fonts/Roboto-Regular.ttf'),
+            'bold': require('../../assets/fonts/Roboto-Bold.ttf'),
         });
         setFontLoad(true);
     }
@@ -27,6 +36,60 @@ function SignIn({ navigation }) {
         loadFont();
     }, [])
 
+    function signIn() {
+        console.log(toast)
+        toast.close('hello world!', 500);
+    }
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        setLoading(true)
+        const email = phone.includes('@') ? true : false;
+        const endpoint = "https://ttuz.azurewebsites.net/api/users/authenticate";
+
+        const data = JSON.stringify({
+            Phone: email ? '' : phone,
+            Password: password,
+            IsEmail: email,
+            Email: email ? phone : ""
+        });
+        axios({
+            method: "post",
+            url: endpoint,
+            data: data,
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(response => {
+            console.log(response);
+            if (response.data.status) {
+                if (email) {
+                    dispatch({ type: 'SIGN_IN', userData: JSON.stringify(response.data.userData) })
+                    // localStorage.setItem('username', values.emailphone);
+                    navigation.goBack();
+                } else {
+                    // localStorage.setItem('username', values.emailphone);
+
+                    dispatch({ type: 'SIGN_IN', userData: JSON.stringify(response.data.userData) })
+                    history.replace(from);
+                }
+            } else {
+                setvalidateConfirmCode('error');
+                setvalidateLoader('error');
+                props.form.setFields({
+                    password: {
+                        value: values.password,
+                        errors: [new Error(response.data.message)],
+                    },
+                });
+            }
+        }).catch(error => {
+
+        })
+
+
+    }
+    console.log(toastRef)
     return fontLoad ? (
         <SafeAreaView style={PolifySafeArea('#293046')}>
             <View>
@@ -40,16 +103,16 @@ function SignIn({ navigation }) {
                 enableOnAndroid={true}
                 enableAutoAutomaticScroll={(Platform.OS === 'ios')}
             >
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: '100%', height: SCREEN_HEIGHT/3 }}>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: '100%', height: SCREEN_HEIGHT / 3 }}>
                     <Image style={{
                         height: 35,
                         width: 166,
                     }} source={logo} />
                 </View>
-                <View style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT, flex: 1, justifyContent: 'flex-start' }}>
+                <View style={{ width: '80%', height: SCREEN_HEIGHT, flex: 1, justifyContent: 'flex-start' }}>
                     <Input
                         inputContainerStyle={styles.inputContainer}
-                        leftIcon={<Ionicons name="ios-clock" size={16} color="green" />}
+                        leftIcon={<Ionicons name="ios-contact" size={16} color="green" />}
                         inputStyle={styles.inputStyle}
                         autoFocus={false}
                         autoCapitalize="none"
@@ -57,13 +120,14 @@ function SignIn({ navigation }) {
                         errorStyle={styles.errorInputStyle}
                         autoCorrect={false}
                         blurOnSubmit={false}
-                        placeholder="Username"
+                        placeholder="Ваш e-mail или телефон"
                         returnKeyType="next"
                         placeholderTextColor="#7384B4"
+                        onChangeText={phone => setPhone(phone)}
                     />
                     <Input
                         inputContainerStyle={styles.inputContainer}
-                        leftIcon={<Ionicons name="ios-clock" size={16} color="green" />}
+                        leftIcon={<Ionicons name="ios-finger-print" size={16} color="green" />}
                         inputStyle={styles.inputStyle}
                         autoFocus={false}
                         autoCapitalize="none"
@@ -71,11 +135,43 @@ function SignIn({ navigation }) {
                         errorStyle={styles.errorInputStyle}
                         autoCorrect={false}
                         blurOnSubmit={false}
-                        placeholder="Username"
+                        placeholder="Пароль"
                         returnKeyType="next"
                         placeholderTextColor="#7384B4"
+                        secureTextEntry={true}
+                        onChangeText={pass => setPassword(pass)}
                     />
+                    <Button
+                        loading={loading}
+                        title="АВТОРИЗОВАТЬСЯ"
+                        // containerStyle={{ alignSelf: 'center' }}
+                        buttonStyle={styles.signInButton}
+                        linearGradientProps={{
+                            colors: ['#FF9800', '#F44336'],
+                            start: [1, 0],
+                            end: [0.2, 0],
+                        }}
+                        // ViewComponent={LinearGradient}
+                        titleStyle={styles.signInButtonText}
+                        onPress={() => toastRef.current.show('hello world!')}
+                        disabled={loading}
+                    />
+                    <View style={styles.signUpHereContainer}>
+                        <Text style={styles.newAccountText}>
+                            Уже есть аккаунт?
+                        </Text>
+                        <Button
+                            title="Зарегистрироваться здесь"
+                            titleStyle={styles.signUpHereText}
+                            containerStyle={{ flex: -1 }}
+                            buttonStyle={{ backgroundColor: 'transparent' }}
+                            underlayColor="transparent"
+                            onPress={() => toastRef.current.show('hello world!')}
+                        />
+                    </View>
+                    {/* <ToastComponent ref={toastRef} /> */}
                 </View>
+
             </KeyboardAwareScrollView>
         </SafeAreaView>
     ) : <Text>Loading</Text>
@@ -117,6 +213,31 @@ const styles = StyleSheet.create({
         marginTop: 0,
         textAlign: 'center',
         color: '#F44336',
+    },
+    signInButtonText: {
+        fontFamily: 'bold',
+        fontSize: 13,
+    },
+    signInButton: {
+        width: '70%',
+        borderRadius: 20,
+        height: 45,
+        alignSelf: 'center'
+    },
+    signUpHereContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        alignSelf: 'center'
+    },
+    newAccountText: {
+        fontFamily: 'regular',
+        fontSize: 12,
+        color: 'white',
+    },
+    signUpHereText: {
+        color: '#FF9800',
+        fontFamily: 'regular',
+        fontSize: 12,
     },
 })
 

@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState, useContext } from 'react';
+import React, { Component, useEffect, useState, useContext, useRef } from 'react';
 import { Text, View, FlatList } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { CategoryContext } from '../../contexts/CategoryContext';
@@ -33,7 +33,7 @@ function MainScreen({ navigation }) {
                     /* 1. Navigate to the Details route with params */
                     navigation.navigate('MainSubScreen', {
                         data: category[index].children,
-                        title: item.label
+                        title: item.label,
                     });
                 }}
                 chevron
