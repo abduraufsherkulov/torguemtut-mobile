@@ -2,13 +2,13 @@ import React, { useState, useEffect, useRef, useContext } from 'react'
 import { View, StyleSheet, Image, Dimensions, SafeAreaView, Platform, ToastAndroid, Alert } from 'react-native';
 import { Input, Text, Button } from 'react-native-elements'
 import { Ionicons } from '@expo/vector-icons';
-import * as Font from 'expo-font';
 import Constants from 'expo-constants';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { PolifySafeArea } from '../../assets/styles/styles';
 import logo from '../../assets/images/logo.png'
 import Toast, { DURATION } from 'react-native-easy-toast'
 import { ToastContext, ToastComponent } from '../../contexts/ToastContext';
+import { ToastHelper } from '../../assets/helpers/ToastHelper';
 
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -16,28 +16,11 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 // ToastAndroid.show('A pikachu appeared nearby !', ToastAndroid.SHORT);
 function SignIn({ navigation, route }) {
     const { toastRef } = useContext(ToastContext)
-    const [fontLoad, setFontLoad] = useState(false)
     const [loading, setLoading] = useState(false)
     const [phone, setPhone] = useState(null);
     const [password, setPassword] = useState(null);
-    // let toast = React.createRef();
-    // const toastRef = useRef();
-
-
-    async function loadFont() {
-        await Font.loadAsync({
-            'regular': require('../../assets/fonts/Roboto-Regular.ttf'),
-            'bold': require('../../assets/fonts/Roboto-Bold.ttf'),
-        });
-        setFontLoad(true);
-    }
-
-    useEffect(() => {
-        loadFont();
-    }, [])
 
     function signIn() {
-        console.log(toast)
         toast.close('hello world!', 500);
     }
 
@@ -61,7 +44,6 @@ function SignIn({ navigation, route }) {
                 "Content-Type": "application/json"
             }
         }).then(response => {
-            console.log(response);
             if (response.data.status) {
                 if (email) {
                     dispatch({ type: 'SIGN_IN', userData: JSON.stringify(response.data.userData) })
@@ -86,11 +68,8 @@ function SignIn({ navigation, route }) {
         }).catch(error => {
 
         })
-
-
     }
-    console.log(toastRef)
-    return fontLoad ? (
+    return (
         <SafeAreaView style={PolifySafeArea('#293046')}>
             <View>
                 <Ionicons onPress={() => navigation.goBack()} name="ios-close" size={64} color="green" />
@@ -153,7 +132,7 @@ function SignIn({ navigation, route }) {
                         }}
                         // ViewComponent={LinearGradient}
                         titleStyle={styles.signInButtonText}
-                        onPress={() => toastRef.current.show('hello world!')}
+                        onPress={() => ToastHelper('go', 500, 'success')}
                         disabled={loading}
                     />
                     <View style={styles.signUpHereContainer}>
@@ -166,15 +145,14 @@ function SignIn({ navigation, route }) {
                             containerStyle={{ flex: -1 }}
                             buttonStyle={{ backgroundColor: 'transparent' }}
                             underlayColor="transparent"
-                            onPress={() => toastRef.current.show('hello world!')}
+                            onPress={() => { toastRef.current.show('hello world!') }}
                         />
                     </View>
                     {/* <ToastComponent ref={toastRef} /> */}
                 </View>
-
             </KeyboardAwareScrollView>
         </SafeAreaView>
-    ) : <Text>Loading</Text>
+    )
 }
 const styles = StyleSheet.create({
     container: {

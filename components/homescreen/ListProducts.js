@@ -15,8 +15,7 @@ function MainList({ navigation, route }) {
     }]);
 
     let id = route.params.id;
-
-    console.log(id)
+    
     function momentize(date) {
         let today = new Date();
         let timeDiff = moment(today).diff(moment(date), 'hours');

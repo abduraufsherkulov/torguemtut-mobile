@@ -113,8 +113,6 @@ function MainApp() {
 }
 
 export default function AppNavigator() {
-  const { toastRef } = useContext(CategoryContext)
-  console.log(toastRef, 'called')
   return (
     <NavigationNativeContainer>
       <ModalStack.Navigator mode="modal" headerMode="none">

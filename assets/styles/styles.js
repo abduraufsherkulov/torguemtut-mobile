@@ -15,6 +15,41 @@ export const fonts = {
   bold: require("../fonts/Roboto-Bold.ttf")
 };
 
+
+export const error = {
+  container: {
+    backgroundColor: 'red',
+  },
+  text: {
+    fontFamily: 'regular',
+    fontSize: 12,
+    color: 'white'
+  }
+}
+
+export const warning = {
+  container: {
+    backgroundColor: 'yellow',
+  },
+  text: {
+    fontFamily: 'regular',
+    fontSize: 12,
+    color: 'white'
+  }
+}
+
+export const success = {
+  container: {
+    backgroundColor: 'green',
+  },
+  text: {
+    fontFamily: 'regular',
+    fontSize: 12,
+    color: 'white'
+  }
+}
+
+
 export const getAdjustedFontSize = size => {
   return (parseInt(size) * width + height) / 400;
 };
