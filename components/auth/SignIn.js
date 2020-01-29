@@ -1,41 +1,36 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
-import { View, StyleSheet, Image, Dimensions, SafeAreaView, Platform, ToastAndroid, Alert } from 'react-native';
+import { View, StyleSheet, Image, Dimensions, SafeAreaView, Platform } from 'react-native';
 import { Input, Text, Button } from 'react-native-elements'
 import { Ionicons } from '@expo/vector-icons';
-import Constants from 'expo-constants';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { PolifySafeArea } from '../../assets/styles/styles';
 import logo from '../../assets/images/logo.png'
-import Toast, { DURATION } from 'react-native-easy-toast'
-import { ToastContext, ToastComponent } from '../../contexts/ToastContext';
-import { ToastHelper } from '../../assets/helpers/ToastHelper';
+// import { DURATION } from 'react-native-easy-toast'
+import { ToastContext } from '../../contexts/ToastContext';
+import axios from 'axios';
 
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
-// ToastAndroid.show('A pikachu appeared nearby !', ToastAndroid.SHORT);
-function SignIn({ navigation, route }) {
-    const { toastRef } = useContext(ToastContext)
-    const [loading, setLoading] = useState(false)
-    const [phone, setPhone] = useState(null);
-    const [password, setPassword] = useState(null);
 
-    function signIn() {
-        toast.close('hello world!', 500);
-    }
+function SignIn({ navigation, route }) {
+    const [loading, setLoading] = useState(false)
+    const [phone, setPhone] = useState('');
+    const [password, setPassword] = useState('');
+    const { dispatch } = useContext(ToastContext);
 
     function handleSubmit(e) {
         e.preventDefault();
         setLoading(true)
         const email = phone.includes('@') ? true : false;
         const endpoint = "https://ttuz.azurewebsites.net/api/users/authenticate";
-
         const data = JSON.stringify({
             Phone: email ? '' : phone,
             Password: password,
             IsEmail: email,
             Email: email ? phone : ""
         });
+
         axios({
             method: "post",
             url: endpoint,
@@ -44,9 +39,12 @@ function SignIn({ navigation, route }) {
                 "Content-Type": "application/json"
             }
         }).then(response => {
+            console.log(response);
+            return false;
             if (response.data.status) {
+                // dispatch({ type: 'success', value: { text: '12341234', duration: 2000 } })
                 if (email) {
-                    dispatch({ type: 'SIGN_IN', userData: JSON.stringify(response.data.userData) })
+                    // dispatch({ type: 'SIGN_IN', userData: JSON.stringify(response.data.userData) })
                     // localStorage.setItem('username', values.emailphone);
                     navigation.goBack();
                 } else {
@@ -66,7 +64,7 @@ function SignIn({ navigation, route }) {
                 });
             }
         }).catch(error => {
-
+            console.log(error.response, 'called')
         })
     }
     return (
@@ -123,7 +121,6 @@ function SignIn({ navigation, route }) {
                     <Button
                         loading={loading}
                         title="АВТОРИЗОВАТЬСЯ"
-                        // containerStyle={{ alignSelf: 'center' }}
                         buttonStyle={styles.signInButton}
                         linearGradientProps={{
                             colors: ['#FF9800', '#F44336'],
@@ -132,8 +129,7 @@ function SignIn({ navigation, route }) {
                         }}
                         // ViewComponent={LinearGradient}
                         titleStyle={styles.signInButtonText}
-                        onPress={() => ToastHelper('go', 500, 'success')}
-                        disabled={loading}
+                        onPress={handleSubmit}
                     />
                     <View style={styles.signUpHereContainer}>
                         <Text style={styles.newAccountText}>
@@ -145,7 +141,7 @@ function SignIn({ navigation, route }) {
                             containerStyle={{ flex: -1 }}
                             buttonStyle={{ backgroundColor: 'transparent' }}
                             underlayColor="transparent"
-                            onPress={() => { toastRef.current.show('hello world!') }}
+                            onPress={() => console.log('new')}
                         />
                     </View>
                     {/* <ToastComponent ref={toastRef} /> */}

@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import moment from 'moment';
 import 'moment/min/locales'
-moment.locale('ru')
+moment.updateLocale('ru')
 
 
 function MainList({ navigation, route }) {
@@ -15,7 +15,7 @@ function MainList({ navigation, route }) {
     }]);
 
     let id = route.params.id;
-    
+
     function momentize(date) {
         let today = new Date();
         let timeDiff = moment(today).diff(moment(date), 'hours');
@@ -53,13 +53,13 @@ function MainList({ navigation, route }) {
             // badge={{ value: 3, textStyle: { color: 'orange' }, containerStyle: { marginTop: -20 } }}
             bottomDivider
             button
-            // onPress={() => {
-            //     /* 1. Navigate to the Details route with params */
-            //     navigation.navigate('MainSubScreen', {
-            //         itemId: index,
-            //         otherParam: 'anything you want here',
-            //     });
-            // }}
+        // onPress={() => {
+        //     /* 1. Navigate to the Details route with params */
+        //     navigation.navigate('MainSubScreen', {
+        //         itemId: index,
+        //         otherParam: 'anything you want here',
+        //     });
+        // }}
         />
     )
 
