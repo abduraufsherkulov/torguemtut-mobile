@@ -19,19 +19,20 @@ function ToastContextProvider(props) {
         outputRange: ['0deg', '360deg']
     })
     const [toaster, dispatch] = useReducer(toastReducer, {
-        text: 'gogogo', duration: 500, type: success
+        text: '', duration: 1, type: success
     })
-{/* <Animated.View
+    {/* <Animated.View
             style={{ transform: [{ rotate: spin }] }}><Ionicons name="ios-close" size={64} color="green" /></Animated.View> */}
 
-    // useEffect(() => {
-    //     console.log('called in toaster');
-    //     toastCaller()
-    // }, [])
-
     useEffect(() => {
-        startAnimation()
-    }, [])
+        console.log('called in toaster');
+        toastCaller()
+    }, [toastRef])
+
+    // useEffect(() => {
+    //     'calling'
+    //     startAnimation()
+    // }, [])
 
     function startAnimation() {
         rotateAnim.setValue(0)

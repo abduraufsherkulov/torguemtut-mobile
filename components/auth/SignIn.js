@@ -7,7 +7,9 @@ import { PolifySafeArea } from '../../assets/styles/styles';
 import logo from '../../assets/images/logo.png'
 // import { DURATION } from 'react-native-easy-toast'
 import { ToastContext } from '../../contexts/ToastContext';
+import { AuthContext } from '../../contexts/AuthContext';
 import axios from 'axios';
+import { _retrieveData, _storeData } from '../../assets/helpers/AssetsCaching';
 
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -17,7 +19,9 @@ function SignIn({ navigation, route }) {
     const [loading, setLoading] = useState(false)
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
+    const [formValid, setFormValid] = useState(true);
     const { dispatch } = useContext(ToastContext);
+    const { dispatch: authDispatch } = useContext(AuthContext);
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -39,19 +43,17 @@ function SignIn({ navigation, route }) {
                 "Content-Type": "application/json"
             }
         }).then(response => {
-            console.log(response);
-            return false;
+            console.log(response.data);
             if (response.data.status) {
-                // dispatch({ type: 'success', value: { text: '12341234', duration: 2000 } })
+
                 if (email) {
-                    // dispatch({ type: 'SIGN_IN', userData: JSON.stringify(response.data.userData) })
-                    // localStorage.setItem('username', values.emailphone);
+                    dispatch({ type: 'success', value: { text: response.data.userData.phone, duration: 2000 } })
+                    authDispatch({ type: 'SIGN_IN', userData: JSON.stringify(response.data.userData) })
                     navigation.goBack();
                 } else {
-                    // localStorage.setItem('username', values.emailphone);
-
-                    dispatch({ type: 'SIGN_IN', userData: JSON.stringify(response.data.userData) })
-                    history.replace(from);
+                    dispatch({ type: 'success', value: { text: response.data.userData.phone, duration: 2000 } })
+                    authDispatch({ type: 'SIGN_IN', userData: JSON.stringify(response.data.userData) })
+                    navigation.goBack();
                 }
             } else {
                 setvalidateConfirmCode('error');
@@ -64,8 +66,23 @@ function SignIn({ navigation, route }) {
                 });
             }
         }).catch(error => {
-            console.log(error.response, 'called')
+            console.log(error)
+            setFormValid(false)
+            setLoading(false)
         })
+    }
+    useEffect(() => {
+        if (!formValid) {
+            setFormValid(true)
+        }
+    }, [phone, password])
+
+    async function test() {
+        const data = await authDispatch({ type: 'USER_DATA' })
+        console.log(data)
+    }
+    function untest() {
+        _storeData('userData', '1sadfasdf23');
     }
     return (
         <SafeAreaView style={PolifySafeArea('#293046')}>
@@ -117,6 +134,9 @@ function SignIn({ navigation, route }) {
                         placeholderTextColor="#7384B4"
                         secureTextEntry={true}
                         onChangeText={pass => setPassword(pass)}
+                        errorMessage={
+                            formValid ? null : "Имя пользователя или пароль неверны."
+                        }
                     />
                     <Button
                         loading={loading}
@@ -141,7 +161,15 @@ function SignIn({ navigation, route }) {
                             containerStyle={{ flex: -1 }}
                             buttonStyle={{ backgroundColor: 'transparent' }}
                             underlayColor="transparent"
-                            onPress={() => console.log('new')}
+                            onPress={test}
+                        />
+                        <Button
+                            title="здесь"
+                            titleStyle={styles.signUpHereText}
+                            containerStyle={{ flex: -1 }}
+                            buttonStyle={{ backgroundColor: 'transparent' }}
+                            underlayColor="transparent"
+                            onPress={untest}
                         />
                     </View>
                     {/* <ToastComponent ref={toastRef} /> */}
