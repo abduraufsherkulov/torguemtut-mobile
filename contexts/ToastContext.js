@@ -25,7 +25,6 @@ function ToastContextProvider(props) {
             style={{ transform: [{ rotate: spin }] }}><Ionicons name="ios-close" size={64} color="green" /></Animated.View> */}
 
     useEffect(() => {
-        console.log('called in toaster');
         toastCaller()
     }, [toastRef])
 

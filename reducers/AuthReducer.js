@@ -1,7 +1,7 @@
 import { _retrieveData, _removeData, _storeData } from "../assets/helpers/AssetsCaching";
 
 export const authReducer = (state, action) => {
-    console.log(state, action, 'authreducer');
+    // console.log(state, action, 'authreducer');
     switch (action.type) {
         case 'SIGN_IN':
             _storeData('userData', action.userData);

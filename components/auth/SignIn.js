@@ -21,7 +21,7 @@ function SignIn({ navigation, route }) {
     const [password, setPassword] = useState('');
     const [formValid, setFormValid] = useState(true);
     const { dispatch } = useContext(ToastContext);
-    const { dispatch: authDispatch } = useContext(AuthContext);
+    const { userData, dispatch: authDispatch } = useContext(AuthContext);
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -78,11 +78,7 @@ function SignIn({ navigation, route }) {
     }, [phone, password])
 
     async function test() {
-        const data = await authDispatch({ type: 'USER_DATA' })
-        console.log(data)
-    }
-    function untest() {
-        _storeData('userData', '1sadfasdf23');
+        console.log(await userData)
     }
     return (
         <SafeAreaView style={PolifySafeArea('#293046')}>
@@ -162,14 +158,6 @@ function SignIn({ navigation, route }) {
                             buttonStyle={{ backgroundColor: 'transparent' }}
                             underlayColor="transparent"
                             onPress={test}
-                        />
-                        <Button
-                            title="здесь"
-                            titleStyle={styles.signUpHereText}
-                            containerStyle={{ flex: -1 }}
-                            buttonStyle={{ backgroundColor: 'transparent' }}
-                            underlayColor="transparent"
-                            onPress={untest}
                         />
                     </View>
                     {/* <ToastComponent ref={toastRef} /> */}
