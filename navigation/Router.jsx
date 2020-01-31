@@ -15,6 +15,7 @@ import TopProductsScreen from '../components/topProductsScreen/TopProductsScreen
 import ProfileScreen from '../components/profileScreen/ProfileScreen';
 import SignIn from '../components/auth/SignIn';
 import { CategoryContext } from '../contexts/CategoryContext';
+import Product from '../components/productScreen/Product';
 
 
 const MainStack = createStackNavigator();
@@ -105,6 +106,12 @@ function MainApp() {
       <MainStack.Screen
         name="ListProducts"
         component={ListProducts}
+        options={({ route }) => ({
+          title: route.params.title,
+        })} />
+      <MainStack.Screen
+        name="Product"
+        component={Product}
         options={({ route }) => ({
           title: route.params.title,
         })} />

@@ -5,7 +5,8 @@ import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import moment from 'moment';
 import 'moment/min/locales'
-moment.updateLocale('ru')
+import { AuthContext } from '../../contexts/AuthContext';
+moment.locale('ru')
 
 
 function MainList({ navigation, route }) {
@@ -13,7 +14,7 @@ function MainList({ navigation, route }) {
         images: [{ path: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg' }],
         price: { amount: 10000, currencyLabel: 'UZS' }
     }]);
-
+    const { userData } = useContext(AuthContext);
     let id = route.params.id;
 
     function momentize(date) {
@@ -26,6 +27,14 @@ function MainList({ navigation, route }) {
     }
 
     const keyExtractor = (item, index) => index.toString()
+
+    function wishIt() {
+        if (userData.token) {
+
+        } else {
+            navigation.navigate('SignIn')
+        }
+    }
 
     const renderItem = ({ item, index }) => (
         <ListItem
@@ -43,7 +52,7 @@ function MainList({ navigation, route }) {
                     </View>
                     <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                         <View style={{ flex: 0.8 }}><Text><Ionicons name="ios-clock" size={18} color="green" />  {momentize(item.updatedDate)}</Text></View>
-                        <View style={{ flex: 0.2, alignItems: 'flex-end' }}><Ionicons onPress={() => navigation.navigate('SignIn')} name="ios-heart-empty" size={28} color="black" /></View>
+                        <View style={{ flex: 0.2, alignItems: 'flex-end' }}><Ionicons onPress={wishIt} name="ios-heart-empty" size={28} color="black" /></View>
                     </View>
                 </View>
             }
@@ -53,13 +62,14 @@ function MainList({ navigation, route }) {
             // badge={{ value: 3, textStyle: { color: 'orange' }, containerStyle: { marginTop: -20 } }}
             bottomDivider
             button
-        // onPress={() => {
-        //     /* 1. Navigate to the Details route with params */
-        //     navigation.navigate('MainSubScreen', {
-        //         itemId: index,
-        //         otherParam: 'anything you want here',
-        //     });
-        // }}
+            onPress={() => {
+                /* 1. Navigate to the Details route with params */
+                navigation.navigate('Product', {
+                    item: item,
+                    id: item.id,
+                    title: item.label
+                });
+            }}
         />
     )
 
