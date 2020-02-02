@@ -3,9 +3,10 @@ import { View, StyleSheet, Image, Dimensions, SafeAreaView, Platform } from 'rea
 import { Input, Text, Button } from 'react-native-elements'
 import { Ionicons } from '@expo/vector-icons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { LinearGradient } from 'expo-linear-gradient';
 import { PolifySafeArea } from '../../assets/styles/styles';
 import logo from '../../assets/images/logo.png'
-// import { DURATION } from 'react-native-easy-toast'
+import { DURATION } from 'react-native-easy-toast'
 import { ToastContext } from '../../contexts/ToastContext';
 import { AuthContext } from '../../contexts/AuthContext';
 import axios from 'axios';
@@ -43,15 +44,13 @@ function SignIn({ navigation, route }) {
                 "Content-Type": "application/json"
             }
         }).then(response => {
-            console.log(response.data);
             if (response.data.status) {
-
                 if (email) {
-                    dispatch({ type: 'success', value: { text: response.data.userData.phone, duration: 2000 } })
+                    dispatch({ type: 'loading', value: { text: response.data.userData.phone, duration: DURATION.FOREVER } })
                     authDispatch({ type: 'SIGN_IN', userData: JSON.stringify(response.data.userData) })
                     navigation.goBack();
                 } else {
-                    dispatch({ type: 'success', value: { text: response.data.userData.phone, duration: 2000 } })
+                    dispatch({ type: 'loading', value: { text: response.data.userData.phone, duration: DURATION.FOREVER } })
                     authDispatch({ type: 'SIGN_IN', userData: JSON.stringify(response.data.userData) })
                     navigation.goBack();
                 }
@@ -143,7 +142,7 @@ function SignIn({ navigation, route }) {
                             start: [1, 0],
                             end: [0.2, 0],
                         }}
-                        // ViewComponent={LinearGradient}
+                        ViewComponent={LinearGradient}
                         titleStyle={styles.signInButtonText}
                         onPress={handleSubmit}
                     />

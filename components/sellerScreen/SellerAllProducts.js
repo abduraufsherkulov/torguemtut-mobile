@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { View, SafeAreaView, ScrollView, Text, Button } from 'react-native'
-import ProductCarousel from './ProductCarousel'
-import ProductDetails from './ProductDetails';
+// import ProductDetails from './ProductDetails';
 import axios from 'axios'
-import ProductInfoSeller from './ProductInfoSeller';
+import ProductDetails from '../productScreen/ProductDetails';
+import ProductInfoSeller from '../productScreen/ProductInfoSeller';
+import ProductCarousel from '../productScreen/ProductCarousel';
 
-
-function Product({ navigation, route }) {
+function SellerAllProducts({ navigation, route }) {
     const [loading, setLoading] = useState(true)
     const [listData, setListData] = useState([{}, {}, {}, {}]);
 
@@ -64,4 +64,4 @@ function Product({ navigation, route }) {
 
 
 
-export default Product
+export default SellerAllProducts

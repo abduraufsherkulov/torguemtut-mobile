@@ -12,16 +12,15 @@ function ProductDetails({ listData }) {
                 <View style={styles.infoCategoryContainer}>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
                         <View style={{ flex: 1, alignItems: 'flex-start' }}>
-                            {typeof listData.newsAttribute !== 'undefined' ? listData.newsAttribute.map((item, index) => (
+                            {listData.newsAttribute.map((item, index) => (
                                 <Text style={styles.infoTypeLabel}>{item.attributeInfo.title}</Text>
-                            )) : null}
+                            ))}
 
                         </View>
                         <View style={{ flex: 1, marginLeft: 10 }}>
-                            {
-                                typeof listData.newsAttribute !== 'undefined' ? listData.newsAttribute.map((item, index) => (
-                                    <Text style={styles.infoAnswerLabel}>{item.value}</Text>
-                                )) : null
+                            {listData.newsAttribute.map((item, index) => (
+                                <Text style={styles.infoAnswerLabel}>{item.value}</Text>
+                            ))
                             }
                         </View>
                     </View>

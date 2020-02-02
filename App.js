@@ -6,6 +6,7 @@ import Toast, { DURATION } from 'react-native-easy-toast'
 import * as Font from 'expo-font';
 import ToastContextProvider, { ToastContext } from './contexts/ToastContext';
 import AuthContextProvider from './contexts/AuthContext';
+import WishlistContextProvider from './contexts/WishlistContext';
 
 export default function App() {
   const [fontLoad, setFontLoad] = useState(false)
@@ -26,7 +27,9 @@ export default function App() {
     <CategoryContextProvider>
       <ToastContextProvider>
         <AuthContextProvider>
-          <AppNavigator />
+          <WishlistContextProvider>
+            <AppNavigator />
+          </WishlistContextProvider>
         </AuthContextProvider>
       </ToastContextProvider>
     </CategoryContextProvider>

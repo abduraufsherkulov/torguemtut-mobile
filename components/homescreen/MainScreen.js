@@ -27,8 +27,6 @@ function MainScreen({ navigation }) {
                 title={item.label}
                 leftIcon={{ name: 'flight-takeoff' }}
                 // badge={{ value: 3, textStyle: { color: 'orange' }, containerStyle: { marginTop: -20 } }}
-                bottomDivider
-                button
                 onPress={() => {
                     /* 1. Navigate to the Details route with params */
                     navigation.navigate('MainSubScreen', {
@@ -37,6 +35,8 @@ function MainScreen({ navigation }) {
                     });
                 }}
                 chevron
+                bottomDivider
+                button
             />
         ) : (
                 <ListItem

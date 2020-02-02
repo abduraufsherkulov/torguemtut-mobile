@@ -16,6 +16,9 @@ import ProfileScreen from '../components/profileScreen/ProfileScreen';
 import SignIn from '../components/auth/SignIn';
 import { CategoryContext } from '../contexts/CategoryContext';
 import Product from '../components/productScreen/Product';
+import ProductLocation from '../components/productScreen/ProductLocation';
+import Seller from '../components/sellerScreen/Seller';
+import SellerNewProducts from '../components/sellerScreen/SellerAllProducts';
 
 
 const MainStack = createStackNavigator();
@@ -112,6 +115,24 @@ function MainApp() {
       <MainStack.Screen
         name="Product"
         component={Product}
+        options={({ route }) => ({
+          title: route.params.title,
+        })} />
+      <MainStack.Screen
+        name="ProductLocation"
+        component={ProductLocation}
+        options={({ route }) => ({
+          title: route.params.title,
+        })} />
+      <MainStack.Screen
+        name="Seller"
+        component={Seller}
+        options={({ route }) => ({
+          title: route.params.title,
+        })} />
+      <MainStack.Screen
+        name="SellerNewProducts"
+        component={SellerNewProducts}
         options={({ route }) => ({
           title: route.params.title,
         })} />

@@ -6,9 +6,12 @@ export const AuthContext = createContext();
 
 function AuthContextProvider(props) {
     const [userData, dispatch] = useReducer(authReducer, null, async () => {
-        const userData = await _retrieveData('userData');
-        return userData ? JSON.parse(userData) : { userData: { token: null } };
+        await _retrieveData('userData').then((data) => {
+            console.log(data, 'returned')
+            return data ? JSON.parse(data) : { userData: { token: null } };
+        });
     })
+    console.log(userData, 'userData')
     return (
         <AuthContext.Provider value={{ userData, dispatch }}>
             {props.children}

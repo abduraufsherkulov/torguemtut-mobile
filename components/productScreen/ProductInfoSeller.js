@@ -2,9 +2,16 @@ import React from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import { Rating, ListItem } from 'react-native-elements'
 
-function ProductInfoSeller({ contactDetail }) {
+function ProductInfoSeller({ contactDetail, ownerId, navigation }) {
     return (
         <ListItem
+            onPress={() => {
+                /* 1. Navigate to the Details route with params */
+                navigation.navigate('Seller', {
+                    ownerId: ownerId,
+                    title: ownerId
+                });
+            }}
             title={contactDetail.phone}
             subtitle={
                 <View style={styles.subtitleView}>

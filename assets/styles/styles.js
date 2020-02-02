@@ -40,12 +40,24 @@ export const warning = {
 
 export const success = {
   container: {
-    backgroundColor: 'green',
+    backgroundColor: 'white',
   },
   text: {
     fontFamily: 'regular',
     fontSize: 12,
-    color: 'white'
+    color: 'black'
+  }
+}
+
+
+export const loading = {
+  container: {
+    backgroundColor: 'white'
+  },
+  text: {
+    fontFamily: 'regular',
+    fontSize: 12,
+    color: 'black'
   }
 }
 

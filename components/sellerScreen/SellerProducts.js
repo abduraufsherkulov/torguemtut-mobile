@@ -1,26 +1,22 @@
 import React, { useEffect, useContext, useState } from 'react'
 import { Text, View, FlatList } from 'react-native';
-import { ListItem, Avatar, Button } from 'react-native-elements';
+import { ListItem, Avatar } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import moment from 'moment';
 import 'moment/min/locales'
 import { AuthContext } from '../../contexts/AuthContext';
-import { WishlistContext } from '../../contexts/WishlistContext';
-import WishlistHelper from '../../assets/helpers/WishlistHelper';
-import { ToastContext } from '../../contexts/ToastContext';
 moment.locale('ru')
 
 
-function MainList({ navigation, route }) {
+function SellerProducts({ navigation, route }) {
     const [listData, setListData] = useState([{
+        ownerDetails: { name: "Torguem", surname: 'tut' },
         images: [{ path: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg' }],
         price: { amount: 10000, currencyLabel: 'UZS' }
     }]);
     const { userData } = useContext(AuthContext);
-    const { addWish, removeWish } = useContext(WishlistContext);
-    const { dispatch } = useContext(ToastContext);
-    let id = route.params.id;
+    let ownerId = route.params.ownerId;
 
     function momentize(date) {
         let today = new Date();
@@ -35,11 +31,7 @@ function MainList({ navigation, route }) {
 
     function wishIt() {
         if (userData.token) {
-            if (props.favourite) {
-                removeWish(props.item, props.listData, props.setListData);
-            } else {
-                addWish(props.item, props.listData, props.setListData);
-            }
+
         } else {
             navigation.navigate('SignIn')
         }
@@ -61,7 +53,7 @@ function MainList({ navigation, route }) {
                     </View>
                     <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                         <View style={{ flex: 0.8 }}><Text><Ionicons name="ios-clock" size={18} color="green" />  {momentize(item.updatedDate)}</Text></View>
-                        <View style={{ flex: 0.2, alignItems: 'flex-end' }}><WishlistHelper navigation={navigation} setListData={setListData} listData={listData} item={item} favourite={item.favourite} /></View>
+                        <View style={{ flex: 0.2, alignItems: 'flex-end' }}><Ionicons onPress={wishIt} name="ios-heart-empty" size={28} color="black" /></View>
                     </View>
                 </View>
             }
@@ -73,7 +65,7 @@ function MainList({ navigation, route }) {
             button
             onPress={() => {
                 /* 1. Navigate to the Details route with params */
-                navigation.navigate('Product', {
+                navigation.navigate('SellerNewProducts', {
                     item: item,
                     id: item.id,
                     title: item.label
@@ -85,7 +77,7 @@ function MainList({ navigation, route }) {
     useEffect(() => {
         const abortController = new AbortController();
         const data = JSON.stringify({
-            categoryId: id
+            ownerId: ownerId
         })
         const endpoint = `https://ttuz.azurewebsites.net/api/news/get-all`;
         axios({
@@ -94,11 +86,11 @@ function MainList({ navigation, route }) {
             data: data,
             headers: {
                 "content-type": "application/json",
-                Authorization: `Bearer ${userData.token}`
+                // Authorization: `Bearer ${userData.token}`
             }
         })
             .then(response => {
-                dispatch({ type: 'finished' })
+                // console.log(response.data[0])
                 setListData(response.data);
             })
             .catch(error => {
@@ -112,14 +104,25 @@ function MainList({ navigation, route }) {
         return () => {
             abortController.abort();
         };
-    }, [userData.token]);
-    console.log(listData[0])
+    }, []);
     return (
         <FlatList
+            ListHeaderComponent={
+                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                    <Avatar
+                        rounded
+                        size="large"
+                        source={{
+                            uri:
+                                'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+                        }}
+                    />
+                    <Text>{listData[0].ownerDetails.name} {listData[0].ownerDetails.surname}</Text>
+                </View>}
             keyExtractor={keyExtractor}
             data={listData}
             renderItem={renderItem}
         />
     )
 }
-export default MainList
+export default SellerProducts
