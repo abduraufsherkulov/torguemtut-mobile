@@ -2,6 +2,7 @@ import React, { Component, useEffect, useState, useContext, useRef } from 'react
 import { Text, View, FlatList } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { CategoryContext } from '../../contexts/CategoryContext';
+import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 
 function MainScreen({ navigation }) {
@@ -25,7 +26,7 @@ function MainScreen({ navigation }) {
             <ListItem
                 key={index}
                 title={item.label}
-                leftIcon={{ name: 'flight-takeoff' }}
+                leftIcon={<Ionicons name={item.mobileIcon} size={32} />}
                 // badge={{ value: 3, textStyle: { color: 'orange' }, containerStyle: { marginTop: -20 } }}
                 onPress={() => {
                     /* 1. Navigate to the Details route with params */
@@ -42,7 +43,7 @@ function MainScreen({ navigation }) {
                 <ListItem
                     key={index}
                     title={item.label}
-                    leftIcon={{ name: 'flight-takeoff' }}
+                    leftIcon={<Ionicons name={item.mobileIcon} size={32} />}
                     // badge={{ value: 3, textStyle: { color: 'orange' }, containerStyle: { marginTop: -20 } }}
                     bottomDivider
                     button
@@ -56,6 +57,7 @@ function MainScreen({ navigation }) {
                 />
             )
     }
+    console.log(category[0])
     return (
         <FlatList
             keyExtractor={keyExtractor}
