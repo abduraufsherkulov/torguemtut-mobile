@@ -8,12 +8,9 @@ export const authReducer = (state, action) => {
             return JSON.parse(action.userData)
         case 'SIGN_OUT':
             _removeData('userData');
-            return { userData: { token: null } }
-        case 'USER_DATA':
-            async () => {
-                const data = await _retrieveData('userData');
-                return JSON.parse(data);
-            }
+            return { token: null };
+        case 'INIT_LOAD':
+            return JSON.parse(action.userData)
         case 'SIGN_UP':
             return
         case 'FB_LOGIN':

@@ -57,7 +57,6 @@ function MainScreen({ navigation }) {
                 />
             )
     }
-    console.log(category[0])
     return (
         <FlatList
             keyExtractor={keyExtractor}

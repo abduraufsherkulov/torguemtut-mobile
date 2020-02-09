@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react'
-import { Text, View, FlatList } from 'react-native';
-import { ListItem, Avatar, Button } from 'react-native-elements';
+import { Text, View, FlatList, ActivityIndicator } from 'react-native';
+import { ListItem, Avatar, Button, Image } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import moment from 'moment';
@@ -40,7 +40,8 @@ function TopProductsScreen({ navigation, route }) {
                     <View><Text>{item.title}</Text></View>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
                         <View style={{ flex: 0.5 }}>
-                            <Avatar size="xlarge" title={item.title} source={{ uri: `https://ttuz.azurewebsites.net/${item.images[0].path}` }} />
+                            <Image
+                                PlaceholderContent={<ActivityIndicator />} style={{ width: '90%', height: 150 }} source={{ uri: `https://ttuz.azurewebsites.net/Resources/Images/${item.images[0].path}` }} />
                         </View>
                         <View style={{ flex: 0.5 }}>
                             <Text>{item.price.amount} {item.price.currencyLabel}</Text>
@@ -82,7 +83,6 @@ function TopProductsScreen({ navigation, route }) {
         })
             .then(response => {
                 setListData(response.data)
-                console.log(response.data[1], 'topdata')
             })
             .catch(error => {
                 // if (error.response.status == 401) {
@@ -95,7 +95,6 @@ function TopProductsScreen({ navigation, route }) {
             abortController.abort();
         };
     }, [])
-    console.log(listData[0])
     return (
         <FlatList
             keyExtractor={keyExtractor}

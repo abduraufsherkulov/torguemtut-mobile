@@ -7,6 +7,8 @@ import * as Font from 'expo-font';
 import ToastContextProvider, { ToastContext } from './contexts/ToastContext';
 import AuthContextProvider from './contexts/AuthContext';
 import WishlistContextProvider from './contexts/WishlistContext';
+import { enableScreens } from 'react-native-screens';
+enableScreens();
 
 export default function App() {
   const [fontLoad, setFontLoad] = useState(false)

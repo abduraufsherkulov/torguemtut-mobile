@@ -5,35 +5,35 @@ import { wishlistReducer } from '../reducers/WishlistReducer';
 import { ToastContext } from './ToastContext';
 import { DURATION } from 'react-native-easy-toast'
 
+
 export const WishlistContext = createContext();
 
 function WishlistContextProvider(props) {
-
     const { userData, dispatch: dispatcher } = useContext(AuthContext);
 
     const [{ wishlist }, dispatch] = useReducer(wishlistReducer, { wishlist: [] })
     const { dispatch: toastDispatch } = useContext(ToastContext)
-
+    console.log(userData.token, 'test')
     useEffect(() => {
-        if (userData.token) {
-            const endpoint = "https://ttuz.azurewebsites.net/api/news/get-all-favourites";
-            axios({
-                method: 'post',
-                url: endpoint,
-                headers: {
-                    "content-type": "application/json",
-                    Authorization: `Bearer ${userData.token}`
-                }
-            }).then(response => {
-                dispatch({ type: 'INIT_WISHLIST', wishlist: response.data });
-            }).catch(error => {
-                console.log(error.response.status);
-                // if (error.response.status == 401) {
-                //     message.info('Сессия истекла', 2);
-                //     dispatcher({ type: 'SIGN_IN' })
-                // }
-            })
-        }
+        const endpoint = "https://ttuz.azurewebsites.net/api/news/get-all-favourites";
+        axios({
+            method: 'post',
+            url: endpoint,
+            headers: {
+                "content-type": "application/json",
+                Authorization: `Bearer ${userData.token}`
+            }
+        }).then(response => {
+            console.log(response, 'wishlistda')
+            dispatch({ type: 'INIT_WISHLIST', wishlist: response.data });
+        }).catch(error => {
+            console.log(error.response.status);
+            // navigation.navigate('SignIn')
+            // if (error.response.status == 401) {
+            //     message.info('Сессия истекла', 2);
+            //     dispatcher({ type: 'SIGN_IN' })
+            // }
+        })
     }, [userData.token]);
 
     const addWish = (wish, listData, setListData) => {
@@ -103,7 +103,6 @@ function WishlistContextProvider(props) {
             toastDispatch({ type: 'error', value: { text: "Что то пошло не так", duration: 2000 } })
         })
     }
-    console.log(wishlist)
     return (
         <WishlistContext.Provider value={{ wishlist, dispatch, addWish, removeWish }}>
             {props.children}

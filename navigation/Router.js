@@ -1,9 +1,7 @@
-
 import React, { Component, useEffect, useState, useContext } from 'react';
-import { Text, View, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationNativeContainer } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import MainScreen from '../components/homeScreen/MainScreen';
 import MainSubScreen from '../components/homeScreen/MainSubScreen';
@@ -24,6 +22,7 @@ import SellerNewProducts from '../components/sellerScreen/SellerAllProducts';
 const MainStack = createStackNavigator();
 const ModalStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+const ProfileStack = createStackNavigator();
 
 function getHeaderTitle(route) {
   // Access the tab navigator's state using `route.state`
@@ -46,6 +45,18 @@ function getHeaderTitle(route) {
     case 'Profile':
       return 'Мой профиль';
   }
+}
+
+function ProfileStackScreen() {
+  return (
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen
+        name="ProfileScreen"
+        component={ProfileScreen}
+        options={({ route }) => ({
+          headerTitle: getHeaderTitle(route),
+        })} />
+    </ProfileStack.Navigator>)
 }
 
 function MainTab() {
@@ -80,7 +91,7 @@ function MainTab() {
       <Tab.Screen options={{ title: 'Избранные' }} name="Favourite" component={FavouriteScreen} />
       <Tab.Screen options={{ title: 'Добавить' }} name="Sell" component={SellScreen} />
       <Tab.Screen options={{ title: 'Топ' }} name="TopProducts" component={TopProductsScreen} />
-      <Tab.Screen options={{ title: 'Мой профиль' }} name="Profile" component={ProfileScreen} />
+      <Tab.Screen options={{ headerTitle: 'Мой профиль' }} name="Profile" component={ProfileStackScreen} />
     </Tab.Navigator>
   )
 }
@@ -93,6 +104,7 @@ function MainApp() {
         component={MainTab}
         options={({ route }) => ({
           headerTitle: getHeaderTitle(route),
+          headerShown: route.state ? (route.state.index == 4 ? false : true) : true
         })} />
       <MainStack.Screen
         name="MainSubScreen"
@@ -142,7 +154,7 @@ function MainApp() {
 
 export default function AppNavigator() {
   return (
-    <NavigationNativeContainer>
+    <NavigationContainer>
       <ModalStack.Navigator mode="modal" headerMode="none">
         <ModalStack.Screen
           name="MainApp"
@@ -151,6 +163,6 @@ export default function AppNavigator() {
           name="SignIn"
           component={SignIn} />
       </ModalStack.Navigator>
-    </NavigationNativeContainer>
+    </NavigationContainer>
   );
 }

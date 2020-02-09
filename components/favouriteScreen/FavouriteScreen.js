@@ -9,6 +9,7 @@ import { AuthContext } from '../../contexts/AuthContext';
 import { WishlistContext } from '../../contexts/WishlistContext';
 import WishlistHelper from '../../assets/helpers/WishlistHelper';
 import { ToastContext } from '../../contexts/ToastContext';
+import UnAuthorizedNavigate from '../auth/UnAuthorizedNavigate';
 moment.locale('ru')
 
 
@@ -42,7 +43,7 @@ function FavouriteScreen({ navigation, route }) {
                     <View><Text>{item.title}</Text></View>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
                         <View style={{ flex: 0.5 }}>
-                            <Avatar size="xlarge" title={item.title} source={{ uri: `https://ttuz.azurewebsites.net/${item.images[0].path}` }} />
+                            <Avatar size="xlarge" title={item.title} source={{ uri: `https://ttuz.azurewebsites.net/Resources/Images/${item.images[0].path}` }} />
                         </View>
                         <View style={{ flex: 0.5 }}>
                             <Text>{item.price.amount} {item.price.currencyLabel}</Text>
@@ -72,16 +73,18 @@ function FavouriteScreen({ navigation, route }) {
     )
 
     useEffect(() => {
-        console.log(userData.token)
+        dispatch({ type: 'finished' })
         setListData(wishlist)
 
     }, [wishlist]);
-    return (
+    return userData.token ? (
         <FlatList
             keyExtractor={keyExtractor}
             data={listData}
             renderItem={renderItem}
         />
-    )
+    ) : (
+            <UnAuthorizedNavigate navigation={navigation} />
+        )
 }
 export default FavouriteScreen

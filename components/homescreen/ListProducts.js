@@ -53,7 +53,7 @@ function MainList({ navigation, route }) {
                     <View><Text>{item.title}</Text></View>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
                         <View style={{ flex: 0.5 }}>
-                            <Avatar size="xlarge" title={item.title} source={{ uri: `https://ttuz.azurewebsites.net/${item.images[0].path}` }} />
+                            <Avatar size="xlarge" title={item.title} source={{ uri: `https://ttuz.azurewebsites.net/Resources/Images/${item.images[0].path}` }} />
                         </View>
                         <View style={{ flex: 0.5 }}>
                             <Text>{item.price.amount} {item.price.currencyLabel}</Text>
@@ -113,7 +113,6 @@ function MainList({ navigation, route }) {
             abortController.abort();
         };
     }, [userData.token]);
-    console.log(listData[0])
     return (
         <FlatList
             keyExtractor={keyExtractor}

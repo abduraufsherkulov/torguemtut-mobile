@@ -45,7 +45,7 @@ function SellerProducts({ navigation, route }) {
                     <View><Text>{item.title}</Text></View>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
                         <View style={{ flex: 0.5 }}>
-                            <Avatar size="xlarge" title={item.title} source={{ uri: `https://ttuz.azurewebsites.net/${item.images[0].path}` }} />
+                            <Avatar size="xlarge" title={item.title} source={{ uri: `https://ttuz.azurewebsites.net/Resources/Images/${item.images[0].path}` }} />
                         </View>
                         <View style={{ flex: 0.5 }}>
                             <Text>{item.price.amount} {item.price.currencyLabel}</Text>
@@ -114,7 +114,7 @@ function SellerProducts({ navigation, route }) {
                         size="large"
                         source={{
                             uri:
-                                'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+                                'https://img.icons8.com/cotton/2x/person-male.png',
                         }}
                     />
                     <Text>{listData[0].ownerDetails.name} {listData[0].ownerDetails.surname}</Text>
