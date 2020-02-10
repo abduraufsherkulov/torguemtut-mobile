@@ -17,6 +17,7 @@ import Product from '../components/productScreen/Product';
 import ProductLocation from '../components/productScreen/ProductLocation';
 import Seller from '../components/sellerScreen/Seller';
 import SellerNewProducts from '../components/sellerScreen/SellerAllProducts';
+import EditProfile from '../components/profileScreen/EditProfile';
 
 
 const MainStack = createStackNavigator();
@@ -53,6 +54,12 @@ function ProfileStackScreen() {
       <ProfileStack.Screen
         name="ProfileScreen"
         component={ProfileScreen}
+        options={({ route }) => ({
+          headerTitle: getHeaderTitle(route),
+        })} />
+      <ProfileStack.Screen
+        name="EditProfile"
+        component={EditProfile}
         options={({ route }) => ({
           headerTitle: getHeaderTitle(route),
         })} />

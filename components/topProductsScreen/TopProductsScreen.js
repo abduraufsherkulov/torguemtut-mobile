@@ -94,7 +94,7 @@ function TopProductsScreen({ navigation, route }) {
         return () => {
             abortController.abort();
         };
-    }, [])
+    }, [userData.token])
     return (
         <FlatList
             keyExtractor={keyExtractor}

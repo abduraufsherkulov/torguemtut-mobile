@@ -12,36 +12,37 @@ function ProfileScreen({ navigation }) {
     const [loading, setLoading] = useState(true);
     const [userInfo, setUserInfo] = useState(null)
     useEffect(() => {
-        if (userData.token) {
-            const endpoint = `https://ttuz.azurewebsites.net/api/users/get-profile?userId=${userData.id}`;
-            axios({
-                method: "post",
-                url: endpoint,
-                headers: {
-                    "content-type": "application/json",
-                    Authorization: `Bearer ${userData.token}`
-                }
+        const endpoint = `https://ttuz.azurewebsites.net/api/users/get-profile?userId=${userData.id}`;
+        axios({
+            method: "post",
+            url: endpoint,
+            headers: {
+                "content-type": "application/json",
+                Authorization: `Bearer ${userData.token}`
+            }
+        })
+            .then(response => {
+                console.log(response.data)
+                setUserInfo(response.data);
+                setLoading(false)
             })
-                .then(response => {
-                    console.log(response.data)
-                    setUserInfo(response.data);
-                    setLoading(false)
-                })
-                .catch(error => {
-                    console.log(error);
-                    // if (error.response.status == 401) {
-                    //     message.info('Сессия истекла', 2);
-                    //     dispatch({ type: 'SIGN_IN' })
-                    // }
-                    console.log(error.response, "error in categories");
-                });
-        }
+            .catch(error => {
+                console.log(error);
+                // if (error.response.status == 401) {
+                //     message.info('Сессия истекла', 2);
+                //     dispatch({ type: 'SIGN_IN' })
+                // }
+                console.log(error.response, "error in categories");
+            });
     }, [userData.token])
     console.log(userInfo)
 
     navigation.setOptions({
         headerRight: () => (
-            <Button type="clear" onPress={() => console.log('clicked')} title={userData.token ? 'edit' : ''} />
+            <Button type="clear" onPress={() => navigation.navigate('EditProfile', {
+                name: userInfo.name,
+                surname: userInfo.surname
+            })} title={userData.token ? 'edit' : ''} />
         ),
         headerTitle: userInfo ? `${userInfo.name} ${userInfo.surname}` : 'Мой профиль'
     })
