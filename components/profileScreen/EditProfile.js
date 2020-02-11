@@ -3,13 +3,18 @@ import { Button, Input } from 'react-native-elements'
 import { View } from 'react-native'
 import axios from 'axios'
 import { AuthContext } from '../../contexts/AuthContext';
+import { UserInfoContext } from '../../contexts/UserInfoContext';
 
-function EditProfile({ navigation, route }) {
-    const [name, setName] = useState(route.params.name);
-    const [surname, setSurname] = useState(route.params.surname)
+function EditProfile({ navigation }) {
     const { userData } = useContext(AuthContext);
+    const { userInfo, setterUserInfo } = useContext(UserInfoContext);
+    const [loading, setLoading] = useState(false);
+    const [name, setName] = useState(userInfo.name);
+    const [surname, setSurname] = useState(userInfo.surname)
 
     function handleSubmit(e) {
+        setLoading(true)
+        let info = { ...userInfo };
         e.preventDefault()
 
         const endpoint = "https://ttuz.azurewebsites.net/api/users/update-profile";
@@ -18,7 +23,6 @@ function EditProfile({ navigation, route }) {
             Name: name,
             Surname: surname
         });
-
         axios({
             method: "post",
             url: endpoint,
@@ -28,7 +32,13 @@ function EditProfile({ navigation, route }) {
                 Authorization: `Bearer ${userData.token}`
             }
         }).then(response => {
-            console.log(response.data);
+            if (response.data.status) {
+                info.name = name;
+                info.surname = surname;
+                setterUserInfo(info)
+                setLoading(false)
+                navigation.goBack();
+            }
         }).catch(error => {
 
         })
@@ -36,7 +46,7 @@ function EditProfile({ navigation, route }) {
 
     navigation.setOptions({
         headerRight: () => (
-            <Button type="clear" onPress={handleSubmit} title={'Сохранить'} />
+            <Button loading={loading} type="clear" onPress={handleSubmit} title={'Сохранить'} />
         ),
         // headerTitle: userInfo ? `${userInfo.name} ${userInfo.surname}` : 'Мой профиль'
     })

@@ -1,54 +1,33 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { Ionicons } from '@expo/vector-icons';
 import { Text, View, FlatList, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
 import { ListItem, Button, Avatar, Image } from 'react-native-elements';
 import { AuthContext } from '../../contexts/AuthContext';
+import { UserInfoContext } from '../../contexts/UserInfoContext';
+import { ToastContext } from '../../contexts/ToastContext';
 import Constants from 'expo-constants';
-import axios from 'axios'
 import logo from '../../assets/images/tt.png'
 
 function ProfileScreen({ navigation }) {
-    const { userData, dispatch } = useContext(AuthContext)
+    const { userData, dispatch: dispatcher } = useContext(AuthContext);
+    const { dispatch } = useContext(ToastContext);
+    const { userInfo, setterUserInfo } = useContext(UserInfoContext)
     const [loading, setLoading] = useState(true);
-    const [userInfo, setUserInfo] = useState(null)
-    useEffect(() => {
-        const endpoint = `https://ttuz.azurewebsites.net/api/users/get-profile?userId=${userData.id}`;
-        axios({
-            method: "post",
-            url: endpoint,
-            headers: {
-                "content-type": "application/json",
-                Authorization: `Bearer ${userData.token}`
-            }
-        })
-            .then(response => {
-                console.log(response.data)
-                setUserInfo(response.data);
-                setLoading(false)
-            })
-            .catch(error => {
-                console.log(error);
-                // if (error.response.status == 401) {
-                //     message.info('Сессия истекла', 2);
-                //     dispatch({ type: 'SIGN_IN' })
-                // }
-                console.log(error.response, "error in categories");
-            });
-    }, [userData.token])
-    console.log(userInfo)
 
-    navigation.setOptions({
-        headerRight: () => (
-            <Button type="clear" onPress={() => navigation.navigate('EditProfile', {
-                name: userInfo.name,
-                surname: userInfo.surname
-            })} title={userData.token ? 'edit' : ''} />
-        ),
-        headerTitle: userInfo ? `${userInfo.name} ${userInfo.surname}` : 'Мой профиль'
-    })
+    useEffect(() => {
+        console.log('called')
+        navigation.setOptions({
+            headerRight: () => (
+                <Button type="clear" onPress={() => navigation.navigate('EditProfile')} title={userData.token ? 'edit' : ''} />
+            ),
+            headerTitle: userInfo.id ? `${userInfo.name} ${userInfo.surname}` : 'Мой профиль'
+        })
+        dispatch({ type: 'finished' })
+    }, [userInfo.name, userInfo.surname])
+    
+    console.log(userInfo, 'profile')
     return (
         <ScrollView>
-            {userInfo ? (
+            {userInfo.id ? (
                 <View style={{ justifyContent: 'center', alignItems: 'center', margin: 20 }}>
                     <Avatar
                         rounded
@@ -156,7 +135,11 @@ function ProfileScreen({ navigation }) {
                         title="Выйти"
                         bottomDivider
                         button
-                        onPress={() => dispatch({ type: 'SIGN_OUT' })}
+                        onPress={() => {
+                            dispatcher({ type: 'SIGN_OUT' })
+                            setterUserInfo({})
+                        }
+                        }
                     />
                 </React.Fragment>
             ) : null}

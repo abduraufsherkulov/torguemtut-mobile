@@ -13,7 +13,6 @@ function WishlistContextProvider(props) {
 
     const [{ wishlist }, dispatch] = useReducer(wishlistReducer, { wishlist: [] })
     const { dispatch: toastDispatch } = useContext(ToastContext)
-    console.log(userData.token, 'test')
     useEffect(() => {
         const endpoint = "https://ttuz.azurewebsites.net/api/news/get-all-favourites";
         axios({
@@ -24,7 +23,6 @@ function WishlistContextProvider(props) {
                 Authorization: `Bearer ${userData.token}`
             }
         }).then(response => {
-            console.log(response, 'wishlistda')
             dispatch({ type: 'INIT_WISHLIST', wishlist: response.data });
         }).catch(error => {
             console.log(error.response.status);
