@@ -8,17 +8,6 @@ import axios from 'axios';
 function MainScreen({ navigation }) {
 
     const { category } = useContext(CategoryContext)
-
-    const list = [
-        {
-            title: 'Appointments',
-            icon: 'av-timer'
-        },
-        {
-            title: 'Trips',
-            icon: 'flight-takeoff'
-        }
-    ]
     const keyExtractor = (item, index) => index.toString()
 
     const renderItem = ({ item, index }) => {

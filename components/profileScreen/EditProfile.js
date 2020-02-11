@@ -45,6 +45,7 @@ function EditProfile({ navigation }) {
     }
 
     navigation.setOptions({
+        headerTitle: 'Редактировать',
         headerRight: () => (
             <Button loading={loading} type="clear" onPress={handleSubmit} title={'Сохранить'} />
         ),

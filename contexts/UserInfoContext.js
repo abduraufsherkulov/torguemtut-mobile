@@ -31,7 +31,6 @@ function UserInfoContextProvider(props) {
     }, [userData.token])
 
     function setterUserInfo(val) {
-        console.log('log')
         setUserInfo(val)
     }
 

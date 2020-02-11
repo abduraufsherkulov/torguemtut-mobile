@@ -9,6 +9,7 @@ import AuthContextProvider from './contexts/AuthContext';
 import WishlistContextProvider from './contexts/WishlistContext';
 import { enableScreens } from 'react-native-screens';
 import UserInfoContextProvider from './contexts/UserInfoContext';
+import MyAdsContextProvider from './contexts/MyAdsContext';
 enableScreens();
 
 export default function App() {
@@ -32,7 +33,9 @@ export default function App() {
         <AuthContextProvider>
           <WishlistContextProvider>
             <UserInfoContextProvider>
-              <AppNavigator />
+              <MyAdsContextProvider>
+                <AppNavigator />
+              </MyAdsContextProvider>
             </UserInfoContextProvider>
           </WishlistContextProvider>
         </AuthContextProvider>

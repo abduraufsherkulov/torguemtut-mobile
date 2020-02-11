@@ -6,15 +6,16 @@ import { UserInfoContext } from '../../contexts/UserInfoContext';
 import { ToastContext } from '../../contexts/ToastContext';
 import Constants from 'expo-constants';
 import logo from '../../assets/images/tt.png'
+import { MyAdsContext } from '../../contexts/MyAdsContext';
 
 function ProfileScreen({ navigation }) {
     const { userData, dispatch: dispatcher } = useContext(AuthContext);
+    const { myAds, setMyAds } = useContext(MyAdsContext)
     const { dispatch } = useContext(ToastContext);
     const { userInfo, setterUserInfo } = useContext(UserInfoContext)
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        console.log('called')
         navigation.setOptions({
             headerRight: () => (
                 <Button type="clear" onPress={() => navigation.navigate('EditProfile')} title={userData.token ? 'edit' : ''} />
@@ -23,8 +24,9 @@ function ProfileScreen({ navigation }) {
         })
         dispatch({ type: 'finished' })
     }, [userInfo.name, userInfo.surname])
-    
-    console.log(userInfo, 'profile')
+    let active = myAds.filter(item => item.status == 2).length;
+    let waiting = myAds.filter(item => item.status == 1).length;
+    let archived = myAds.filter(item => item.status == 3).length;
     return (
         <ScrollView>
             {userInfo.id ? (
@@ -68,16 +70,25 @@ function ProfileScreen({ navigation }) {
                     onPress={() => navigation.navigate('Sell')}
                 />
                 <ListItem
-                    onPress={() => navigation.setOptions({ title: 'Updated!' })}
-                    title="Проверенные"
-                    badge={{ value: 3, textStyle: { color: 'white' } }}
+                    onPress={() => navigation.navigate('ActiveAds')}
+                    title="Активные"
+                    badge={{ value: active, textStyle: { color: 'white' } }}
                     chevron
                     bottomDivider
                     button
                 />
                 <ListItem
+                    onPress={() => navigation.navigate('WaitingAds')}
+                    title="На проверке"
+                    badge={{ value: waiting, textStyle: { color: 'white' } }}
+                    chevron
+                    bottomDivider
+                    button
+                />
+                <ListItem
+                    onPress={() => navigation.navigate('ArchivedAds')}
                     title="Архивные"
-                    badge={{ value: 3, textStyle: { color: 'white' } }}
+                    badge={{ value: archived, textStyle: { color: 'white' } }}
                     chevron
                     bottomDivider
                     button
@@ -138,6 +149,7 @@ function ProfileScreen({ navigation }) {
                         onPress={() => {
                             dispatcher({ type: 'SIGN_OUT' })
                             setterUserInfo({})
+                            setMyAds([]);
                         }
                         }
                     />

@@ -18,6 +18,8 @@ import ProductLocation from '../components/productScreen/ProductLocation';
 import Seller from '../components/sellerScreen/Seller';
 import SellerNewProducts from '../components/sellerScreen/SellerAllProducts';
 import EditProfile from '../components/profileScreen/EditProfile';
+import ArchivedAds from '../components/profileScreen/ArchivedAds';
+import ActiveAds from '../components/profileScreen/ActiveAds';
 
 
 const MainStack = createStackNavigator();
@@ -60,6 +62,18 @@ function ProfileStackScreen() {
       <ProfileStack.Screen
         name="EditProfile"
         component={EditProfile}
+        options={({ route }) => ({
+          headerTitle: getHeaderTitle(route),
+        })} />
+      <ProfileStack.Screen
+        name="ActiveAds"
+        component={ActiveAds}
+        options={({ route }) => ({
+          headerTitle: getHeaderTitle(route),
+        })} />
+      <ProfileStack.Screen
+        name="ArchivedAds"
+        component={ArchivedAds}
         options={({ route }) => ({
           headerTitle: getHeaderTitle(route),
         })} />
