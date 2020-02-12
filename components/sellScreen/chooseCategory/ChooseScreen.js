@@ -7,6 +7,7 @@ import axios from 'axios';
 
 function ChooseScreen({ navigation }) {
 
+
     const { category } = useContext(CategoryContext)
     const keyExtractor = (item, index) => index.toString()
 
@@ -47,14 +48,11 @@ function ChooseScreen({ navigation }) {
             )
     }
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <FlatList
-                style={{ width: '80%', height: '40%' }}
-                keyExtractor={keyExtractor}
-                data={category}
-                renderItem={renderItem}
-            />
-        </View>
+        <FlatList
+            keyExtractor={keyExtractor}
+            data={category}
+            renderItem={renderItem}
+        />
     );
 }
 

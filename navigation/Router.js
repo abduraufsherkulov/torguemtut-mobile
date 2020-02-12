@@ -86,34 +86,6 @@ function ProfileStackScreen() {
 }
 
 
-function CategoryStackScreen() {
-  return (
-    <CategoryStack.Navigator mode="modal" headerMode="none"
-      screenOptions={{
-        cardStyle: { backgroundColor: 'transparent' },
-        cardOverlayEnabled: true,
-      }}>
-      <CategoryStack.Screen
-        name="ChooseScreen"
-        component={ChooseScreen}
-        options={({ route }) => ({
-          headerTitle: getHeaderTitle(route),
-        })} />
-      <CategoryStack.Screen
-        name="ChooseSubScreen"
-        component={ChooseSubScreen}
-        options={({ route }) => ({
-          headerTitle: getHeaderTitle(route),
-        })} />
-      <CategoryStack.Screen
-        name="ChooseSubSubScreen"
-        component={ChooseSubSubScreen}
-        options={({ route }) => ({
-          headerTitle: getHeaderTitle(route),
-        })} />
-    </CategoryStack.Navigator>)
-}
-
 
 function SellStackScreen() {
   return (
@@ -129,15 +101,28 @@ function SellStackScreen() {
           headerTitle: getHeaderTitle(route),
         })} />
       <SellStack.Screen
-        name="CategoryStackScreen"
-        component={CategoryStackScreen}
+        name="ChooseScreen"
+        component={ChooseScreen}
+        options={({ route }) => ({
+          headerTitle: getHeaderTitle(route),
+        })} />
+      <SellStack.Screen
+        name="ChooseSubScreen"
+        component={ChooseSubScreen}
+        options={({ route }) => ({
+          headerTitle: getHeaderTitle(route),
+        })} />
+      <SellStack.Screen
+        name="ChooseSubSubScreen"
+        component={ChooseSubSubScreen}
         options={({ route }) => ({
           headerTitle: getHeaderTitle(route),
         })} />
     </SellStack.Navigator>)
 }
 
-function MainTab() {
+function MainTab({ route }) {
+  console.log(route.state.routes[2].state.routeNames)
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({

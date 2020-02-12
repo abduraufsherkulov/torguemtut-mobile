@@ -44,7 +44,6 @@ function ChooseSubSubScreen({ route, navigation }) {
     }
     return (
         <FlatList
-            style={{ width: '80%' }}
             keyExtractor={keyExtractor}
             data={route.params.data}
             renderItem={renderItem}

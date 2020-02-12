@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { View, Picker, Modal, Text, TouchableHighlight, Alert, Button } from 'react-native'
 import { Input } from 'react-native-elements'
 import { Ionicons } from '@expo/vector-icons';
+import IosPickerHelper from '../../assets/helpers/IosPickerHelper';
 
 function SellForm({ navigation }) {
     const [currency, setCurrency] = useState("2")
@@ -24,15 +25,21 @@ function SellForm({ navigation }) {
                     placeholder="Цена"
                     labelStyle={{ marginTop: 16 }}
                 />
-                <Picker
-                    selectedValue={1}
-                    style={{ height: 50, width: "30%" }}
-                    onValueChange={(itemValue, itemIndex) => setCurrency(itemValue)}>
-                    <Picker.Item label="UZS" value="2" />
-                    <Picker.Item label="USD" value="1" />
-                </Picker>
+                {
+                    Platform.OS === 'android' ? (
+                        <Picker
+                            selectedValue={1}
+                            style={{ width: "30%" }}
+                            onValueChange={(itemValue, itemIndex) => setCurrency(itemValue)}>
+                            <Picker.Item label="UZS" value="2" />
+                            <Picker.Item label="USD" value="1" />
+                        </Picker>
+                    ) : (
+                            <Text>UZS</Text>
+                        )
+                }
             </View>
-            <Button title="test" onPress={() => navigation.navigate('CategoryStackScreen')} />
+            <Button title="test" onPress={() => navigation.navigate('ChooseScreen')} />
             <Input
                 containerStyle={{ width: '90%' }}
                 rightIcon={
