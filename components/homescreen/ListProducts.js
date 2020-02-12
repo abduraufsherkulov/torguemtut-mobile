@@ -3,12 +3,12 @@ import { Text, View, FlatList } from 'react-native';
 import { ListItem, Avatar, Button } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
-import moment from 'moment';
-import 'moment/min/locales'
 import { AuthContext } from '../../contexts/AuthContext';
 import { WishlistContext } from '../../contexts/WishlistContext';
 import WishlistHelper from '../../assets/helpers/WishlistHelper';
 import { ToastContext } from '../../contexts/ToastContext';
+import moment from 'moment';
+import 'moment/min/locales'
 moment.locale('ru')
 
 

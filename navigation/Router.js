@@ -20,12 +20,17 @@ import SellerNewProducts from '../components/sellerScreen/SellerAllProducts';
 import EditProfile from '../components/profileScreen/EditProfile';
 import ArchivedAds from '../components/profileScreen/ArchivedAds';
 import ActiveAds from '../components/profileScreen/ActiveAds';
+import ChooseScreen from '../components/sellScreen/chooseCategory/ChooseScreen';
+import ChooseSubScreen from '../components/sellScreen/chooseCategory/ChooseSubScreen';
+import ChooseSubSubScreen from '../components/sellScreen/chooseCategory/ChooseSubSubScreen';
 
 
 const MainStack = createStackNavigator();
 const ModalStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const ProfileStack = createStackNavigator();
+const SellStack = createStackNavigator();
+const CategoryStack = createStackNavigator();
 
 function getHeaderTitle(route) {
   // Access the tab navigator's state using `route.state`
@@ -80,6 +85,58 @@ function ProfileStackScreen() {
     </ProfileStack.Navigator>)
 }
 
+
+function CategoryStackScreen() {
+  return (
+    <CategoryStack.Navigator mode="modal" headerMode="none"
+      screenOptions={{
+        cardStyle: { backgroundColor: 'transparent' },
+        cardOverlayEnabled: true,
+      }}>
+      <CategoryStack.Screen
+        name="ChooseScreen"
+        component={ChooseScreen}
+        options={({ route }) => ({
+          headerTitle: getHeaderTitle(route),
+        })} />
+      <CategoryStack.Screen
+        name="ChooseSubScreen"
+        component={ChooseSubScreen}
+        options={({ route }) => ({
+          headerTitle: getHeaderTitle(route),
+        })} />
+      <CategoryStack.Screen
+        name="ChooseSubSubScreen"
+        component={ChooseSubSubScreen}
+        options={({ route }) => ({
+          headerTitle: getHeaderTitle(route),
+        })} />
+    </CategoryStack.Navigator>)
+}
+
+
+function SellStackScreen() {
+  return (
+    <SellStack.Navigator mode="modal"
+      screenOptions={{
+        cardStyle: { backgroundColor: 'transparent' },
+        cardOverlayEnabled: true,
+      }}>
+      <SellStack.Screen
+        name="SellScreen"
+        component={SellScreen}
+        options={({ route }) => ({
+          headerTitle: getHeaderTitle(route),
+        })} />
+      <SellStack.Screen
+        name="CategoryStackScreen"
+        component={CategoryStackScreen}
+        options={({ route }) => ({
+          headerTitle: getHeaderTitle(route),
+        })} />
+    </SellStack.Navigator>)
+}
+
 function MainTab() {
   return (
     <Tab.Navigator
@@ -110,7 +167,7 @@ function MainTab() {
     >
       <Tab.Screen options={{ title: 'Главная' }} name="Main" component={MainScreen} />
       <Tab.Screen options={{ title: 'Избранные' }} name="Favourite" component={FavouriteScreen} />
-      <Tab.Screen options={{ title: 'Добавить' }} name="Sell" component={SellScreen} />
+      <Tab.Screen options={{ title: 'Добавить' }} name="Sell" component={SellStackScreen} />
       <Tab.Screen options={{ title: 'Топ' }} name="TopProducts" component={TopProductsScreen} />
       <Tab.Screen options={{ headerTitle: 'Мой профиль' }} name="Profile" component={ProfileStackScreen} />
     </Tab.Navigator>
@@ -125,7 +182,7 @@ function MainApp() {
         component={MainTab}
         options={({ route }) => ({
           headerTitle: getHeaderTitle(route),
-          headerShown: route.state ? (route.state.index == 4 ? false : true) : true
+          headerShown: route.state ? (route.state.index == 4 || route.state.index == 2 ? false : true) : true
         })} />
       <MainStack.Screen
         name="MainSubScreen"
@@ -176,7 +233,26 @@ function MainApp() {
 export default function AppNavigator() {
   return (
     <NavigationContainer>
-      <ModalStack.Navigator mode="modal" headerMode="none">
+      <ModalStack.Navigator mode="modal" headerMode="none"
+        screenOptions={{
+          cardStyle: { backgroundColor: 'transparent' },
+          cardOverlayEnabled: true,
+          cardStyleInterpolator: ({ current: { progress } }) => ({
+            cardStyle: {
+              opacity: progress.interpolate({
+                inputRange: [0, 0.5, 0.9, 1],
+                outputRange: [0, 0.25, 0.7, 1],
+              }),
+            },
+            overlayStyle: {
+              opacity: progress.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 0.5],
+                extrapolate: 'clamp',
+              }),
+            },
+          }),
+        }} >
         <ModalStack.Screen
           name="MainApp"
           component={MainApp} />
