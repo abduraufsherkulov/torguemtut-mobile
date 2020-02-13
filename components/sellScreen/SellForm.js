@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Picker, Modal, Text, TouchableHighlight, Alert, Button } from 'react-native'
+import { View, Picker, Modal, Text, TouchableHighlight, Alert, Button, Platform } from 'react-native'
 import { Input } from 'react-native-elements'
 import { Ionicons } from '@expo/vector-icons';
 import IosPickerHelper from '../../assets/helpers/IosPickerHelper';

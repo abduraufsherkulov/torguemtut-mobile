@@ -135,7 +135,7 @@ function ProfileScreen({ navigation }) {
                 />
             </View>
             {userData.token && userInfo ? (
-                <React.Fragment>
+                <View style={{ width: '100%' }}>
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                         <Text>Вы вошли как</Text>
                         <Text>{userInfo.name} {userInfo.surname}</Text>
@@ -153,7 +153,7 @@ function ProfileScreen({ navigation }) {
                         }
                         }
                     />
-                </React.Fragment>
+                </View>
             ) : null}
             <View style={styles.firstRow}>
                 <Image style={{

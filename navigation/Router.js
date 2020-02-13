@@ -89,11 +89,7 @@ function ProfileStackScreen() {
 
 function SellStackScreen() {
   return (
-    <SellStack.Navigator mode="modal"
-      screenOptions={{
-        cardStyle: { backgroundColor: 'transparent' },
-        cardOverlayEnabled: true,
-      }}>
+    <SellStack.Navigator mode="modal">
       <SellStack.Screen
         name="SellScreen"
         component={SellScreen}
@@ -122,7 +118,14 @@ function SellStackScreen() {
 }
 
 function MainTab({ route }) {
-  console.log(route.state.routes[2].state.routeNames)
+  const routeName = route.state
+    ?
+    route.state.routes[route.state.index]
+    :
+    'Main';
+
+  const router = routeName.state ? route.state.routes[route.state.index].state.index : routeName.state
+  console.log(router)
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -142,7 +145,8 @@ function MainTab({ route }) {
 
           // You can return any component that you like here!
           return <Ionicons name={iconName} size={size} color={color} />;
-        }
+        },
+        tabBarVisible: [1, 2, 3].includes(router) ? false : true
       })}
 
       tabBarOptions={{

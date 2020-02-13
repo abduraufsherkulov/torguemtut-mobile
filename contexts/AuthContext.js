@@ -9,6 +9,7 @@ function AuthContextProvider(props) {
     useEffect(() => {
         _retrieveData('userData').then((data) => {
             if (data) {
+                console.log(data)
                 dispatch({ type: 'INIT_LOAD', userData: data });
             }
         });
