@@ -3,7 +3,7 @@ import { Text, View, FlatList } from 'react-native';
 import { ListItem } from 'react-native-elements';
 
 function ChooseSubSubScreen({ route, navigation }) {
-
+    console.log(route.params)
     const keyExtractor = (item, index) => index.toString()
 
     const renderItem = ({ item, index }) => {
@@ -11,13 +11,12 @@ function ChooseSubSubScreen({ route, navigation }) {
             <ListItem
                 key={index}
                 title={item.label}
-                leftIcon={{ name: 'flight-takeoff' }}
                 // badge={{ value: 3, textStyle: { color: 'orange' }, containerStyle: { marginTop: -20 } }}
                 bottomDivider
                 button
                 onPress={() => {
                     /* 1. Navigate to the Details route with params */
-                    navigation.navigate('ListProducts', {
+                    navigation.navigate('SellScreen', {
                         id: item.value,
                         title: item.label
                     });
@@ -28,13 +27,12 @@ function ChooseSubSubScreen({ route, navigation }) {
                 <ListItem
                     key={index}
                     title={item.label}
-                    leftIcon={{ name: 'flight-takeoff' }}
                     // badge={{ value: 3, textStyle: { color: 'orange' }, containerStyle: { marginTop: -20 } }}
                     bottomDivider
                     button
                     onPress={() => {
                         /* 1. Navigate to the Details route with params */
-                        navigation.navigate('ListProducts', {
+                        navigation.navigate('SellScreen', {
                             id: item.value,
                             title: item.label
                         });

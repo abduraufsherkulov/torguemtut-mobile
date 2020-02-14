@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Picker, Modal, Text, TouchableHighlight, Alert, Button, Platform } from 'react-native'
 import { Input } from 'react-native-elements'
 import { Ionicons } from '@expo/vector-icons';
-import IosPickerHelper from '../../assets/helpers/IosPickerHelper';
+import IosPickerHelper from '../../../assets/helpers/IosPickerHelper';
+import axios from 'axios';
+import CascaderAttrs from './CascaderAttrs';
 
-function SellForm({ navigation }) {
+function SellForm({ navigation, route }) {
     const [currency, setCurrency] = useState("2")
-    const [modalVisible, setModalVisible] = useState(false);
     return (
         <View style={{ alignItems: 'center', marginBottom: 16, flex: 1, width: '100%' }}>
             <Input
@@ -39,18 +40,7 @@ function SellForm({ navigation }) {
                         )
                 }
             </View>
-            <Button title="test" onPress={() => navigation.navigate('ChooseScreen')} />
-            <Input
-                containerStyle={{ width: '90%' }}
-                rightIcon={
-                    <Ionicons
-                        name="ios-arrow-forward"
-                        size={25}
-                    />
-                }
-                // containerStyle={styles.inputContainerStyle}
-                placeholder="Input with right icon"
-            />
+            <CascaderAttrs navigation={navigation} route={route} />
         </View>
     )
 }

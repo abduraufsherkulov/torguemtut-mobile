@@ -4,9 +4,9 @@ import { AuthContext } from '../../contexts/AuthContext';
 import UnAuthorizedNavigate from '../auth/UnAuthorizedNavigate';
 import { PolifySafeArea } from '../../assets/styles/styles';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import SellForm from './SellForm';
+import SellForm from './sellForm/SellForm';
 
-function SellScreen({ navigation }) {
+function SellScreen({ navigation, route }) {
     const { userData } = useContext(AuthContext);
     return userData.token ? (
         <KeyboardAwareScrollView
@@ -17,7 +17,7 @@ function SellScreen({ navigation }) {
             enableOnAndroid={true}
             enableAutoAutomaticScroll={(Platform.OS === 'ios')}
         >
-            <SellForm navigation={navigation} />
+            <SellForm navigation={navigation} route={route} />
 
         </KeyboardAwareScrollView>
     ) : (
