@@ -3,16 +3,6 @@ import { Text, View, FlatList } from 'react-native';
 import { ListItem } from 'react-native-elements';
 
 function ChooseSubScreen({ route, navigation }) {
-    const list = [
-        {
-            title: 'Appointments',
-            icon: 'av-timer'
-        },
-        {
-            title: 'Trips',
-            icon: 'flight-takeoff'
-        }
-    ]
     const keyExtractor = (item, index) => index.toString()
 
     const renderItem = ({ item, index }) => {
@@ -28,6 +18,7 @@ function ChooseSubScreen({ route, navigation }) {
                     /* 1. Navigate to the Details route with params */
                     navigation.navigate('ChooseSubSubScreen', {
                         data: item.children,
+                        first: route.params.title,
                         title: item.label
                     });
                 }}

@@ -34,7 +34,9 @@ function ChooseSubSubScreen({ route, navigation }) {
                         /* 1. Navigate to the Details route with params */
                         navigation.navigate('SellScreen', {
                             id: item.value,
-                            title: item.label
+                            title: item.label,
+                            first: route.params.first,
+                            second: route.params.title,
                         });
                     }}
                 />

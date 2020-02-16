@@ -73,3 +73,40 @@ export const PolifySafeArea = (background) => {
     paddingTop: Platform.OS === "android" ? Constants.statusBarHeight : 0
   }
 }
+
+export const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(110, 120, 170, 1)',
+    borderRadius: 5,
+    color: 'black',
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(110, 120, 170, 1)',
+    height: 45,
+    borderRadius: 5,
+    color: 'black',
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+  inputAndroidContainer: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    width: '100%'
+  },
+  inputIOSContainer: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    width: '100%'
+  },
+  iconContainer: {
+    top: 5,
+    right: 15,
+  },
+});

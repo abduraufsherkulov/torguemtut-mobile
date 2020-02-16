@@ -1,32 +1,29 @@
 import React, { useState, useEffect } from 'react'
-import { View, Picker, Modal, Text, TouchableHighlight, Alert, Button, Platform } from 'react-native'
-import { Input } from 'react-native-elements'
+import { View, Picker, Modal, Text, StyleSheet, Alert, Platform } from 'react-native'
+import { Input, Button, Divider } from 'react-native-elements'
 import { Ionicons } from '@expo/vector-icons';
 import IosPickerHelper from '../../../assets/helpers/IosPickerHelper';
 import axios from 'axios';
 import CascaderAttrs from './CascaderAttrs';
+import ImageUpload from './ImageUpload';
 
 function SellForm({ navigation, route }) {
     const [currency, setCurrency] = useState("2")
     return (
         <View style={{ alignItems: 'center', marginBottom: 16, flex: 1, width: '100%' }}>
             <Input
-                containerStyle={{ width: '90%' }}
                 placeholder="Заголовок"
-                labelStyle={{ marginTop: 16 }}
+                inputContainerStyle={styles.inputContainer}
+                inputStyle={styles.inputStyle}
             />
-            <Input
-                containerStyle={{ width: '90%' }}
-                placeholder="Категории"
-                labelStyle={{ marginTop: 16 }}
-            />
-            <View style={{ width: '90%', flexDirection: 'row' }}>
+            <CascaderAttrs navigation={navigation} route={route} />
+            <View style={{ width: '100%', flexDirection: 'row' }}>
                 <Input
-                    containerStyle={{ width: '70%' }}
                     placeholder="Цена"
-                    labelStyle={{ marginTop: 16 }}
+                    inputContainerStyle={styles.inputContainer}
+                    inputStyle={styles.inputStyle}
                 />
-                {
+                {/* {
                     Platform.OS === 'android' ? (
                         <Picker
                             selectedValue={1}
@@ -38,11 +35,37 @@ function SellForm({ navigation, route }) {
                     ) : (
                             <Text>UZS</Text>
                         )
-                }
+                } */}
             </View>
-            <CascaderAttrs navigation={navigation} route={route} />
+            <Input
+                placeholder="Описания"
+                inputContainerStyle={styles.inputContainer}
+                inputStyle={styles.inputStyle}
+                multiline={true}
+            />
+            <ImageUpload />
+            <Button title="submit" />
         </View>
     )
 }
+const styles = StyleSheet.create({
+    inputContainer: {
+        paddingLeft: 8,
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: 'rgba(110, 120, 170, 1)',
+        height: 45,
+        width: '100%',
+        marginVertical: 5
+    },
+    inputStyle: {
+        flex: 1,
+        color: 'black',
+        fontFamily: 'regular',
+        fontSize: 16,
+    }
+});
+
+
 
 export default SellForm

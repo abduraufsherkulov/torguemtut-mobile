@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Text, View, FlatList, Platform, StyleSheet, SafeAreaView } from 'react-native';
+import { Text, View, FlatList, Platform, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { AuthContext } from '../../contexts/AuthContext';
 import UnAuthorizedNavigate from '../auth/UnAuthorizedNavigate';
 import { PolifySafeArea } from '../../assets/styles/styles';
@@ -9,17 +9,19 @@ import SellForm from './sellForm/SellForm';
 function SellScreen({ navigation, route }) {
     const { userData } = useContext(AuthContext);
     return userData.token ? (
-        <KeyboardAwareScrollView
-            // style={{ backgroundColor: '#4c69a5' }}
-            resetScrollToCoords={{ x: 0, y: 0 }}
-            contentContainerStyle={styles.container}
-            scrollEnabled={false}
-            enableOnAndroid={true}
-            enableAutoAutomaticScroll={(Platform.OS === 'ios')}
-        >
-            <SellForm navigation={navigation} route={route} />
+        <ScrollView>
+            <KeyboardAwareScrollView
+                // style={{ backgroundColor: '#4c69a5' }}
+                resetScrollToCoords={{ x: 0, y: 0 }}
+                contentContainerStyle={styles.container}
+                scrollEnabled={false}
+                enableOnAndroid={true}
+                enableAutoAutomaticScroll={(Platform.OS === 'ios')}
+            >
+                <SellForm navigation={navigation} route={route} />
 
-        </KeyboardAwareScrollView>
+            </KeyboardAwareScrollView>
+        </ScrollView>
     ) : (
             <UnAuthorizedNavigate navigation={navigation} />
         );

@@ -18,6 +18,7 @@ function UserInfoContextProvider(props) {
             }
         })
             .then(response => {
+                console.log(response.data)
                 setUserInfo(response.data);
             })
             .catch(error => {

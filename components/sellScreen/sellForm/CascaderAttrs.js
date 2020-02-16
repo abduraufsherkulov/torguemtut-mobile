@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from 'react'
-import { View, Picker, Modal, Text, TouchableHighlight, Alert, Button, Platform } from 'react-native'
+import { View, StyleSheet, Button, Platform } from 'react-native'
 import RNPickerSelect from 'react-native-picker-select';
 import { Input } from 'react-native-elements'
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
+import { pickerSelectStyles } from '../../../assets/styles/styles';
 
 function CascaderAttrs({ navigation, route }) {
     const [currency, setCurrency] = useState("2")
     const [modalVisible, setModalVisible] = useState(false);
     const [cascaderLoading, setCascaderLoading] = useState(false);
     const [attr, setAttr] = useState([]);
+    const [title, setTitle] = useState("Категории");
     let categoryId = route.params ? route.params.id : null;
-
+    console.log(route.params)
     useEffect(() => {
         if (categoryId) {
+            setTitle(`${route.params.first}/${route.params.second}/${route.params.title}`)
             setCascaderLoading(true);
             const endpoint = `https://ttuz.azurewebsites.net/api/category/get-category-attributes?Id=${route.params.id}`;
             axios({
@@ -34,17 +37,30 @@ function CascaderAttrs({ navigation, route }) {
 
     function AttrSelect({ item }) {
         return (
-            <RNPickerSelect
-                onValueChange={(value) => console.log(value)}
-                placeholder={item.title}
-                items={item.attributeOptions}
-            />
+            <View style={{
+                width: '95%', marginVertical: 5, marginRight: 'auto', marginLeft: 'auto'
+            }}>
+                <RNPickerSelect
+                    style={pickerSelectStyles}
+                    onValueChange={(value) => console.log(value)}
+                    placeholder={{ label: item.label }}
+                    items={item.attributeOptions}
+                    useNativeAndroidPickerStyle={false}
+                    Icon={() => {
+                        return <Ionicons name="ios-arrow-down" size={24} color="gray" />;
+                    }}
+                />
+            </View>
         )
     }
 
     function AttrInput({ item }) {
         return (
-            <Input placeholder={item.title} />
+            <Input
+                inputContainerStyle={styles.inputContainer}
+                inputStyle={styles.inputStyle}
+                placeholder={item.title}
+            />
         )
     }
 
@@ -66,22 +82,28 @@ function CascaderAttrs({ navigation, route }) {
     }
 
     return (
-        <View style={{ alignItems: 'center', marginBottom: 16, flex: 1, width: '100%' }}>
-            <Button title="test" onPress={() => navigation.navigate('ChooseScreen')} />
-            <Input
-                containerStyle={{ width: '90%' }}
-                rightIcon={
-                    <Ionicons
-                        name="ios-arrow-forward"
-                        size={25}
-                    />
-                }
-                // containerStyle={styles.inputContainerStyle}
-                placeholder="Input with right icon"
-            />
+        <React.Fragment>
+            <Button title={title} onPress={() => navigation.navigate('ChooseScreen')} />
             <Just />
-        </View>
+        </React.Fragment>
     )
 }
+
+const styles = StyleSheet.create({
+    inputContainer: {
+        paddingLeft: 8,
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: 'rgba(110, 120, 170, 1)',
+        height: 45,
+        width: '100%'
+    },
+    inputStyle: {
+        flex: 1,
+        color: 'black',
+        fontFamily: 'regular',
+        fontSize: 16,
+    }
+});
 
 export default CascaderAttrs
