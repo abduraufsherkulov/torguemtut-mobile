@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Button, Image, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
+import axios from 'axios';
+import { AuthContext } from '../../../contexts/AuthContext';
 
 function ImageUpload() {
+    const { userData } = useContext(AuthContext);
     const [image, setImage] = useState(null)
 
     useEffect(() => {
@@ -24,9 +27,11 @@ function ImageUpload() {
 
     const _pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsMultipleSelection: true,
             allowsEditing: true,
+            base64: true,
+            exif: true,
             aspect: [4, 3],
             quality: 1
         });
@@ -34,6 +39,24 @@ function ImageUpload() {
         console.log(result);
 
         if (!result.cancelled) {
+            const endpoint = "https://ttuz.azurewebsites.net/api/news/upload-image";
+            const data = new FormData();
+            data.append('image', result.uri);
+
+            axios({
+                method: "post",
+                url: endpoint,
+                data: data,
+                headers: {
+                    'Accept': 'application/json',
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${userData.token}`
+                }
+            }).then(response => {
+                console.log(response);
+            }).catch(err => {
+                console.log(err)
+            })
             setImage(result.uri)
         }
     };
