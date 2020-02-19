@@ -11,19 +11,22 @@ function SellForm({ navigation, route }) {
     const [currency, setCurrency] = useState("2")
     return (
         <View style={{ alignItems: 'center', marginBottom: 16, flex: 1, width: '100%' }}>
-            <Input
-                placeholder="Заголовок"
-                inputContainerStyle={styles.inputContainer}
-                inputStyle={styles.inputStyle}
-            />
-            <CascaderAttrs navigation={navigation} route={route} />
-            <View style={{ width: '100%', flexDirection: 'row' }}>
+            <View style={{ backgroundColor: 'white', marginVertical: 4, paddingVertical: 10, width: '100%', paddingHorizontal: 10 }}>
                 <Input
-                    placeholder="Цена"
+                    placeholder="Заголовок"
+                    containerStyle={{ paddingHorizontal: 0, padding: 0, margin: 0 }}
                     inputContainerStyle={styles.inputContainer}
                     inputStyle={styles.inputStyle}
                 />
-                {/* {
+                <CascaderAttrs navigation={navigation} route={route} />
+                <View style={{ width: '100%', flexDirection: 'row' }}>
+                    <Input
+                        placeholder="Цена"
+                        containerStyle={{ paddingHorizontal: 0, padding: 0, margin: 0 }}
+                        inputContainerStyle={styles.inputContainer}
+                        inputStyle={styles.inputStyle}
+                    />
+                    {/* {
                     Platform.OS === 'android' ? (
                         <Picker
                             selectedValue={1}
@@ -36,14 +39,19 @@ function SellForm({ navigation, route }) {
                             <Text>UZS</Text>
                         )
                 } */}
+                </View>
             </View>
-            <Input
-                placeholder="Описания"
-                inputContainerStyle={styles.inputContainer}
-                inputStyle={styles.inputStyle}
-                multiline={true}
-            />
-            <ImageUpload />
+
+            <View style={{ backgroundColor: 'white', marginVertical: 4, paddingVertical: 10, width: '100%', paddingHorizontal: 10 }}>
+                <Input
+                    placeholder="Описания"
+                    containerStyle={{ paddingHorizontal: 0, padding: 0, margin: 0 }}
+                    inputContainerStyle={styles.inputContainer}
+                    inputStyle={styles.inputStyle}
+                    multiline={true}
+                />
+                <ImageUpload />
+            </View>
             <Button title="submit" />
         </View>
     )
@@ -56,7 +64,7 @@ const styles = StyleSheet.create({
         borderColor: 'rgba(110, 120, 170, 1)',
         height: 45,
         width: '100%',
-        marginVertical: 5
+        marginVertical: 5,
     },
     inputStyle: {
         flex: 1,

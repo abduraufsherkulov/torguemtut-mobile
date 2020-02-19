@@ -96,24 +96,6 @@ function SellStackScreen() {
         options={({ route }) => ({
           headerTitle: getHeaderTitle(route),
         })} />
-      <SellStack.Screen
-        name="ChooseScreen"
-        component={ChooseScreen}
-        options={({ route }) => ({
-          headerTitle: getHeaderTitle(route),
-        })} />
-      <SellStack.Screen
-        name="ChooseSubScreen"
-        component={ChooseSubScreen}
-        options={({ route }) => ({
-          headerTitle: getHeaderTitle(route),
-        })} />
-      <SellStack.Screen
-        name="ChooseSubSubScreen"
-        component={ChooseSubSubScreen}
-        options={({ route }) => ({
-          headerTitle: getHeaderTitle(route),
-        })} />
     </SellStack.Navigator>)
 }
 
@@ -145,8 +127,7 @@ function MainTab({ route }) {
 
           // You can return any component that you like here!
           return <Ionicons name={iconName} size={size} color={color} />;
-        },
-        tabBarVisible: [1, 2, 3].includes(router) ? false : true
+        }
       })}
 
       tabBarOptions={{
@@ -156,7 +137,7 @@ function MainTab({ route }) {
     >
       <Tab.Screen options={{ title: 'Главная' }} name="Main" component={MainScreen} />
       <Tab.Screen options={{ title: 'Избранные' }} name="Favourite" component={FavouriteScreen} />
-      <Tab.Screen options={{ title: 'Добавить' }} name="Sell" component={SellStackScreen} />
+      <Tab.Screen options={{ title: 'Добавить' }} name="Sell" component={SellScreen} />
       <Tab.Screen options={{ title: 'Топ' }} name="TopProducts" component={TopProductsScreen} />
       <Tab.Screen options={{ headerTitle: 'Мой профиль' }} name="Profile" component={ProfileStackScreen} />
     </Tab.Navigator>
@@ -171,7 +152,7 @@ function MainApp() {
         component={MainTab}
         options={({ route }) => ({
           headerTitle: getHeaderTitle(route),
-          headerShown: route.state ? (route.state.index == 4 || route.state.index == 2 ? false : true) : true
+          headerShown: route.state ? (route.state.index == 4 ? false : true) : true
         })} />
       <MainStack.Screen
         name="MainSubScreen"
@@ -214,6 +195,25 @@ function MainApp() {
         component={SellerNewProducts}
         options={({ route }) => ({
           title: route.params.title,
+        })} />
+
+      <MainStack.Screen
+        name="ChooseScreen"
+        component={ChooseScreen}
+        options={({ route }) => ({
+          headerTitle: getHeaderTitle(route),
+        })} />
+      <MainStack.Screen
+        name="ChooseSubScreen"
+        component={ChooseSubScreen}
+        options={({ route }) => ({
+          headerTitle: getHeaderTitle(route),
+        })} />
+      <MainStack.Screen
+        name="ChooseSubSubScreen"
+        component={ChooseSubSubScreen}
+        options={({ route }) => ({
+          headerTitle: getHeaderTitle(route),
         })} />
     </MainStack.Navigator>
   )

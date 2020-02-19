@@ -38,7 +38,7 @@ function CascaderAttrs({ navigation, route }) {
     function AttrSelect({ item }) {
         return (
             <View style={{
-                width: '95%', marginVertical: 5, marginRight: 'auto', marginLeft: 'auto'
+                width: '100%', marginVertical: 5, marginRight: 'auto', marginLeft: 'auto'
             }}>
                 <RNPickerSelect
                     style={pickerSelectStyles}
@@ -57,6 +57,7 @@ function CascaderAttrs({ navigation, route }) {
     function AttrInput({ item }) {
         return (
             <Input
+                containerStyle={{ paddingHorizontal: 0, padding: 0, margin: 0 }}
                 inputContainerStyle={styles.inputContainer}
                 inputStyle={styles.inputStyle}
                 placeholder={item.title}

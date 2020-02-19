@@ -16,7 +16,7 @@ function ChooseSubSubScreen({ route, navigation }) {
                 button
                 onPress={() => {
                     /* 1. Navigate to the Details route with params */
-                    navigation.navigate('SellScreen', {
+                    navigation.navigate('Sell', {
                         id: item.value,
                         title: item.label
                     });
@@ -32,7 +32,7 @@ function ChooseSubSubScreen({ route, navigation }) {
                     button
                     onPress={() => {
                         /* 1. Navigate to the Details route with params */
-                        navigation.navigate('SellScreen', {
+                        navigation.navigate('Sell', {
                             id: item.value,
                             title: item.label,
                             first: route.params.first,
