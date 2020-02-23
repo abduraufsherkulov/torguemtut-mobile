@@ -4,6 +4,8 @@ import { success, warning, error, loading } from '../assets/styles/styles';
 import { toastReducer } from '../reducers/ToastReducer';
 import { Ionicons, AntDesign } from '@expo/vector-icons';
 import { Animated, Easing, View, Text } from 'react-native';
+import * as Animatable from 'react-native-animatable';
+const AnimatableIcon = Animatable.createAnimatableComponent(AntDesign);
 
 export const ToastContext = createContext();
 
@@ -11,51 +13,23 @@ export const ToastContext = createContext();
 function ToastContextProvider(props) {
 
     const toastRef = React.createRef();
-    const [rotateAnim, setRotateAnim] = useState(new Animated.Value(0))
 
-
-    const spin = rotateAnim.interpolate({
-        inputRange: [0, 1],
-        outputRange: ['0deg', '360deg']
-    })
     const [toaster, dispatch] = useReducer(toastReducer, {
         text: '', duration: 2000, style: loading, type: 'loading'
     })
-    {/* <Animated.View
-            style={{ transform: [{ rotate: spin }] }}><Ionicons name="ios-close" size={64} color="green" /></Animated.View> */}
-
+    
     useEffect(() => {
         toastCaller()
     }, [toastRef])
 
-    // useEffect(() => {
-    //     startAnimation()
-    // }, [])
-
-    function startAnimation() {
-        rotateAnim.setValue(0)
-        Animated.timing(
-            rotateAnim,
-            {
-                toValue: 1,
-                duration: 500,
-                easing: Easing.linear
-            }
-        ).start(() => {
-            startAnimation()
-        })
-    }
-
     function toastCaller() {
         if (toaster.type == 'loading') {
+            console.log('loading')
             toastRef.current.show(
                 <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-                    <Animated.View style={{ transform: [{ rotate: spin }], width: 30 }}>
-                        <AntDesign name="loading2" size={32} color="green" />
-                    </Animated.View>
-                    <Text>{"   "}{toaster.text}</Text>
+                    <AnimatableIcon easing="linear" animation="rotate" useNativeDriver={false} iterationCount="infinite" name="loading2" size={32} color="green" />
+                    {/* <Text>{"   "}{toaster.text}</Text> */}
                 </View>, toaster.duration);
-            startAnimation()
         } else if (toaster.type == 'finished') {
             toastRef.current.close();
         } else if (toaster.type == 'success') {

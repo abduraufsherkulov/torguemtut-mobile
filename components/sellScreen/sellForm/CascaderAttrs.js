@@ -6,11 +6,8 @@ import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import { pickerSelectStyles } from '../../../assets/styles/styles';
 
-function CascaderAttrs({ navigation, route }) {
-    const [currency, setCurrency] = useState("2")
-    const [modalVisible, setModalVisible] = useState(false);
+function CascaderAttrs({ navigation, route, attr, setAttr, selectedAttr, setSelectedAttr }) {
     const [cascaderLoading, setCascaderLoading] = useState(false);
-    const [attr, setAttr] = useState([]);
     const [title, setTitle] = useState("Категории");
     let categoryId = route.params ? route.params.id : null;
     console.log(route.params)
@@ -35,15 +32,24 @@ function CascaderAttrs({ navigation, route }) {
         }
     }, [categoryId])
 
-    function AttrSelect({ item }) {
+    const handleSelectChange = (attributeId, value, name) => {
+        selectedAttr[name] = { AttributeId: attributeId, Value: value };
+        console.log(selectedAttr);
+        setSelectedAttr(selectedAttr);
+
+    }
+    // {item.name: {AttributeId: attributeId, Value: value}}
+    function AttrSelect({ item, attr, index }) {
         return (
             <View style={{
                 width: '100%', marginVertical: 5, marginRight: 'auto', marginLeft: 'auto'
             }}>
                 <RNPickerSelect
                     style={pickerSelectStyles}
-                    onValueChange={(value) => console.log(value)}
+                    onValueChange={(value, key) => handleSelectChange(item.attributeOptions[key].attributeId, value, item.name)}
+                    // onDonePress={(value, key) => handleSelectChange(item.attributeOptions[key].attributeId, item.attributeOptions[key].value)}
                     placeholder={{ label: item.label }}
+                    value={selectedAttr[item.name]}
                     items={item.attributeOptions}
                     useNativeAndroidPickerStyle={false}
                     Icon={() => {
@@ -71,11 +77,11 @@ function CascaderAttrs({ navigation, route }) {
             attr.map((item, index) => {
                 if (item.attributeOptions.length > 0) {
                     return (
-                        <AttrSelect item={item} key={item.name} />
+                        <AttrSelect index={index} attr={attr} item={item} key={item.name} />
                     )
                 } else {
                     return (
-                        <AttrInput item={item} key={item.name} />
+                        <AttrInput index={index} attr={attr} item={item} key={item.name} />
                     )
                 }
             })

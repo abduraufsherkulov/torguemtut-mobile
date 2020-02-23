@@ -23,6 +23,7 @@ import ActiveAds from '../components/profileScreen/ActiveAds';
 import ChooseScreen from '../components/sellScreen/chooseCategory/ChooseScreen';
 import ChooseSubScreen from '../components/sellScreen/chooseCategory/ChooseSubScreen';
 import ChooseSubSubScreen from '../components/sellScreen/chooseCategory/ChooseSubSubScreen';
+import MainMapPart from '../components/sellScreen/sellForm/MainMapPart';
 
 
 const MainStack = createStackNavigator();
@@ -212,6 +213,12 @@ function MainApp() {
       <MainStack.Screen
         name="ChooseSubSubScreen"
         component={ChooseSubSubScreen}
+        options={({ route }) => ({
+          headerTitle: getHeaderTitle(route),
+        })} />
+      <MainStack.Screen
+        name="MainMapPart"
+        component={MainMapPart}
         options={({ route }) => ({
           headerTitle: getHeaderTitle(route),
         })} />
