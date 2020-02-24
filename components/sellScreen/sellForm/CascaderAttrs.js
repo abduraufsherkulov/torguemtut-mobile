@@ -33,12 +33,11 @@ function CascaderAttrs({ navigation, route, attr, setAttr, selectedAttr, setSele
     }, [categoryId])
 
     const handleSelectChange = (attributeId, value, name) => {
+        console.log(value)
         selectedAttr[name] = { AttributeId: attributeId, Value: value };
         console.log(selectedAttr);
         setSelectedAttr(selectedAttr);
-
     }
-    // {item.name: {AttributeId: attributeId, Value: value}}
     function AttrSelect({ item, attr, index }) {
         return (
             <View style={{
@@ -46,10 +45,9 @@ function CascaderAttrs({ navigation, route, attr, setAttr, selectedAttr, setSele
             }}>
                 <RNPickerSelect
                     style={pickerSelectStyles}
-                    onValueChange={(value, key) => handleSelectChange(item.attributeOptions[key].attributeId, value, item.name)}
-                    // onDonePress={(value, key) => handleSelectChange(item.attributeOptions[key].attributeId, item.attributeOptions[key].value)}
+                    onValueChange={(value) => handleSelectChange(item.id, value, item.name)}
                     placeholder={{ label: item.label }}
-                    value={selectedAttr[item.name]}
+                    // value={selectedAttr[item.name] ? selectedAttr[item.name].Value : ''}
                     items={item.attributeOptions}
                     useNativeAndroidPickerStyle={false}
                     Icon={() => {
@@ -60,9 +58,11 @@ function CascaderAttrs({ navigation, route, attr, setAttr, selectedAttr, setSele
         )
     }
 
-    function AttrInput({ item }) {
+    function AttrInput({ item, index }) {
         return (
             <Input
+                // onValueChange={(value, key) => handleSelectChange(item.attributeOptions[key].attributeId, value, item.name)}
+                onChangeText={(value) => handleSelectChange(item.id, value, item.name)}
                 containerStyle={{ paddingHorizontal: 0, padding: 0, margin: 0 }}
                 inputContainerStyle={styles.inputContainer}
                 inputStyle={styles.inputStyle}

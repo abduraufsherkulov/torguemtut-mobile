@@ -188,7 +188,7 @@ function SellForm({ navigation, route, userInfo }) {
                     inputContainerStyle={styles.inputContainer}
                     inputStyle={styles.inputStyle}
                     multiline={true}
-                    onChangeText={pass => setPassword(pass)}
+                    onChangeText={desc => setDescription(desc)}
                 />
                 <ImageUpload image={image} setImage={setImage} />
             </View>
