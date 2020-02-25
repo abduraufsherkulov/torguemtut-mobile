@@ -38,6 +38,12 @@ function CascaderAttrs({ navigation, route, attr, setAttr, selectedAttr, setSele
         console.log(selectedAttr);
         setSelectedAttr(selectedAttr);
     }
+    const handleOpen = (attributeId, value, name) => {
+        console.log('test')
+        selectedAttr[name] = { AttributeId: attributeId, Value: value };
+        console.log(selectedAttr);
+        setSelectedAttr(selectedAttr);
+    }
     function AttrSelect({ item, attr, index }) {
         return (
             <View style={{
@@ -46,8 +52,9 @@ function CascaderAttrs({ navigation, route, attr, setAttr, selectedAttr, setSele
                 <RNPickerSelect
                     style={pickerSelectStyles}
                     onValueChange={(value) => handleSelectChange(item.id, value, item.name)}
+                    // onOpen={() => handleOpen(item.id, '', item.name)}
                     placeholder={{ label: item.label }}
-                    // value={selectedAttr[item.name] ? selectedAttr[item.name].Value : ''}
+                    value={selectedAttr[item.name] ? selectedAttr[item.name].Value : ''}
                     items={item.attributeOptions}
                     useNativeAndroidPickerStyle={false}
                     Icon={() => {
@@ -63,6 +70,7 @@ function CascaderAttrs({ navigation, route, attr, setAttr, selectedAttr, setSele
             <Input
                 // onValueChange={(value, key) => handleSelectChange(item.attributeOptions[key].attributeId, value, item.name)}
                 onChangeText={(value) => handleSelectChange(item.id, value, item.name)}
+                value={selectedAttr[item.name] ? selectedAttr[item.name].Value : ''}
                 containerStyle={{ paddingHorizontal: 0, padding: 0, margin: 0 }}
                 inputContainerStyle={styles.inputContainer}
                 inputStyle={styles.inputStyle}
