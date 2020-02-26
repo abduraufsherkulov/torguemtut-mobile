@@ -10,7 +10,6 @@ function CascaderAttrs({ navigation, route, attr, setAttr, selectedAttr, setSele
     const [cascaderLoading, setCascaderLoading] = useState(false);
     const [title, setTitle] = useState("Категории");
     let categoryId = route.params ? route.params.id : null;
-    console.log(route.params)
     useEffect(() => {
         if (categoryId) {
             setTitle(`${route.params.first}/${route.params.second}/${route.params.title}`)

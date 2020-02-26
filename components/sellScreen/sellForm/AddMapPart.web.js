@@ -13,26 +13,28 @@ function AddMapPart({ navigation, route, address, setAddress, setPinLocation, pi
     })
 
     return (
-        <div style={{ height: 150, width: '100%' }}>
-            <GoogleMapReact
-                onClick={() => navigation.navigate('MainMapPart', {
-                    latlong: latlong,
-                    setlatlong: setlatlong,
-                    pinLocation: pinLocation,
-                    setPinLocation: setPinLocation,
-                    address: address,
-                    setAddress: setAddress
-                })}
-                bootstrapURLKeys={{ key: 'AIzaSyDL4bGpcflipvkmToDwc_ELWpVxU75vuwM' }}
-                defaultCenter={location.center}
-                defaultZoom={location.zoom}
-            >
-                <AnyReactComponent
-                    lat={59.955413}
-                    lng={30.337844}
-                    text="My Marker"
-                />
-            </GoogleMapReact>
+        <div style={{ height: 250, width: '100%' }}
+            onClick={() => navigation.navigate('MainMapPart', {
+                latlong: latlong,
+                setlatlong: setlatlong,
+                pinLocation: pinLocation,
+                setPinLocation: setPinLocation,
+                address: address,
+                setAddress: setAddress
+            })}>
+            <div style={{ width: '100%', height: '100%', pointerEvents: 'none' }}>
+                <GoogleMapReact
+                    bootstrapURLKeys={{ key: 'AIzaSyDL4bGpcflipvkmToDwc_ELWpVxU75vuwM' }}
+                    defaultCenter={{ lat: latlong.latitude, lng: latlong.longitude }}
+                    defaultZoom={location.zoom}
+                >
+                    <AnyReactComponent
+                        lat={pinLocation.latitude}
+                        lng={pinLocation.longitude}
+                        text="My Marker"
+                    />
+                </GoogleMapReact>
+            </div>
         </div>
     )
 }

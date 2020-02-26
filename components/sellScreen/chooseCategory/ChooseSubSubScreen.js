@@ -3,7 +3,6 @@ import { Text, View, FlatList } from 'react-native';
 import { ListItem } from 'react-native-elements';
 
 function ChooseSubSubScreen({ route, navigation }) {
-    console.log(route.params)
     const keyExtractor = (item, index) => index.toString()
 
     const renderItem = ({ item, index }) => {
