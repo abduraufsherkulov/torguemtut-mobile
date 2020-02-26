@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { View, StyleSheet, Button, Platform } from 'react-native'
 import RNPickerSelect from 'react-native-picker-select';
 import { Input } from 'react-native-elements'
@@ -6,8 +6,10 @@ import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import { pickerSelectStyles } from '../../../assets/styles/styles';
 
-function CascaderAttrs({ navigation, route, attr, setAttr, selectedAttr, setSelectedAttr }) {
+function CascaderAttrs({ navigation, route, selectedAttr, setSelectedAttr }) {
     const [cascaderLoading, setCascaderLoading] = useState(false);
+    const [attrHere, setAttrHere] = useState([])
+    const [selectedAttrHere, setSelectedAttrHere] = useState([])
     const [title, setTitle] = useState("Категории");
     let categoryId = route.params ? route.params.id : null;
     useEffect(() => {
@@ -24,7 +26,8 @@ function CascaderAttrs({ navigation, route, attr, setAttr, selectedAttr, setSele
             }).then(response => {
                 console.log(response.data)
                 setCascaderLoading(false)
-                setAttr(response.data);
+                setAttrHere(response.data)
+                // setAttr(response.data);
             }).catch(error => {
                 console.log(error)
             })
@@ -33,17 +36,18 @@ function CascaderAttrs({ navigation, route, attr, setAttr, selectedAttr, setSele
 
     const handleSelectChange = (attributeId, value, name) => {
         console.log(value)
-        selectedAttr[name] = { AttributeId: attributeId, Value: value };
-        console.log(selectedAttr);
-        setSelectedAttr(selectedAttr);
+        let it = selectedAttrHere.find(x => x.name == name);
+        console.log(it, 'it here')
+        if (it) {
+            let index = selectedAttrHere.findIndex(x => x.name == name);
+            let c = [...selectedAttrHere];
+            c[index].Value = value;
+            setSelectedAttrHere([...c]);
+        } else {
+            setSelectedAttrHere([...selectedAttrHere, { AttributeId: attributeId, Value: value, name: name }])
+        }
     }
-    const handleOpen = (attributeId, value, name) => {
-        console.log('test')
-        selectedAttr[name] = { AttributeId: attributeId, Value: value };
-        console.log(selectedAttr);
-        setSelectedAttr(selectedAttr);
-    }
-    function AttrSelect({ item, attr, index }) {
+    const AttrSelect = ({ item, index }) => {
         return (
             <View style={{
                 width: '100%', marginVertical: 5, marginRight: 'auto', marginLeft: 'auto'
@@ -53,7 +57,7 @@ function CascaderAttrs({ navigation, route, attr, setAttr, selectedAttr, setSele
                     onValueChange={(value) => handleSelectChange(item.id, value, item.name)}
                     // onOpen={() => handleOpen(item.id, '', item.name)}
                     placeholder={{ label: item.label }}
-                    value={selectedAttr[item.name] ? selectedAttr[item.name].Value : ''}
+                    // value={selectedAttrHere[item.name] ? selectedAttrHere[item.name].Value : ''}
                     items={item.attributeOptions}
                     useNativeAndroidPickerStyle={false}
                     Icon={() => {
@@ -64,12 +68,12 @@ function CascaderAttrs({ navigation, route, attr, setAttr, selectedAttr, setSele
         )
     }
 
-    function AttrInput({ item, index }) {
+    const AttrInput = ({ item, index }) => {
         return (
             <Input
                 // onValueChange={(value, key) => handleSelectChange(item.attributeOptions[key].attributeId, value, item.name)}
                 onChangeText={(value) => handleSelectChange(item.id, value, item.name)}
-                value={selectedAttr[item.name] ? selectedAttr[item.name].Value : ''}
+                // value={selectedAttrHere[item.name] ? selectedAttrHere[item.name].Value : ''}
                 containerStyle={{ paddingHorizontal: 0, padding: 0, margin: 0 }}
                 inputContainerStyle={styles.inputContainer}
                 inputStyle={styles.inputStyle}
@@ -80,25 +84,27 @@ function CascaderAttrs({ navigation, route, attr, setAttr, selectedAttr, setSele
 
 
     const Just = () => {
+        console.log('test')
         return (
-            attr.map((item, index) => {
+            attrHere.map((item, index) => {
                 if (item.attributeOptions.length > 0) {
                     return (
-                        <AttrSelect index={index} attr={attr} item={item} key={item.name} />
+                        <AttrSelect index={index} attr={attrHere} item={item} key={item.name} />
                     )
                 } else {
                     return (
-                        <AttrInput index={index} attr={attr} item={item} key={item.name} />
+                        <AttrInput index={index} attr={attrHere} item={item} key={item.name} />
                     )
                 }
             })
         )
     }
-
+    console.log(selectedAttrHere)
+    const MemoizedValue = useMemo(() => Just, [attrHere]);
     return (
         <React.Fragment>
             <Button title={title} onPress={() => navigation.navigate('ChooseScreen')} />
-            <Just />
+            <MemoizedValue />
         </React.Fragment>
     )
 }

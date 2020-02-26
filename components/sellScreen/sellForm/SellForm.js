@@ -147,8 +147,7 @@ function SellForm({ navigation, route, userInfo }) {
             console.log(error.response)
         })
     };
-    // console.log(selectedAttr);
-    console.log(pinLocation, 'in sellform')
+    console.log(selectedAttr);
     return (
         <View style={{ alignItems: 'center', marginBottom: 16, flex: 1, width: '100%' }}>
             <View style={{ backgroundColor: 'white', marginVertical: 4, paddingVertical: 10, width: '100%', paddingHorizontal: 10 }}>
