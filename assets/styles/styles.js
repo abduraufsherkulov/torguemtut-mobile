@@ -119,7 +119,7 @@ export const pickerSelectErrorStyles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 10,
     borderWidth: 1,
-    borderColor: 'rgba(110, 120, 170, 1)',
+    borderColor: 'red',
     borderRadius: 5,
     color: 'black',
     paddingRight: 30, // to ensure the text is never behind the icon

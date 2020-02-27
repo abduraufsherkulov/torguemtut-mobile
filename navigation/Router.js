@@ -24,6 +24,7 @@ import ChooseScreen from '../components/sellScreen/chooseCategory/ChooseScreen';
 import ChooseSubScreen from '../components/sellScreen/chooseCategory/ChooseSubScreen';
 import ChooseSubSubScreen from '../components/sellScreen/chooseCategory/ChooseSubSubScreen';
 import MainMapPart from '../components/sellScreen/sellForm/MainMapPart';
+import WaitingAds from '../components/profileScreen/WaitingAds';
 
 
 const MainStack = createStackNavigator();
@@ -80,6 +81,12 @@ function ProfileStackScreen() {
       <ProfileStack.Screen
         name="ArchivedAds"
         component={ArchivedAds}
+        options={({ route }) => ({
+          headerTitle: getHeaderTitle(route),
+        })} />
+      <ProfileStack.Screen
+        name="WaitingAds"
+        component={WaitingAds}
         options={({ route }) => ({
           headerTitle: getHeaderTitle(route),
         })} />
@@ -221,6 +228,7 @@ function MainApp() {
         component={MainMapPart}
         options={({ route }) => ({
           headerTitle: getHeaderTitle(route),
+          gestureEnabled: false,
         })} />
     </MainStack.Navigator>
   )

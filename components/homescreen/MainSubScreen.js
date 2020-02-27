@@ -20,7 +20,7 @@ function MainSubScreen({ route, navigation }) {
             <ListItem
                 key={index}
                 title={item.label}
-                leftIcon={{ name: 'flight-takeoff' }}
+                // leftIcon={{ name: 'flight-takeoff' }}
                 // badge={{ value: 3, textStyle: { color: 'orange' }, containerStyle: { marginTop: -20 } }}
                 bottomDivider
                 button
@@ -37,7 +37,7 @@ function MainSubScreen({ route, navigation }) {
                 <ListItem
                     key={index}
                     title={item.label}
-                    leftIcon={{ name: 'flight-takeoff' }}
+                    // leftIcon={{ name: 'flight-takeoff' }}
                     // badge={{ value: 3, textStyle: { color: 'orange' }, containerStyle: { marginTop: -20 } }}
                     bottomDivider
                     button

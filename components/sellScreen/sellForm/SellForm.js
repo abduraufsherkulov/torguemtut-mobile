@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { View, Picker, Modal, Text, StyleSheet, Alert, Platform } from 'react-native'
 import { Input, Button, Divider } from 'react-native-elements'
 import { Ionicons } from '@expo/vector-icons';
@@ -7,8 +7,13 @@ import axios from 'axios';
 import CascaderAttrs from './CascaderAttrs';
 import ImageUpload from './ImageUpload';
 import AddMapPart from './AddMapPart';
+import { AuthContext } from '../../../contexts/AuthContext';
+import { MyAdsContext } from '../../../contexts/MyAdsContext';
 
 function SellForm({ navigation, route, userInfo }) {
+    const { userData, dispatch } = useContext(AuthContext)
+    const { myAds, setMyAds } = useContext(MyAdsContext);
+
     const [loading, setLoading] = useState(false)
     const [title, setTitle] = useState("")
     const [currency, setCurrency] = useState("2")
@@ -25,6 +30,8 @@ function SellForm({ navigation, route, userInfo }) {
 
     useEffect(() => {
         setContactPerson(`${userInfo.name} ${userInfo.surname}`)
+        setEmail(userInfo.email);
+        setPhone(userInfo.phone);
     }, [userInfo])
 
     const [image, setImage] = useState([{
@@ -75,7 +82,7 @@ function SellForm({ navigation, route, userInfo }) {
     const handleSubmit = e => {
         e.preventDefault();
         setLoading(true);
-        if (selectedAttr.length == 0) {
+        if (selectedAttr.length == 0 || price == '' || description == '' || title == '') {
             console.log('please choose categories')
         }
         let images = [];
@@ -109,31 +116,26 @@ function SellForm({ navigation, route, userInfo }) {
                 }
             });
             setSelectedAttr(showErrorMap);
-
             return false
-        }
-        return false;
-        for (let i = 0; i < attr.length; i++) {
-            newAttr.push({ AttributeId: attr[i].id, Value: attr[i].name in values ? (typeof values[attr[i].name] == "object" ? values[attr[i].name].key : values[attr[i].name]) : false })
         }
         const data = JSON.stringify({
             NewsAttribute: newAttr,
             Title: title,
             CategoryId: categoryId,
             Price: {
-                Amount: price,
-                Currency: +selectChange,
+                Amount: +price,
+                Currency: 1,
                 Exchange: false,
                 Free: false,
-                Negotiatable: checked
+                Negotiatable: true
             },
             Description: description,
             Location: position,
             ContactDetail: {
                 Name: contactPerson,
                 IsIndividual: true,
-                Email: userData.email,
-                Phone: userData.phone
+                Email: email,
+                Phone: phone
             },
             Status: 1,
             ImageIds: images
@@ -148,11 +150,10 @@ function SellForm({ navigation, route, userInfo }) {
                 Authorization: `Bearer ${userData.token}`
             }
         }).then(response => {
-            console.log(response);
+            console.log(response.data);
             if (response.data.status) {
-                setActiveKey('waiting');
                 setMyAds([...myAds, response.data.data]);
-                props.history.push('/myads');
+                navigation.navigate('WaitingAds')
             }
         }).catch(error => {
             if (error.response.status == 401) {
@@ -162,7 +163,7 @@ function SellForm({ navigation, route, userInfo }) {
             console.log(error.response)
         })
     };
-    console.log(selectedAttr);
+    console.log(title);
     return (
         <View style={{ alignItems: 'center', marginBottom: 16, flex: 1, width: '100%' }}>
             <View style={{ backgroundColor: 'white', marginVertical: 4, paddingVertical: 10, width: '100%', paddingHorizontal: 10 }}>
@@ -171,6 +172,8 @@ function SellForm({ navigation, route, userInfo }) {
                     containerStyle={{ paddingHorizontal: 0, padding: 0, margin: 0 }}
                     inputContainerStyle={styles.inputContainer}
                     inputStyle={styles.inputStyle}
+                    onChangeText={e => setTitle(e)}
+                    value={title}
                 />
                 <CascaderAttrs selectedAttr={selectedAttr} setSelectedAttr={setSelectedAttr} navigation={navigation} route={route} />
                 <View style={{ width: '100%', flexDirection: 'row' }}>
@@ -236,14 +239,15 @@ function SellForm({ navigation, route, userInfo }) {
                 />
                 <Input
                     placeholder="E-mail"
-                    value={`${userInfo.email}`}
+                    value={email}
                     containerStyle={{ paddingHorizontal: 0, padding: 0, margin: 0 }}
                     inputContainerStyle={styles.inputContainer}
                     inputStyle={styles.inputStyle}
+                    onChangeText={e => setEmail(e)}
                 />
                 <Input
                     disabled={true}
-                    value={`${userInfo.phone}`}
+                    value={phone}
                     placeholder="Контакты"
                     containerStyle={{ paddingHorizontal: 0, padding: 0, margin: 0 }}
                     inputContainerStyle={styles.inputContainer}

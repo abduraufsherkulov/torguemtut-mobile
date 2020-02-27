@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState, useContext, useRef } from 'react';
-import { Text, View, FlatList } from 'react-native';
+import { Text, View, FlatList, Platform } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { CategoryContext } from '../../contexts/CategoryContext';
 import { Ionicons } from '@expo/vector-icons';
@@ -11,10 +11,11 @@ function MainScreen({ navigation }) {
     const keyExtractor = (item, index) => index.toString()
 
     const renderItem = ({ item, index }) => {
+        let label = Platform.OS === "web" ? "   " + item.label : item.label;
         return item.children.length > 0 ? (
             <ListItem
                 key={index}
-                title={item.label}
+                title={label}
                 leftIcon={<Ionicons name={item.mobileIcon} size={32} />}
                 // badge={{ value: 3, textStyle: { color: 'orange' }, containerStyle: { marginTop: -20 } }}
                 onPress={() => {
@@ -31,7 +32,7 @@ function MainScreen({ navigation }) {
         ) : (
                 <ListItem
                     key={index}
-                    title={item.label}
+                    title={label}
                     leftIcon={<Ionicons name={item.mobileIcon} size={32} />}
                     // badge={{ value: 3, textStyle: { color: 'orange' }, containerStyle: { marginTop: -20 } }}
                     bottomDivider
