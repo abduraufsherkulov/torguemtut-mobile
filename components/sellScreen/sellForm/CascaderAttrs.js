@@ -4,12 +4,11 @@ import RNPickerSelect from 'react-native-picker-select';
 import { Input } from 'react-native-elements'
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
-import { pickerSelectStyles } from '../../../assets/styles/styles';
+import { pickerSelectStyles, pickerSelectErrorStyles } from '../../../assets/styles/styles';
 
 function CascaderAttrs({ navigation, route, selectedAttr, setSelectedAttr }) {
     const [cascaderLoading, setCascaderLoading] = useState(false);
     const [attrHere, setAttrHere] = useState([])
-    const [selectedAttrHere, setSelectedAttrHere] = useState([])
     const [title, setTitle] = useState("Категории");
     let categoryId = route.params ? route.params.id : null;
     useEffect(() => {
@@ -27,84 +26,74 @@ function CascaderAttrs({ navigation, route, selectedAttr, setSelectedAttr }) {
                 console.log(response.data)
                 setCascaderLoading(false)
                 setAttrHere(response.data)
-                // setAttr(response.data);
+                let parsed = response.data.map(function (item) {
+                    return {
+                        AttributeId: item.id,
+                        Value: '',
+                        name: item.name,
+                        required: item.required,
+                        error: false
+                    }
+                })
+                console.log(parsed)
+                setSelectedAttr(parsed)
             }).catch(error => {
                 console.log(error)
             })
         }
     }, [categoryId])
 
-    const handleSelectChange = (attributeId, value, name) => {
-        console.log(value)
-        let it = selectedAttrHere.find(x => x.name == name);
-        console.log(it, 'it here')
-        if (it) {
-            let index = selectedAttrHere.findIndex(x => x.name == name);
-            let c = [...selectedAttrHere];
-            c[index].Value = value;
-            setSelectedAttrHere([...c]);
+    const handleSelectChange = (attributeId, value, name, required) => {
+        console.log(attributeId, value, name)
+        let test = selectedAttr.findIndex(x => x.name == name)
+        console.log(test)
+        if (test !== -1) {
+            let k = [...selectedAttr];
+            k[test].Value = value === undefined ? '' : value;
+            k[test].error = false;
+            // setSelectedAttrHere(k)
+            setSelectedAttr(k)
         } else {
-            setSelectedAttrHere([...selectedAttrHere, { AttributeId: attributeId, Value: value, name: name }])
+            // setSelectedAttrHere([...selectedAttr, { AttributeId: attributeId, Value: value, name: name, required: required, error: false }])
+            setSelectedAttr([...selectedAttr, { AttributeId: attributeId, Value: value === undefined ? '' : value, name: name, required: required, error: false }])
         }
     }
-    const AttrSelect = ({ item, index }) => {
-        return (
-            <View style={{
-                width: '100%', marginVertical: 5, marginRight: 'auto', marginLeft: 'auto'
-            }}>
-                <RNPickerSelect
-                    style={pickerSelectStyles}
-                    onValueChange={(value) => handleSelectChange(item.id, value, item.name)}
-                    // onOpen={() => handleOpen(item.id, '', item.name)}
-                    placeholder={{ label: item.label }}
-                    // value={selectedAttrHere[item.name] ? selectedAttrHere[item.name].Value : ''}
-                    items={item.attributeOptions}
-                    useNativeAndroidPickerStyle={false}
-                    Icon={() => {
-                        return <Ionicons name="ios-arrow-down" size={24} color="gray" />;
-                    }}
-                />
-            </View>
-        )
-    }
-
-    const AttrInput = ({ item, index }) => {
-        return (
-            <Input
-                // onValueChange={(value, key) => handleSelectChange(item.attributeOptions[key].attributeId, value, item.name)}
-                onChangeText={(value) => handleSelectChange(item.id, value, item.name)}
-                // value={selectedAttrHere[item.name] ? selectedAttrHere[item.name].Value : ''}
-                containerStyle={{ paddingHorizontal: 0, padding: 0, margin: 0 }}
-                inputContainerStyle={styles.inputContainer}
-                inputStyle={styles.inputStyle}
-                placeholder={item.title}
-            />
-        )
-    }
-
-
-    const Just = () => {
-        console.log('test')
-        return (
-            attrHere.map((item, index) => {
-                if (item.attributeOptions.length > 0) {
-                    return (
-                        <AttrSelect index={index} attr={attrHere} item={item} key={item.name} />
-                    )
-                } else {
-                    return (
-                        <AttrInput index={index} attr={attrHere} item={item} key={item.name} />
-                    )
-                }
-            })
-        )
-    }
-    console.log(selectedAttrHere)
-    const MemoizedValue = useMemo(() => Just, [attrHere]);
     return (
         <React.Fragment>
             <Button title={title} onPress={() => navigation.navigate('ChooseScreen')} />
-            <MemoizedValue />
+            {/* <MemoizedValue /> */}
+            {attrHere && selectedAttr.length > 0 && attrHere.map((item, index) => (
+                item.attributeOptions.length > 0 ?
+                    <View key={item.name} style={{
+                        width: '100%', marginVertical: 5, marginRight: 'auto', marginLeft: 'auto'
+                    }}>
+                        <RNPickerSelect
+                            style={selectedAttr.find(x => x.name == item.name).error ? pickerSelectErrorStyles : pickerSelectStyles}
+                            onValueChange={(value) => handleSelectChange(item.id, value, item.name, item.required)}
+                            // onOpen={() => handleOpen(item.id, '', item.name)}
+                            placeholder={{ label: item.label }}
+                            value={selectedAttr.find(x => x.name == item.name) ? selectedAttr.find(x => x.name == item.name).Value : ''}
+                            items={item.attributeOptions}
+                            useNativeAndroidPickerStyle={false}
+                            Icon={() => {
+                                return <Ionicons name="ios-arrow-down" size={24} color="gray" />;
+                            }}
+                        />
+                    </View>
+                    :
+                    <Input
+                        key={item.name}
+                        // onValueChange={(value, key) => handleSelectChange(item.attributeOptions[key].attributeId, value, item.name)}
+                        onChangeText={(value) => handleSelectChange(item.id, value, item.name, item.required)}
+                        value={selectedAttr.find(x => x.name == item.name) ? selectedAttr.find(x => x.name == item.name).Value : ''}
+                        containerStyle={{ paddingHorizontal: 0, padding: 0, margin: 0 }}
+                        inputContainerStyle={selectedAttr.find(x => x.name == item.name).error ? styles.inputErrorContainer : styles.inputContainer}
+                        inputStyle={selectedAttr.find(x => x.name == item.name).error ? styles.inputErrorStyle : styles.inputStyle}
+                        placeholder={item.title}
+                    />
+
+            ))}
+
         </React.Fragment>
     )
 }
@@ -121,6 +110,20 @@ const styles = StyleSheet.create({
     inputStyle: {
         flex: 1,
         color: 'black',
+        fontFamily: 'regular',
+        fontSize: 16,
+    },
+    inputErrorContainer: {
+        paddingLeft: 8,
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: 'red',
+        height: 45,
+        width: '100%'
+    },
+    inputErrorStyle: {
+        flex: 1,
+        color: 'red',
         fontFamily: 'regular',
         fontSize: 16,
     }

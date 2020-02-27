@@ -19,8 +19,7 @@ function SellForm({ navigation, route, userInfo }) {
     const [email, setEmail] = useState("")
     const [phone, setPhone] = useState("")
     const [telegram, setTelegram] = useState("")
-    const [attr, setAttr] = useState([]);
-    const [selectedAttr, setSelectedAttr] = useState({});
+    const [selectedAttr, setSelectedAttr] = useState([]);
 
     let categoryId = route.params ? route.params.id : null;
 
@@ -76,7 +75,9 @@ function SellForm({ navigation, route, userInfo }) {
     const handleSubmit = e => {
         e.preventDefault();
         setLoading(true);
-
+        if (selectedAttr.length == 0) {
+            console.log('please choose categories')
+        }
         let images = [];
 
         image.map(i => {
@@ -96,7 +97,21 @@ function SellForm({ navigation, route, userInfo }) {
         }
 
         let newAttr = [];
-        console.log(attr)
+        let checkRequired = selectedAttr.filter(x => x.required == true);
+        let checkUndefinded = checkRequired.filter(x => x.Value == '');
+        console.log(selectedAttr)
+        if (checkUndefinded.length > 0) {
+            console.log('tick all');
+            let showErrorMap = [...selectedAttr];
+            showErrorMap.forEach((x, index) => {
+                if (x.required == true && x.Value == '') {
+                    showErrorMap[index].error = true;
+                }
+            });
+            setSelectedAttr(showErrorMap);
+
+            return false
+        }
         return false;
         for (let i = 0; i < attr.length; i++) {
             newAttr.push({ AttributeId: attr[i].id, Value: attr[i].name in values ? (typeof values[attr[i].name] == "object" ? values[attr[i].name].key : values[attr[i].name]) : false })
@@ -157,7 +172,7 @@ function SellForm({ navigation, route, userInfo }) {
                     inputContainerStyle={styles.inputContainer}
                     inputStyle={styles.inputStyle}
                 />
-                <CascaderAttrs selectedAttr={selectedAttr} setSelectedAttr={setSelectedAttr} attr={attr} setAttr={setAttr} navigation={navigation} route={route} />
+                <CascaderAttrs selectedAttr={selectedAttr} setSelectedAttr={setSelectedAttr} navigation={navigation} route={route} />
                 <View style={{ width: '100%', flexDirection: 'row' }}>
                     <Input
                         placeholder="Цена"
