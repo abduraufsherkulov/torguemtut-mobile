@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, Image } from 'react-native';
 import AppNavigator from './navigation/Router';
 import CategoryContextProvider from './contexts/CategoryContext';
 import Toast, { DURATION } from 'react-native-easy-toast'
@@ -10,6 +10,8 @@ import WishlistContextProvider from './contexts/WishlistContext';
 import { enableScreens } from 'react-native-screens';
 import UserInfoContextProvider from './contexts/UserInfoContext';
 import MyAdsContextProvider from './contexts/MyAdsContext';
+import loader from './assets/images/loader.gif'
+
 enableScreens();
 
 export default function App() {
@@ -41,5 +43,13 @@ export default function App() {
         </AuthContextProvider>
       </ToastContextProvider>
     </CategoryContextProvider>
-  ) : <Text>loading</Text>;
+  ) :
+    <View
+      style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+    >
+      <Image
+        style={{ width: 100, height: 100 }}
+        source={loader}
+      />
+    </View>;
 }
