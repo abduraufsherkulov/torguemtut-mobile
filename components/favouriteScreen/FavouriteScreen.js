@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react'
-import { Text, View, FlatList } from 'react-native';
-import { ListItem, Avatar, Button } from 'react-native-elements';
+import { Text, View, FlatList, ActivityIndicator } from 'react-native';
+import { ListItem, Avatar, Button, Image } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import moment from 'moment';
@@ -10,11 +10,19 @@ import { WishlistContext } from '../../contexts/WishlistContext';
 import WishlistHelper from '../../assets/helpers/WishlistHelper';
 import { ToastContext } from '../../contexts/ToastContext';
 import UnAuthorizedNavigate from '../auth/UnAuthorizedNavigate';
+import { skeletItemHelper } from '../../assets/helpers/SkeletHelper';
 moment.locale('ru')
 
 
 function FavouriteScreen({ navigation, route }) {
+    const [loading, setLoading] = useState(true)
     const [listData, setListData] = useState([{
+        images: [{ path: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg' }],
+        price: { amount: 10000, currencyLabel: 'UZS' }
+    }, {
+        images: [{ path: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg' }],
+        price: { amount: 10000, currencyLabel: 'UZS' }
+    }, {
         images: [{ path: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg' }],
         price: { amount: 10000, currencyLabel: 'UZS' }
     }]);
@@ -43,7 +51,9 @@ function FavouriteScreen({ navigation, route }) {
                     <View><Text>{item.title}</Text></View>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
                         <View style={{ flex: 0.5 }}>
-                            <Avatar size="xlarge" title={item.title} source={{ uri: `https://ttuz.azurewebsites.net/Resources/Images/${item.images[0].path}` }} />
+                            <Image
+                                PlaceholderContent={<ActivityIndicator />} style={{ width: '90%', height: 150 }} source={{ uri: `https://ttuz.azurewebsites.net/Resources/Images/${item.images[0].path}` }} />
+
                         </View>
                         <View style={{ flex: 0.5 }}>
                             <Text>{item.price.amount} {item.price.currencyLabel}</Text>
@@ -75,13 +85,14 @@ function FavouriteScreen({ navigation, route }) {
     useEffect(() => {
         dispatch({ type: 'finished' })
         setListData(wishlist)
+        setLoading(false)
 
     }, [wishlist]);
     return userData.token ? (
         <FlatList
             keyExtractor={keyExtractor}
             data={listData}
-            renderItem={renderItem}
+            renderItem={loading ? skeletItemHelper : renderItem}
         />
     ) : (
             <UnAuthorizedNavigate navigation={navigation} />

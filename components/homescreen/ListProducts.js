@@ -1,22 +1,36 @@
 import React, { useEffect, useContext, useState } from 'react'
-import { Text, View, FlatList } from 'react-native';
-import { ListItem, Avatar, Button } from 'react-native-elements';
+import { Text, View, FlatList, Dimensions, ActivityIndicator } from 'react-native';
+import { ListItem, Avatar, Button, Image } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import { AuthContext } from '../../contexts/AuthContext';
 import { WishlistContext } from '../../contexts/WishlistContext';
 import WishlistHelper from '../../assets/helpers/WishlistHelper';
 import { ToastContext } from '../../contexts/ToastContext';
+import SkeletonContent from "react-native-skeleton-content";
 import moment from 'moment';
 import 'moment/min/locales'
+import { skeletItemHelper } from '../../assets/helpers/SkeletHelper';
 moment.locale('ru')
 
 
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_HEIGHT = Dimensions.get('window').height;
+
+
 function MainList({ navigation, route }) {
+    const [loading, setLoading] = useState(true);
     const [listData, setListData] = useState([{
         images: [{ path: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg' }],
         price: { amount: 10000, currencyLabel: 'UZS' }
+    }, {
+        images: [{ path: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg' }],
+        price: { amount: 10000, currencyLabel: 'UZS' }
+    }, {
+        images: [{ path: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg' }],
+        price: { amount: 10000, currencyLabel: 'UZS' }
     }]);
+
     const { userData } = useContext(AuthContext);
     const { addWish, removeWish } = useContext(WishlistContext);
     const { dispatch } = useContext(ToastContext);
@@ -46,6 +60,7 @@ function MainList({ navigation, route }) {
     }
 
     const renderItem = ({ item, index }) => (
+
         <ListItem
             key={index}
             title={
@@ -53,7 +68,9 @@ function MainList({ navigation, route }) {
                     <View><Text>{item.title}</Text></View>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
                         <View style={{ flex: 0.5 }}>
-                            <Avatar size="xlarge" title={item.title} source={{ uri: `https://ttuz.azurewebsites.net/Resources/Images/${item.images[0].path}` }} />
+                            <Image
+                                PlaceholderContent={<ActivityIndicator />} style={{ width: '90%', height: 150 }} source={{ uri: `https://ttuz.azurewebsites.net/Resources/Images/${item.images[0].path}` }} />
+
                         </View>
                         <View style={{ flex: 0.5 }}>
                             <Text>{item.price.amount} {item.price.currencyLabel}</Text>
@@ -82,6 +99,57 @@ function MainList({ navigation, route }) {
         />
     )
 
+
+    const renderItem2 = ({ item, index }, loading) => (
+        <ListItem
+            key={index}
+            title={
+                <View>
+                    <SkeletonContent
+                        containerStyle={{
+                            flex: 1,
+                            width: SCREEN_WIDTH - 32,
+                            flexDirection: 'column',
+                            justifyContent: 'space-between',
+                        }}
+                        isLoading={loading}
+                        layout={
+                            [
+                                { key: "someId2", width: SCREEN_WIDTH - 32, height: 20, marginBottom: 6, },
+                            ]}
+                    />
+
+                    <SkeletonContent
+                        containerStyle={{
+                            flex: 1,
+                            width: SCREEN_WIDTH - 32,
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                        }}
+                        isLoading={loading}
+                        layout={
+                            [{ key: "someId", width: SCREEN_WIDTH / 2 * 0.9 - 16, height: 150, marginBottom: 6 },
+                            { key: "someId3", width: SCREEN_WIDTH / 2 * 0.9 - 16, height: 20, marginBottom: 6 },
+                            ]}
+                    />
+                    <SkeletonContent
+                        containerStyle={{
+                            flex: 1,
+                            width: SCREEN_WIDTH,
+                            flexDirection: 'column',
+                            justifyContent: 'space-between',
+                        }}
+                        isLoading={loading}
+                        layout={
+                            [
+                                { key: "someOtherId", width: SCREEN_WIDTH / 2, height: 20, marginBottom: 6 },
+                            ]}
+                    />
+                </View>
+            }
+            bottomDivider
+        />
+    )
     useEffect(() => {
         const abortController = new AbortController();
         const data = JSON.stringify({
@@ -99,6 +167,7 @@ function MainList({ navigation, route }) {
         })
             .then(response => {
                 dispatch({ type: 'finished' })
+                setLoading(false);
                 setListData(response.data);
             })
             .catch(error => {
@@ -113,11 +182,12 @@ function MainList({ navigation, route }) {
             abortController.abort();
         };
     }, [userData.token]);
+
     return (
         <FlatList
             keyExtractor={keyExtractor}
             data={listData}
-            renderItem={renderItem}
+            renderItem={loading ? skeletItemHelper : renderItem}
         />
     )
 }

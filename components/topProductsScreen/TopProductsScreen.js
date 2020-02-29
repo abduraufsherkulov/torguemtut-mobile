@@ -9,11 +9,19 @@ import { AuthContext } from '../../contexts/AuthContext';
 import { WishlistContext } from '../../contexts/WishlistContext';
 import WishlistHelper from '../../assets/helpers/WishlistHelper';
 import { ToastContext } from '../../contexts/ToastContext';
+import { skeletItemHelper } from '../../assets/helpers/SkeletHelper';
 moment.locale('ru')
 
 
 function TopProductsScreen({ navigation, route }) {
+    const [loading, setLoading] = useState(true)
     const [listData, setListData] = useState([{
+        images: [{ path: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg' }],
+        price: { amount: 10000, currencyLabel: 'UZS' }
+    }, {
+        images: [{ path: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg' }],
+        price: { amount: 10000, currencyLabel: 'UZS' }
+    }, {
         images: [{ path: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg' }],
         price: { amount: 10000, currencyLabel: 'UZS' }
     }]);
@@ -82,6 +90,7 @@ function TopProductsScreen({ navigation, route }) {
             }
         })
             .then(response => {
+                setLoading(false)
                 setListData(response.data)
             })
             .catch(error => {
@@ -99,7 +108,7 @@ function TopProductsScreen({ navigation, route }) {
         <FlatList
             keyExtractor={keyExtractor}
             data={listData}
-            renderItem={renderItem}
+            renderItem={loading ? skeletItemHelper : renderItem}
         />
     )
 }
