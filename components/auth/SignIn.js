@@ -92,7 +92,7 @@ function SignIn({ navigation, route }) {
                 enableOnAndroid={true}
                 enableAutoAutomaticScroll={(Platform.OS === 'ios')}
             >
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: '100%', height: SCREEN_HEIGHT / 3 }}>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: '100%', height: SCREEN_HEIGHT / 4 }}>
                     <Image style={{
                         height: 35,
                         width: 166,
@@ -148,7 +148,7 @@ function SignIn({ navigation, route }) {
                     />
                     <View style={styles.signUpHereContainer}>
                         <Text style={styles.newAccountText}>
-                            Уже есть аккаунт?
+                            Нет акаунта?
                         </Text>
                         <Button
                             title="Зарегистрироваться здесь"
@@ -156,7 +156,7 @@ function SignIn({ navigation, route }) {
                             containerStyle={{ flex: -1 }}
                             buttonStyle={{ backgroundColor: 'transparent' }}
                             underlayColor="transparent"
-                            onPress={test}
+                            onPress={() => navigation.navigate('SignUp')}
                         />
                     </View>
                     {/* <ToastComponent ref={toastRef} /> */}

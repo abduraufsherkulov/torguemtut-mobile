@@ -6,6 +6,7 @@ import * as Font from 'expo-font';
 import Constants from 'expo-constants';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { PolifySafeArea } from '../../assets/styles/styles';
+import { LinearGradient } from 'expo-linear-gradient';
 import logo from '../../assets/images/logo.png'
 
 
@@ -13,109 +14,205 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 function SignUp({ navigation }) {
-    const [fontLoad, setFontLoad] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [referral, setReferral] = useState("");
+    const [password, setPassword] = useState("")
+    const [passConfirm, setPassConfirm] = useState("")
+    const [upEmail, setUpEmail] = useState("")
+    const [emailValid, setEmailValid] = useState(true)
+    const [passValid, setPassValid] = useState(true)
 
-
-    async function loadFont() {
-        await Font.loadAsync({
-            'regular': require('../../assets/fonts/Roboto-Regular.ttf'),
-            'bold': require('../../assets/fonts/Roboto-Bold.ttf'),
+    function handleSubmit(e) {
+        e.preventDefault();
+        const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        const eValid = re.test(upEmail);
+        console.log(eValid)
+        if (!eValid) {
+            setEmailValid(false);
+            return false;
+        }
+        if (password != passConfirm) {
+            setPassValid(false)
+            return false
+        }
+        setLoading(true)
+        const isEmail = email.includes('@') ? true : false;
+        const endpoint = "https://ttuz.azurewebsites.net/api/users/register";
+        const data = JSON.stringify({
+            Phone: isEmail ? '' : email,
+            Password: password,
+            IsEmail: isEmail,
+            Email: isEmail ? email : ""
         });
-        setFontLoad(true);
+
+        axios({
+            method: "post",
+            url: endpoint,
+            data: data,
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(response => {
+            setLoading(false)
+            if (response.data.status) {
+                if (email) {
+                    dispatch({ type: 'loading', value: { text: response.data.userData.phone, duration: DURATION.FOREVER } })
+                    authDispatch({ type: 'SIGN_IN', userData: JSON.stringify(response.data.userData) })
+                    navigation.goBack();
+                } else {
+                    dispatch({ type: 'loading', value: { text: response.data.userData.phone, duration: DURATION.FOREVER } })
+                    authDispatch({ type: 'SIGN_IN', userData: JSON.stringify(response.data.userData) })
+                    navigation.goBack();
+                }
+            } else {
+                setvalidateConfirmCode('error');
+                setvalidateLoader('error');
+                props.form.setFields({
+                    password: {
+                        value: values.password,
+                        errors: [new Error(response.data.message)],
+                    },
+                });
+            }
+        }).catch(error => {
+            console.log(error)
+            setFormValid(false)
+            setLoading(false)
+        })
+
     }
 
     useEffect(() => {
-        loadFont();
-    }, [])
-
-    function signIn() {
-        console.log('called')
-    }
-
-    
-
-    return fontLoad ? (
-        <SafeAreaView style={PolifySafeArea('#293046')}>
-            <View>
-                <Ionicons onPress={() => navigation.goBack()} name="ios-close" size={64} color="green" />
+        if (!emailValid) {
+            setEmailValid(true)
+        }
+        if (!passValid) {
+            setPassValid(true)
+        }
+    }, [upEmail, password])
+    console.log(upEmail)
+    return <SafeAreaView style={PolifySafeArea('#293046')}>
+        <View>
+            <Ionicons onPress={() => navigation.goBack()} name="ios-close" size={64} color="green" />
+        </View>
+        <KeyboardAwareScrollView
+            // style={{ backgroundColor: '#4c69a5' }}
+            resetScrollToCoords={{ x: 0, y: 0 }}
+            contentContainerStyle={styles.container}
+            scrollEnabled={false}
+            enableOnAndroid={true}
+            enableAutoAutomaticScroll={(Platform.OS === 'ios')}
+        >
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: '100%', height: SCREEN_HEIGHT / 3 }}>
+                <Image style={{
+                    height: 35,
+                    width: 166,
+                }} source={logo} />
             </View>
-            <KeyboardAwareScrollView
-                // style={{ backgroundColor: '#4c69a5' }}
-                resetScrollToCoords={{ x: 0, y: 0 }}
-                contentContainerStyle={styles.container}
-                scrollEnabled={false}
-                enableOnAndroid={true}
-                enableAutoAutomaticScroll={(Platform.OS === 'ios')}
-            >
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: '100%', height: SCREEN_HEIGHT / 3 }}>
-                    <Image style={{
-                        height: 35,
-                        width: 166,
-                    }} source={logo} />
-                </View>
-                <View style={{ width: '80%', height: SCREEN_HEIGHT, flex: 1, justifyContent: 'flex-start' }}>
-                    <Input
-                        inputContainerStyle={styles.inputContainer}
-                        leftIcon={<Ionicons name="ios-contact" size={16} color="green" />}
-                        inputStyle={styles.inputStyle}
-                        autoFocus={false}
-                        autoCapitalize="none"
-                        keyboardAppearance="dark"
-                        errorStyle={styles.errorInputStyle}
-                        autoCorrect={false}
-                        blurOnSubmit={false}
-                        placeholder="Ваш e-mail или телефон"
-                        returnKeyType="next"
-                        placeholderTextColor="#7384B4"
-                    />
-                    <Input
-                        inputContainerStyle={styles.inputContainer}
-                        leftIcon={<Ionicons name="ios-finger-print" size={16} color="green" />}
-                        inputStyle={styles.inputStyle}
-                        autoFocus={false}
-                        autoCapitalize="none"
-                        keyboardAppearance="dark"
-                        errorStyle={styles.errorInputStyle}
-                        autoCorrect={false}
-                        blurOnSubmit={false}
-                        placeholder="Пароль"
-                        returnKeyType="next"
-                        placeholderTextColor="#7384B4"
-                    />
-                    <Button
-                        loading={loading}
-                        title="SIGNUP"
-                        // containerStyle={{ alignSelf: 'center' }}
-                        buttonStyle={styles.signInButton}
-                        linearGradientProps={{
-                            colors: ['#FF9800', '#F44336'],
-                            start: [1, 0],
-                            end: [0.2, 0],
-                        }}
-                        // ViewComponent={LinearGradient}
-                        titleStyle={styles.signUpButtonText}
-                        onPress={signIn}
-                        disabled={loading}
-                    />
-                    <View style={styles.loginHereContainer}>
-                        <Text style={styles.alreadyAccountText}>
-                            Already have an account.
+            <View style={{ width: '80%', height: SCREEN_HEIGHT, flex: 1, justifyContent: 'flex-start' }}>
+                <Input
+                    inputContainerStyle={styles.inputContainer}
+                    leftIcon={<Ionicons name="ios-contact" size={16} color="green" />}
+                    inputStyle={styles.inputStyle}
+                    autoFocus={false}
+                    autoCapitalize="none"
+                    keyboardAppearance="dark"
+                    errorStyle={styles.errorInputStyle}
+                    autoCorrect={false}
+                    blurOnSubmit={false}
+                    placeholder="Ваш e-mail"
+                    returnKeyType="next"
+                    placeholderTextColor="#7384B4"
+                    onChangeText={email => setUpEmail(email)}
+                    errorMessage={
+                        emailValid ? null : "Неверный формат имэйл"
+                    }
+                />
+                <Input
+                    inputContainerStyle={styles.inputContainer}
+                    leftIcon={<Ionicons name="ios-finger-print" size={16} color="green" />}
+                    inputStyle={styles.inputStyle}
+                    autoFocus={false}
+                    autoCapitalize="none"
+                    keyboardAppearance="dark"
+                    errorStyle={styles.errorInputStyle}
+                    autoCorrect={false}
+                    blurOnSubmit={false}
+                    placeholder="Пароль"
+                    returnKeyType="next"
+                    placeholderTextColor="#7384B4"
+                    onChangeText={pass => setPassword(pass)}
+                    secureTextEntry={true}
+                // errorMessage={
+                //     emailValid ? null : "Неверный формат имэйл"
+                // }
+                />
+                <Input
+                    inputContainerStyle={styles.inputContainer}
+                    leftIcon={<Ionicons name="ios-finger-print" size={16} color="green" />}
+                    inputStyle={styles.inputStyle}
+                    autoFocus={false}
+                    autoCapitalize="none"
+                    keyboardAppearance="dark"
+                    errorStyle={styles.errorInputStyle}
+                    autoCorrect={false}
+                    blurOnSubmit={false}
+                    placeholder="Подтвердите Пароль"
+                    returnKeyType="next"
+                    placeholderTextColor="#7384B4"
+                    onChangeText={pass => setPassConfirm(pass)}
+                    secureTextEntry={true}
+                    errorMessage={
+                        passValid ? null : "Пароли не совпадают"
+                    }
+                />
+                <Input
+                    inputContainerStyle={styles.inputContainer}
+                    leftIcon={<Ionicons name="ios-git-branch" size={16} color="green" />}
+                    inputStyle={styles.inputStyle}
+                    autoFocus={false}
+                    autoCapitalize="none"
+                    keyboardAppearance="dark"
+                    errorStyle={styles.errorInputStyle}
+                    autoCorrect={false}
+                    blurOnSubmit={false}
+                    placeholder="Код рефералки"
+                    returnKeyType="next"
+                    placeholderTextColor="#7384B4"
+                    onChangeText={pass => setReferral(pass)}
+                />
+                <Button
+                    loading={loading}
+                    title="ЗАРЕГИСТРИРОВАТЬСЯ"
+                    // containerStyle={{ alignSelf: 'center' }}
+                    buttonStyle={styles.signInButton}
+                    linearGradientProps={{
+                        colors: ['#FF9800', '#F44336'],
+                        start: [1, 0],
+                        end: [0.2, 0],
+                    }}
+                    ViewComponent={LinearGradient}
+                    titleStyle={styles.signUpButtonText}
+                    onPress={handleSubmit}
+                    disabled={loading}
+                />
+                <View style={styles.loginHereContainer}>
+                    <Text style={styles.alreadyAccountText}>
+                        Уже есть аккаунт?
                         </Text>
-                        <Button
-                            title="Login here"
-                            titleStyle={styles.loginHereText}
-                            containerStyle={{ flex: -1 }}
-                            buttonStyle={{ backgroundColor: 'transparent' }}
-                            underlayColor="transparent"
-                            onPress={() => console.log('🔥', 'You can login here')}
-                        />
-                    </View>
+                    <Button
+                        title="Войти здесь"
+                        titleStyle={styles.loginHereText}
+                        containerStyle={{ flex: -1 }}
+                        buttonStyle={{ backgroundColor: 'transparent' }}
+                        underlayColor="transparent"
+                        onPress={() => navigation.navigate('SignIn')}
+                    />
                 </View>
+            </View>
 
-            </KeyboardAwareScrollView>
-        </SafeAreaView>
-    ) : <Text>Loading</Text>
+        </KeyboardAwareScrollView>
+    </SafeAreaView>
 }
 const styles = StyleSheet.create({
     container: {

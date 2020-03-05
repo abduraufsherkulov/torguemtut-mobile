@@ -25,6 +25,7 @@ import ChooseSubScreen from '../components/sellScreen/chooseCategory/ChooseSubSc
 import ChooseSubSubScreen from '../components/sellScreen/chooseCategory/ChooseSubSubScreen';
 import MainMapPart from '../components/sellScreen/sellForm/MainMapPart';
 import WaitingAds from '../components/profileScreen/WaitingAds';
+import SignUp from '../components/auth/SignUp';
 
 
 const MainStack = createStackNavigator();
@@ -263,6 +264,9 @@ export default function AppNavigator() {
         <ModalStack.Screen
           name="SignIn"
           component={SignIn} />
+        <ModalStack.Screen
+          name="SignUp"
+          component={SignUp} />
       </ModalStack.Navigator>
     </NavigationContainer>
   );
