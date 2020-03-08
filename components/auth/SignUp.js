@@ -21,6 +21,7 @@ function SignUp({ navigation }) {
     const [upEmail, setUpEmail] = useState("")
     const [emailValid, setEmailValid] = useState(true)
     const [passValid, setPassValid] = useState(true)
+    const [confirmSide, setConfirmSide] = useState(false)
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -36,13 +37,13 @@ function SignUp({ navigation }) {
             return false
         }
         setLoading(true)
-        const isEmail = email.includes('@') ? true : false;
+        const isEmail = upEmail.includes('@') ? true : false;
         const endpoint = "https://ttuz.azurewebsites.net/api/users/register";
         const data = JSON.stringify({
-            Phone: isEmail ? '' : email,
+            Phone: isEmail ? '' : upEmail,
             Password: password,
             IsEmail: isEmail,
-            Email: isEmail ? email : ""
+            Email: isEmail ? upEmail : ""
         });
 
         axios({
@@ -55,6 +56,7 @@ function SignUp({ navigation }) {
         }).then(response => {
             setLoading(false)
             if (response.data.status) {
+
                 if (email) {
                     dispatch({ type: 'loading', value: { text: response.data.userData.phone, duration: DURATION.FOREVER } })
                     authDispatch({ type: 'SIGN_IN', userData: JSON.stringify(response.data.userData) })
@@ -64,6 +66,7 @@ function SignUp({ navigation }) {
                     authDispatch({ type: 'SIGN_IN', userData: JSON.stringify(response.data.userData) })
                     navigation.goBack();
                 }
+
             } else {
                 setvalidateConfirmCode('error');
                 setvalidateLoader('error');
@@ -90,7 +93,161 @@ function SignUp({ navigation }) {
             setPassValid(true)
         }
     }, [upEmail, password])
-    console.log(upEmail)
+
+    const mainForm = (
+        <View style={{ width: '80%', height: SCREEN_HEIGHT, flex: 1, justifyContent: 'flex-start' }}>
+            <Input
+                inputContainerStyle={styles.inputContainer}
+                leftIcon={<Ionicons name="ios-contact" size={16} color="green" />}
+                inputStyle={styles.inputStyle}
+                autoFocus={false}
+                autoCapitalize="none"
+                keyboardAppearance="dark"
+                errorStyle={styles.errorInputStyle}
+                autoCorrect={false}
+                blurOnSubmit={false}
+                placeholder="Ваш e-mail"
+                returnKeyType="next"
+                placeholderTextColor="#7384B4"
+                onChangeText={email => setUpEmail(email)}
+                errorMessage={
+                    emailValid ? null : "Неверный формат имэйл"
+                }
+            />
+            <Input
+                inputContainerStyle={styles.inputContainer}
+                leftIcon={<Ionicons name="ios-finger-print" size={16} color="green" />}
+                inputStyle={styles.inputStyle}
+                autoFocus={false}
+                autoCapitalize="none"
+                keyboardAppearance="dark"
+                errorStyle={styles.errorInputStyle}
+                autoCorrect={false}
+                blurOnSubmit={false}
+                placeholder="Пароль"
+                returnKeyType="next"
+                placeholderTextColor="#7384B4"
+                onChangeText={pass => setPassword(pass)}
+                secureTextEntry={true}
+            // errorMessage={
+            //     emailValid ? null : "Неверный формат имэйл"
+            // }
+            />
+            <Input
+                inputContainerStyle={styles.inputContainer}
+                leftIcon={<Ionicons name="ios-finger-print" size={16} color="green" />}
+                inputStyle={styles.inputStyle}
+                autoFocus={false}
+                autoCapitalize="none"
+                keyboardAppearance="dark"
+                errorStyle={styles.errorInputStyle}
+                autoCorrect={false}
+                blurOnSubmit={false}
+                placeholder="Подтвердите Пароль"
+                returnKeyType="next"
+                placeholderTextColor="#7384B4"
+                onChangeText={pass => setPassConfirm(pass)}
+                secureTextEntry={true}
+                errorMessage={
+                    passValid ? null : "Пароли не совпадают"
+                }
+            />
+            <Input
+                inputContainerStyle={styles.inputContainer}
+                leftIcon={<Ionicons name="ios-git-branch" size={16} color="green" />}
+                inputStyle={styles.inputStyle}
+                autoFocus={false}
+                autoCapitalize="none"
+                keyboardAppearance="dark"
+                errorStyle={styles.errorInputStyle}
+                autoCorrect={false}
+                blurOnSubmit={false}
+                placeholder="Код рефералки"
+                returnKeyType="next"
+                placeholderTextColor="#7384B4"
+                onChangeText={pass => setReferral(pass)}
+            />
+            <Button
+                loading={loading}
+                title="ЗАРЕГИСТРИРОВАТЬСЯ"
+                // containerStyle={{ alignSelf: 'center' }}
+                buttonStyle={styles.signInButton}
+                linearGradientProps={{
+                    colors: ['#FF9800', '#F44336'],
+                    start: [1, 0],
+                    end: [0.2, 0],
+                }}
+                ViewComponent={LinearGradient}
+                titleStyle={styles.signUpButtonText}
+                onPress={handleSubmit}
+                disabled={loading}
+            />
+            <View style={styles.loginHereContainer}>
+                <Text style={styles.alreadyAccountText}>
+                    Уже есть аккаунт?
+                </Text>
+                <Button
+                    title="Войти здесь"
+                    titleStyle={styles.loginHereText}
+                    containerStyle={{ flex: -1 }}
+                    buttonStyle={{ backgroundColor: 'transparent' }}
+                    underlayColor="transparent"
+                    onPress={() => navigation.navigate('SignIn')}
+                />
+            </View>
+        </View>
+    )
+
+    const confirmForm = (
+        <View style={{ width: '80%', height: SCREEN_HEIGHT, flex: 1, justifyContent: 'flex-start' }}>
+            <Input
+                inputContainerStyle={styles.inputContainer}
+                leftIcon={<Ionicons name="ios-contact" size={16} color="green" />}
+                inputStyle={styles.inputStyle}
+                autoFocus={false}
+                autoCapitalize="none"
+                keyboardAppearance="dark"
+                errorStyle={styles.errorInputStyle}
+                autoCorrect={false}
+                blurOnSubmit={false}
+                placeholder="Ваш e-mail"
+                returnKeyType="next"
+                placeholderTextColor="#7384B4"
+                onChangeText={email => setUpEmail(email)}
+                errorMessage={
+                    emailValid ? null : "Неверный формат имэйл"
+                }
+            />
+            <Button
+                loading={loading}
+                title="ЗАРЕГИСТРИРОВАТЬСЯ"
+                // containerStyle={{ alignSelf: 'center' }}
+                buttonStyle={styles.signInButton}
+                linearGradientProps={{
+                    colors: ['#FF9800', '#F44336'],
+                    start: [1, 0],
+                    end: [0.2, 0],
+                }}
+                ViewComponent={LinearGradient}
+                titleStyle={styles.signUpButtonText}
+                onPress={handleSubmit}
+                disabled={loading}
+            />
+            <View style={styles.loginHereContainer}>
+                <Text style={styles.alreadyAccountText}>
+                    Уже есть аккаунт?
+                </Text>
+                <Button
+                    title="Войти здесь"
+                    titleStyle={styles.loginHereText}
+                    containerStyle={{ flex: -1 }}
+                    buttonStyle={{ backgroundColor: 'transparent' }}
+                    underlayColor="transparent"
+                    onPress={() => navigation.navigate('SignIn')}
+                />
+            </View>
+        </View>
+    )
     return <SafeAreaView style={PolifySafeArea('#293046')}>
         <View>
             <Ionicons onPress={() => navigation.goBack()} name="ios-close" size={64} color="green" />
@@ -109,107 +266,8 @@ function SignUp({ navigation }) {
                     width: 166,
                 }} source={logo} />
             </View>
-            <View style={{ width: '80%', height: SCREEN_HEIGHT, flex: 1, justifyContent: 'flex-start' }}>
-                <Input
-                    inputContainerStyle={styles.inputContainer}
-                    leftIcon={<Ionicons name="ios-contact" size={16} color="green" />}
-                    inputStyle={styles.inputStyle}
-                    autoFocus={false}
-                    autoCapitalize="none"
-                    keyboardAppearance="dark"
-                    errorStyle={styles.errorInputStyle}
-                    autoCorrect={false}
-                    blurOnSubmit={false}
-                    placeholder="Ваш e-mail"
-                    returnKeyType="next"
-                    placeholderTextColor="#7384B4"
-                    onChangeText={email => setUpEmail(email)}
-                    errorMessage={
-                        emailValid ? null : "Неверный формат имэйл"
-                    }
-                />
-                <Input
-                    inputContainerStyle={styles.inputContainer}
-                    leftIcon={<Ionicons name="ios-finger-print" size={16} color="green" />}
-                    inputStyle={styles.inputStyle}
-                    autoFocus={false}
-                    autoCapitalize="none"
-                    keyboardAppearance="dark"
-                    errorStyle={styles.errorInputStyle}
-                    autoCorrect={false}
-                    blurOnSubmit={false}
-                    placeholder="Пароль"
-                    returnKeyType="next"
-                    placeholderTextColor="#7384B4"
-                    onChangeText={pass => setPassword(pass)}
-                    secureTextEntry={true}
-                // errorMessage={
-                //     emailValid ? null : "Неверный формат имэйл"
-                // }
-                />
-                <Input
-                    inputContainerStyle={styles.inputContainer}
-                    leftIcon={<Ionicons name="ios-finger-print" size={16} color="green" />}
-                    inputStyle={styles.inputStyle}
-                    autoFocus={false}
-                    autoCapitalize="none"
-                    keyboardAppearance="dark"
-                    errorStyle={styles.errorInputStyle}
-                    autoCorrect={false}
-                    blurOnSubmit={false}
-                    placeholder="Подтвердите Пароль"
-                    returnKeyType="next"
-                    placeholderTextColor="#7384B4"
-                    onChangeText={pass => setPassConfirm(pass)}
-                    secureTextEntry={true}
-                    errorMessage={
-                        passValid ? null : "Пароли не совпадают"
-                    }
-                />
-                <Input
-                    inputContainerStyle={styles.inputContainer}
-                    leftIcon={<Ionicons name="ios-git-branch" size={16} color="green" />}
-                    inputStyle={styles.inputStyle}
-                    autoFocus={false}
-                    autoCapitalize="none"
-                    keyboardAppearance="dark"
-                    errorStyle={styles.errorInputStyle}
-                    autoCorrect={false}
-                    blurOnSubmit={false}
-                    placeholder="Код рефералки"
-                    returnKeyType="next"
-                    placeholderTextColor="#7384B4"
-                    onChangeText={pass => setReferral(pass)}
-                />
-                <Button
-                    loading={loading}
-                    title="ЗАРЕГИСТРИРОВАТЬСЯ"
-                    // containerStyle={{ alignSelf: 'center' }}
-                    buttonStyle={styles.signInButton}
-                    linearGradientProps={{
-                        colors: ['#FF9800', '#F44336'],
-                        start: [1, 0],
-                        end: [0.2, 0],
-                    }}
-                    ViewComponent={LinearGradient}
-                    titleStyle={styles.signUpButtonText}
-                    onPress={handleSubmit}
-                    disabled={loading}
-                />
-                <View style={styles.loginHereContainer}>
-                    <Text style={styles.alreadyAccountText}>
-                        Уже есть аккаунт?
-                        </Text>
-                    <Button
-                        title="Войти здесь"
-                        titleStyle={styles.loginHereText}
-                        containerStyle={{ flex: -1 }}
-                        buttonStyle={{ backgroundColor: 'transparent' }}
-                        underlayColor="transparent"
-                        onPress={() => navigation.navigate('SignIn')}
-                    />
-                </View>
-            </View>
+            {confirmSide ? confirmForm : mainForm}
+
 
         </KeyboardAwareScrollView>
     </SafeAreaView>
