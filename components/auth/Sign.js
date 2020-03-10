@@ -1,19 +1,28 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { View, StyleSheet, Image, Dimensions, SafeAreaView, Platform } from 'react-native';
 import { Input, Text, Button } from 'react-native-elements'
 import { Ionicons } from '@expo/vector-icons';
 import * as Font from 'expo-font';
 import Constants from 'expo-constants';
+import { DURATION } from 'react-native-easy-toast'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { PolifySafeArea } from '../../assets/styles/styles';
 import { LinearGradient } from 'expo-linear-gradient';
 import logo from '../../assets/images/logo.png'
+import axios from 'axios'
+import { ToastContext } from '../../contexts/ToastContext';
+import { AuthContext } from '../../contexts/AuthContext';
 
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
-function SignUp({ navigation }) {
+function Sign({ navigation }) {
+
+
+    const { dispatch } = useContext(ToastContext);
+    const { userData, dispatch: authDispatch } = useContext(AuthContext);
+
     const [loading, setLoading] = useState(false)
     const [referral, setReferral] = useState("");
     const [password, setPassword] = useState("")
@@ -22,6 +31,14 @@ function SignUp({ navigation }) {
     const [emailValid, setEmailValid] = useState(true)
     const [passValid, setPassValid] = useState(true)
     const [confirmSide, setConfirmSide] = useState(false)
+    const [confirmCode, setConfirmCode] = useState("")
+    const [codeValid, setCodeValid] = useState(true)
+    const [register, setRegister] = useState(false)
+
+    const [signPhone, setSignPhone] = useState('');
+    const [signPassword, setSignPassword] = useState('');
+    const [signFormValid, setSignFormValid] = useState(true);
+
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -55,8 +72,95 @@ function SignUp({ navigation }) {
             }
         }).then(response => {
             setLoading(false)
+            console.log(response)
             if (response.data.status) {
+                setConfirmSide(true)
+                setRegister(false)
+            } else {
+                setvalidateConfirmCode('error');
+                setvalidateLoader('error');
+                props.form.setFields({
+                    password: {
+                        value: values.password,
+                        errors: [new Error(response.data.message)],
+                    },
+                });
+            }
+        }).catch(error => {
+            console.log(error)
+            setLoading(false)
+        })
 
+    }
+
+
+
+    function handleConfirmCode(e) {
+        e.preventDefault();
+        setLoading(true)
+        const isEmail = upEmail.includes('@') ? true : false;
+        const endpoint = "https://ttuz.azurewebsites.net/api/users/validate";
+        const data = JSON.stringify({
+            Phone: isEmail ? '' : upEmail,
+            Code: confirmCode,
+            IsEmail: isEmail,
+            Email: isEmail ? upEmail : ""
+        });
+
+        axios({
+            method: "post",
+            url: endpoint,
+            data: data,
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(response => {
+            setLoading(false)
+            console.log(response)
+            if (response.data.status) {
+                dispatch({ type: 'loading', value: { text: response.data.userData.phone ? response.data.userData.phone : response.data.userData.email, duration: DURATION.FOREVER } })
+                authDispatch({ type: 'SIGN_IN', userData: JSON.stringify(response.data.userData) })
+                navigation.goBack();
+
+            } else {
+                setvalidateConfirmCode('error');
+                setvalidateLoader('error');
+                props.form.setFields({
+                    password: {
+                        value: values.password,
+                        errors: [new Error(response.data.message)],
+                    },
+                });
+            }
+        }).catch(error => {
+            console.log(error)
+            setLoading(false)
+        })
+
+    }
+
+
+    function handleSignSubmit(e) {
+        e.preventDefault();
+        setLoading(true)
+        const email = signPhone.includes('@') ? true : false;
+        const endpoint = "https://ttuz.azurewebsites.net/api/users/authenticate";
+        const data = JSON.stringify({
+            Phone: email ? '' : signPhone,
+            Password: signPassword,
+            IsEmail: email,
+            Email: email ? signPhone : ""
+        });
+
+        axios({
+            method: "post",
+            url: endpoint,
+            data: data,
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(response => {
+            if (response.data.status) {
                 if (email) {
                     dispatch({ type: 'loading', value: { text: response.data.userData.phone, duration: DURATION.FOREVER } })
                     authDispatch({ type: 'SIGN_IN', userData: JSON.stringify(response.data.userData) })
@@ -66,7 +170,6 @@ function SignUp({ navigation }) {
                     authDispatch({ type: 'SIGN_IN', userData: JSON.stringify(response.data.userData) })
                     navigation.goBack();
                 }
-
             } else {
                 setvalidateConfirmCode('error');
                 setvalidateLoader('error');
@@ -82,7 +185,6 @@ function SignUp({ navigation }) {
             setFormValid(false)
             setLoading(false)
         })
-
     }
 
     useEffect(() => {
@@ -92,7 +194,11 @@ function SignUp({ navigation }) {
         if (!passValid) {
             setPassValid(true)
         }
-    }, [upEmail, password])
+        if (!signFormValid) {
+            setSignFormValid(true)
+        }
+    }, [upEmail, password, signPhone, signPassword])
+
 
     const mainForm = (
         <View style={{ width: '80%', height: SCREEN_HEIGHT, flex: 1, justifyContent: 'flex-start' }}>
@@ -110,6 +216,7 @@ function SignUp({ navigation }) {
                 returnKeyType="next"
                 placeholderTextColor="#7384B4"
                 onChangeText={email => setUpEmail(email)}
+                value={upEmail}
                 errorMessage={
                     emailValid ? null : "Неверный формат имэйл"
                 }
@@ -165,6 +272,7 @@ function SignUp({ navigation }) {
                 placeholder="Код рефералки"
                 returnKeyType="next"
                 placeholderTextColor="#7384B4"
+                value={referral}
                 onChangeText={pass => setReferral(pass)}
             />
             <Button
@@ -192,13 +300,65 @@ function SignUp({ navigation }) {
                     containerStyle={{ flex: -1 }}
                     buttonStyle={{ backgroundColor: 'transparent' }}
                     underlayColor="transparent"
-                    onPress={() => navigation.navigate('SignIn')}
+                    onPress={() => setRegister(false)}
                 />
             </View>
         </View>
     )
 
     const confirmForm = (
+        <View style={{ width: '80%', height: SCREEN_HEIGHT, flex: 1, justifyContent: 'flex-start' }}>
+            <Input
+                inputContainerStyle={styles.inputContainer}
+                leftIcon={<Ionicons name="ios-barcode" size={16} color="green" />}
+                inputStyle={styles.inputStyle}
+                autoFocus={false}
+                autoCapitalize="none"
+                keyboardAppearance="dark"
+                errorStyle={styles.errorInputStyle}
+                autoCorrect={false}
+                blurOnSubmit={false}
+                placeholder="Код верификации"
+                returnKeyType="next"
+                placeholderTextColor="#7384B4"
+                onChangeText={code => setConfirmCode(code)}
+                value={confirmCode}
+                errorMessage={
+                    codeValid ? null : "Неверный код"
+                }
+            />
+            <Button
+                loading={loading}
+                title="ОТПРАВИТЬ"
+                // containerStyle={{ alignSelf: 'center' }}
+                buttonStyle={styles.signInButton}
+                linearGradientProps={{
+                    colors: ['#FF9800', '#F44336'],
+                    start: [1, 0],
+                    end: [0.2, 0],
+                }}
+                ViewComponent={LinearGradient}
+                titleStyle={styles.signUpButtonText}
+                onPress={handleConfirmCode}
+                disabled={loading}
+            />
+            <View style={styles.loginHereContainer}>
+                <Button
+                    title="Назад"
+                    titleStyle={styles.loginHereText}
+                    containerStyle={{ flex: -1 }}
+                    buttonStyle={{ backgroundColor: 'transparent' }}
+                    underlayColor="transparent"
+                    onPress={() => {
+                        setConfirmSide(false)
+                        setRegister(true)
+                    }}
+                />
+            </View>
+        </View>
+    )
+
+    const signForm = (
         <View style={{ width: '80%', height: SCREEN_HEIGHT, flex: 1, justifyContent: 'flex-start' }}>
             <Input
                 inputContainerStyle={styles.inputContainer}
@@ -210,18 +370,34 @@ function SignUp({ navigation }) {
                 errorStyle={styles.errorInputStyle}
                 autoCorrect={false}
                 blurOnSubmit={false}
-                placeholder="Ваш e-mail"
+                placeholder="Ваш e-mail или телефон"
+                returnKeyType="next"
+                value={signPhone}
+                placeholderTextColor="#7384B4"
+                onChangeText={phone => setSignPhone(phone)}
+            />
+            <Input
+                inputContainerStyle={styles.inputContainer}
+                leftIcon={<Ionicons name="ios-finger-print" size={16} color="green" />}
+                inputStyle={styles.inputStyle}
+                autoFocus={false}
+                autoCapitalize="none"
+                keyboardAppearance="dark"
+                errorStyle={styles.errorInputStyle}
+                autoCorrect={false}
+                blurOnSubmit={false}
+                placeholder="Пароль"
                 returnKeyType="next"
                 placeholderTextColor="#7384B4"
-                onChangeText={email => setUpEmail(email)}
+                secureTextEntry={true}
+                onChangeText={pass => setSignPassword(pass)}
                 errorMessage={
-                    emailValid ? null : "Неверный формат имэйл"
+                    signFormValid ? null : "Имя пользователя или пароль неверны."
                 }
             />
             <Button
                 loading={loading}
-                title="ЗАРЕГИСТРИРОВАТЬСЯ"
-                // containerStyle={{ alignSelf: 'center' }}
+                title="АВТОРИЗОВАТЬСЯ"
                 buttonStyle={styles.signInButton}
                 linearGradientProps={{
                     colors: ['#FF9800', '#F44336'],
@@ -230,20 +406,19 @@ function SignUp({ navigation }) {
                 }}
                 ViewComponent={LinearGradient}
                 titleStyle={styles.signUpButtonText}
-                onPress={handleSubmit}
-                disabled={loading}
+                onPress={handleSignSubmit}
             />
-            <View style={styles.loginHereContainer}>
-                <Text style={styles.alreadyAccountText}>
-                    Уже есть аккаунт?
-                </Text>
+            <View style={styles.signUpHereContainer}>
+                <Text style={styles.newAccountText}>
+                    Нет акаунта?
+            </Text>
                 <Button
-                    title="Войти здесь"
-                    titleStyle={styles.loginHereText}
+                    title="Зарегистрироваться здесь"
+                    titleStyle={styles.signUpHereText}
                     containerStyle={{ flex: -1 }}
                     buttonStyle={{ backgroundColor: 'transparent' }}
                     underlayColor="transparent"
-                    onPress={() => navigation.navigate('SignIn')}
+                    onPress={() => setRegister(true)}
                 />
             </View>
         </View>
@@ -266,7 +441,7 @@ function SignUp({ navigation }) {
                     width: 166,
                 }} source={logo} />
             </View>
-            {confirmSide ? confirmForm : mainForm}
+            {register ? mainForm : confirmSide ? confirmForm : signForm}
 
 
         </KeyboardAwareScrollView>
@@ -335,7 +510,22 @@ const styles = StyleSheet.create({
         fontFamily: 'regular',
         fontSize: 12,
     },
+    signUpHereContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        alignSelf: 'center'
+    },
+    newAccountText: {
+        fontFamily: 'regular',
+        fontSize: 12,
+        color: 'white',
+    },
+    signUpHereText: {
+        color: '#FF9800',
+        fontFamily: 'regular',
+        fontSize: 12,
+    },
 })
 
 
-export default SignUp
+export default Sign

@@ -24,57 +24,6 @@ function SignIn({ navigation, route }) {
     const { dispatch } = useContext(ToastContext);
     const { userData, dispatch: authDispatch } = useContext(AuthContext);
 
-    function handleSubmit(e) {
-        e.preventDefault();
-        setLoading(true)
-        const email = phone.includes('@') ? true : false;
-        const endpoint = "https://ttuz.azurewebsites.net/api/users/authenticate";
-        const data = JSON.stringify({
-            Phone: email ? '' : phone,
-            Password: password,
-            IsEmail: email,
-            Email: email ? phone : ""
-        });
-
-        axios({
-            method: "post",
-            url: endpoint,
-            data: data,
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }).then(response => {
-            if (response.data.status) {
-                if (email) {
-                    dispatch({ type: 'loading', value: { text: response.data.userData.phone, duration: DURATION.FOREVER } })
-                    authDispatch({ type: 'SIGN_IN', userData: JSON.stringify(response.data.userData) })
-                    navigation.goBack();
-                } else {
-                    dispatch({ type: 'loading', value: { text: response.data.userData.phone, duration: DURATION.FOREVER } })
-                    authDispatch({ type: 'SIGN_IN', userData: JSON.stringify(response.data.userData) })
-                    navigation.goBack();
-                }
-            } else {
-                setvalidateConfirmCode('error');
-                setvalidateLoader('error');
-                props.form.setFields({
-                    password: {
-                        value: values.password,
-                        errors: [new Error(response.data.message)],
-                    },
-                });
-            }
-        }).catch(error => {
-            console.log(error)
-            setFormValid(false)
-            setLoading(false)
-        })
-    }
-    useEffect(() => {
-        if (!formValid) {
-            setFormValid(true)
-        }
-    }, [phone, password])
 
     async function test() {
         console.log(await userData)
@@ -97,69 +46,6 @@ function SignIn({ navigation, route }) {
                         height: 35,
                         width: 166,
                     }} source={logo} />
-                </View>
-                <View style={{ width: '80%', height: SCREEN_HEIGHT, flex: 1, justifyContent: 'flex-start' }}>
-                    <Input
-                        inputContainerStyle={styles.inputContainer}
-                        leftIcon={<Ionicons name="ios-contact" size={16} color="green" />}
-                        inputStyle={styles.inputStyle}
-                        autoFocus={false}
-                        autoCapitalize="none"
-                        keyboardAppearance="dark"
-                        errorStyle={styles.errorInputStyle}
-                        autoCorrect={false}
-                        blurOnSubmit={false}
-                        placeholder="Ваш e-mail или телефон"
-                        returnKeyType="next"
-                        placeholderTextColor="#7384B4"
-                        onChangeText={phone => setPhone(phone)}
-                    />
-                    <Input
-                        inputContainerStyle={styles.inputContainer}
-                        leftIcon={<Ionicons name="ios-finger-print" size={16} color="green" />}
-                        inputStyle={styles.inputStyle}
-                        autoFocus={false}
-                        autoCapitalize="none"
-                        keyboardAppearance="dark"
-                        errorStyle={styles.errorInputStyle}
-                        autoCorrect={false}
-                        blurOnSubmit={false}
-                        placeholder="Пароль"
-                        returnKeyType="next"
-                        placeholderTextColor="#7384B4"
-                        secureTextEntry={true}
-                        onChangeText={pass => setPassword(pass)}
-                        errorMessage={
-                            formValid ? null : "Имя пользователя или пароль неверны."
-                        }
-                    />
-                    <Button
-                        loading={loading}
-                        title="АВТОРИЗОВАТЬСЯ"
-                        buttonStyle={styles.signInButton}
-                        linearGradientProps={{
-                            colors: ['#FF9800', '#F44336'],
-                            start: [1, 0],
-                            end: [0.2, 0],
-                        }}
-                        ViewComponent={LinearGradient}
-                        titleStyle={styles.signInButtonText}
-                        onPress={handleSubmit}
-                    />
-                    <View style={styles.signUpHereContainer}>
-                        <Text style={styles.newAccountText}>
-                            Нет акаунта?
-                        </Text>
-                        <Button
-                            title="Зарегистрироваться здесь"
-                            titleStyle={styles.signUpHereText}
-                            containerStyle={{ flex: -1 }}
-                            buttonStyle={{ backgroundColor: 'transparent' }}
-                            underlayColor="transparent"
-                            onPress={() => navigation.navigate('SignUp')}
-                        />
-                    </View>
-                    {/* <ToastComponent ref={toastRef} /> */}
                 </View>
             </KeyboardAwareScrollView>
         </SafeAreaView>

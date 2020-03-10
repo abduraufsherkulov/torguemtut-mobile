@@ -80,9 +80,15 @@ function TopProductsScreen({ navigation, route }) {
 
     useEffect(() => {
         const abortController = new AbortController();
-        const endpoint = "https://ttuz.azurewebsites.net/api/news/get-all-by-tariff?type=1";
+        const endpoint = "https://ttuz.azurewebsites.net/api/news/get-all-by-tariff";
+        const data = JSON.stringify({
+            Type: 1,
+            pageSize: 30,
+            // pageNumber: currentPage
+        })
         axios({
             method: "post",
+            data: data,
             url: endpoint,
             headers: {
                 "content-type": "application/json",
@@ -90,6 +96,7 @@ function TopProductsScreen({ navigation, route }) {
             }
         })
             .then(response => {
+                console.log(response)
                 setLoading(false)
                 setListData(response.data)
             })

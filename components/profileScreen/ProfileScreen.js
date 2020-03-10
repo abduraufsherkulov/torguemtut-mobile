@@ -55,7 +55,7 @@ function ProfileScreen({ navigation }) {
                             PlaceholderContent={<ActivityIndicator />}
                             source={logo}
                         />
-                        <Button title="Войти" style={{ width: '100%' }} onPress={() => navigation.navigate("SignIn")} />
+                        <Button title="Войти" style={{ width: '100%' }} onPress={() => navigation.navigate("Sign")} />
                     </View>
                 )}
             <View style={styles.headerContainer}>

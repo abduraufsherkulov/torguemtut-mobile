@@ -21,7 +21,7 @@ export const skeletItemHelper = ({ item, index }) => (
                     isLoading={true}
                     layout={
                         [
-                            { key: "someId2", width: SCREEN_WIDTH - 32, height: 20, marginBottom: 6, },
+                            { width: SCREEN_WIDTH - 32, height: 20, marginBottom: 6, },
                         ]}
                 />
 
@@ -34,8 +34,8 @@ export const skeletItemHelper = ({ item, index }) => (
                     }}
                     isLoading={true}
                     layout={
-                        [{ key: "someId", width: SCREEN_WIDTH / 2 * 0.9 - 16, height: 150, marginBottom: 6 },
-                        { key: "someId3", width: SCREEN_WIDTH / 2 * 0.9 - 16, height: 20, marginBottom: 6 },
+                        [{ width: SCREEN_WIDTH / 2 * 0.9 - 16, height: 150, marginBottom: 6 },
+                        { width: SCREEN_WIDTH / 2 * 0.9 - 16, height: 20, marginBottom: 6 },
                         ]}
                 />
                 <SkeletonContent
@@ -48,7 +48,7 @@ export const skeletItemHelper = ({ item, index }) => (
                     isLoading={true}
                     layout={
                         [
-                            { key: "someOtherId", width: SCREEN_WIDTH / 2, height: 20, marginBottom: 6 },
+                            { width: SCREEN_WIDTH / 2, height: 20, marginBottom: 6 },
                         ]}
                 />
             </View>

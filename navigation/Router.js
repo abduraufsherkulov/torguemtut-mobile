@@ -11,7 +11,6 @@ import FavouriteScreen from '../components/favouriteScreen/FavouriteScreen';
 import SellScreen from '../components/sellScreen/SellScreen';
 import TopProductsScreen from '../components/topProductsScreen/TopProductsScreen';
 import ProfileScreen from '../components/profileScreen/ProfileScreen';
-import SignIn from '../components/auth/SignIn';
 import { CategoryContext } from '../contexts/CategoryContext';
 import Product from '../components/productScreen/Product';
 import ProductLocation from '../components/productScreen/ProductLocation';
@@ -25,7 +24,7 @@ import ChooseSubScreen from '../components/sellScreen/chooseCategory/ChooseSubSc
 import ChooseSubSubScreen from '../components/sellScreen/chooseCategory/ChooseSubSubScreen';
 import MainMapPart from '../components/sellScreen/sellForm/MainMapPart';
 import WaitingAds from '../components/profileScreen/WaitingAds';
-import SignUp from '../components/auth/SignUp';
+import Sign from '../components/auth/Sign';
 
 
 const MainStack = createStackNavigator();
@@ -262,11 +261,8 @@ export default function AppNavigator() {
           name="MainApp"
           component={MainApp} />
         <ModalStack.Screen
-          name="SignIn"
-          component={SignIn} />
-        <ModalStack.Screen
-          name="SignUp"
-          component={SignUp} />
+          name="Sign"
+          component={Sign} />
       </ModalStack.Navigator>
     </NavigationContainer>
   );
