@@ -39,19 +39,26 @@ function ImageUpload({ image, setImage }) {
             quality: 1
         });
 
+        console.log(ImagePicker)
+
+        console.log(result)
         if (!result.cancelled) {
             image[index].loading = true;
             setImage([...image])
             const endpoint = "https://ttuz.azurewebsites.net/api/news/upload-image";
             const data = new FormData();
-            let name = result.uri.split("/");
-            name = name[name.length - 1];
-            console.log(name)
-            let type = name.split(".");
-            type = type[type.length - 1];
-            type = `image/${type}`;
-            data.append('image', { uri: result.uri, name: name, filename: name, type: type });
-            data.append('Content-Type', type);
+
+            let base64ContentArray = result.uri.split(",")
+            let mimeType = base64ContentArray[0].match(/[^:\s*]\w+\/[\w-+\d.]+(?=[;| ])/)[0]
+            let ext = mimeType.split("/");
+
+            var file = new File([result.uri], `imagefile.${ext[1]}`, {
+                type: mimeType,
+            });
+
+            data.append('image', file);
+            data.append('Content-Type', mimeType);
+
             axios({
                 method: "post",
                 url: endpoint,
