@@ -5,19 +5,20 @@ import { ENTRIES1, ENTRIES2 } from './entries';
 import { sliderWidth, itemWidth } from './SliderEntry.style';
 import { Image } from 'react-native'
 
-function ProductCarousel() {
+function ProductCarousel({ listImages }) {
     const _renderItem = ({ item, index }) => {
         return (
             <Image
-                source={{ uri: item.illustration }}
+                source={{ uri: `https://ttuz.azurewebsites.net/Resources/Images/${item.path}` }}
                 style={styles.image}
             />
         );
     }
+    console.log(listImages)
     return (
         <Carousel
             // ref={(c) => { this._carousel = c; }}
-            data={ENTRIES1}
+            data={listImages}
             layout={'default'}
             renderItem={_renderItem}
             sliderWidth={sliderWidth}

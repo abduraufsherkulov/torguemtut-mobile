@@ -13,10 +13,12 @@ function WishlistContextProvider(props) {
 
     const [{ wishlist }, dispatch] = useReducer(wishlistReducer, { wishlist: [] })
     const { dispatch: toastDispatch } = useContext(ToastContext)
+
     useEffect(() => {
         const endpoint = "https://ttuz.azurewebsites.net/api/news/get-all-favourites";
         axios({
             method: 'post',
+            data: {},
             url: endpoint,
             headers: {
                 "content-type": "application/json",

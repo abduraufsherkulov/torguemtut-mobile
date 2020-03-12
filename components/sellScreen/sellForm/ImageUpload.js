@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Animated, Easing, Button, Image, View, Text, Dimensions, Alert } from 'react-native';
+import { Animated, Easing, Button, Image, View, Text, Dimensions, Alert, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import axios from 'axios';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { Ionicons, AntDesign } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as Animatable from 'react-native-animatable';
 const AnimatableIcon = Animatable.createAnimatableComponent(AntDesign);
 
@@ -34,9 +33,15 @@ function ImageUpload({ image, setImage }) {
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsMultipleSelection: true,
             // allowsEditing: true,
+            base64: false,
             aspect: [4, 3],
+            exif: true,
             quality: 1
         });
+
+        console.log(ImagePicker)
+
+        console.log(result)
         if (!result.cancelled) {
             image[index].loading = true;
             setImage([...image])
@@ -44,6 +49,7 @@ function ImageUpload({ image, setImage }) {
             const data = new FormData();
             let name = result.uri.split("/");
             name = name[name.length - 1];
+            console.log(name)
             let type = name.split(".");
             type = type[type.length - 1];
             type = `image/${type}`;
@@ -59,6 +65,7 @@ function ImageUpload({ image, setImage }) {
                     Authorization: `Bearer ${userData.token}`
                 }
             }).then(response => {
+                console.log(response);
                 image[index].uri = result.uri;
                 image[index].imageId = response.data.imageId;
                 image[index].loading = false;

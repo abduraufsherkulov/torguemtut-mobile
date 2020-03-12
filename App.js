@@ -11,6 +11,7 @@ import { enableScreens } from 'react-native-screens';
 import UserInfoContextProvider from './contexts/UserInfoContext';
 import MyAdsContextProvider from './contexts/MyAdsContext';
 import loader from './assets/images/loader.gif'
+import SoataContextProvider from './contexts/SoataContext';
 
 enableScreens();
 
@@ -36,7 +37,9 @@ export default function App() {
           <WishlistContextProvider>
             <UserInfoContextProvider>
               <MyAdsContextProvider>
-                <AppNavigator />
+                <SoataContextProvider>
+                  <AppNavigator />
+                </SoataContextProvider>
               </MyAdsContextProvider>
             </UserInfoContextProvider>
           </WishlistContextProvider>

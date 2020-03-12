@@ -3,29 +3,34 @@ import { View, StyleSheet, Text } from 'react-native'
 
 function ProductDetails({ listData }) {
     return listData.title ? (
-        <View>
-            <View>
-                <Text>{listData.price.amount} {listData.price.currencyLabel}</Text>
-                <Text>{listData.title}</Text>
+        <View style={{ backgroundColor: 'white', marginBottom: 10 }}>
+            <View style={{ flex: 1 }}>
+                <View style={styles.infoCategoryContainer}>
+                    <Text style={{ fontFamily: 'bold', fontSize: 40 }}>{listData.price.amount}
+                        {" "}</Text>
+                    <Text>{listData.price.currencyLabel}</Text>
+                </View>
+                <View style={styles.infoCategoryContainer}>
+                    <Text>{listData.title}</Text>
+                </View>
             </View>
             <View style={{ flex: 1, marginTop: 30 }}>
                 <View style={styles.infoCategoryContainer}>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
                         <View style={{ flex: 1, alignItems: 'flex-start' }}>
                             {listData.newsAttribute.map((item, index) => (
-                                <Text style={styles.infoTypeLabel}>{item.attributeInfo.title}</Text>
+                                <Text key={index} style={styles.infoTypeLabel}>{item.attributeInfo.title}</Text>
                             ))}
 
                         </View>
                         <View style={{ flex: 1, marginLeft: 10 }}>
                             {listData.newsAttribute.map((item, index) => (
-                                <Text style={styles.infoAnswerLabel}>{item.value}</Text>
+                                <Text key={index} style={styles.infoAnswerLabel}>{item.value}</Text>
                             ))
                             }
                         </View>
                     </View>
                 </View>
-
             </View>
 
             <View style={{ flex: 1, marginTop: 30 }}>
