@@ -25,6 +25,8 @@ import ChooseSubSubScreen from '../components/sellScreen/chooseCategory/ChooseSu
 import MainMapPart from '../components/sellScreen/sellForm/MainMapPart';
 import WaitingAds from '../components/profileScreen/WaitingAds';
 import Sign from '../components/auth/Sign';
+import ChooseRegion from '../components/sellScreen/chooseSoato/ChooseRegion';
+import ChooseDistrict from '../components/sellScreen/chooseSoato/ChooseDistrict';
 
 
 const MainStack = createStackNavigator();
@@ -223,6 +225,20 @@ function MainApp() {
         options={({ route }) => ({
           headerTitle: getHeaderTitle(route),
         })} />
+
+      <MainStack.Screen
+        name="ChooseRegion"
+        component={ChooseRegion}
+        options={({ route }) => ({
+          headerTitle: getHeaderTitle(route),
+        })} />
+      <MainStack.Screen
+        name="ChooseDistrict"
+        component={ChooseDistrict}
+        options={({ route }) => ({
+          headerTitle: getHeaderTitle(route),
+        })} />
+
       <MainStack.Screen
         name="MainMapPart"
         component={MainMapPart}

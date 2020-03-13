@@ -9,6 +9,7 @@ import ImageUpload from './ImageUpload';
 import AddMapPart from './AddMapPart';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { MyAdsContext } from '../../../contexts/MyAdsContext';
+import CascaderSoato from './CascaderSoato';
 
 function SellForm({ navigation, route, userInfo }) {
     const { userData, dispatch } = useContext(AuthContext)
@@ -25,6 +26,8 @@ function SellForm({ navigation, route, userInfo }) {
     const [phone, setPhone] = useState("")
     const [telegram, setTelegram] = useState("")
     const [selectedAttr, setSelectedAttr] = useState([]);
+    const [selectedSoato, setSelectedSoato] = useState([]);
+
 
     let categoryId = route.params ? route.params.id : null;
 
@@ -119,7 +122,7 @@ function SellForm({ navigation, route, userInfo }) {
             return false
         }
         const data = JSON.stringify({
-            NewsAttribute: newAttr,
+            NewsAttribute: selectedAttr,
             Title: title,
             CategoryId: categoryId,
             Price: {
@@ -163,7 +166,6 @@ function SellForm({ navigation, route, userInfo }) {
             console.log(error.response)
         })
     };
-    console.log(title);
     return (
         <View style={{ alignItems: 'center', marginBottom: 16, flex: 1, width: '100%' }}>
             <View style={{ backgroundColor: 'white', marginVertical: 4, paddingVertical: 10, width: '100%', paddingHorizontal: 10 }}>
@@ -211,14 +213,15 @@ function SellForm({ navigation, route, userInfo }) {
                 <ImageUpload image={image} setImage={setImage} />
             </View>
             <View style={{ backgroundColor: 'white', marginVertical: 4, paddingVertical: 10, width: '100%', paddingHorizontal: 10 }}>
-                <Input
+                <CascaderSoato selectedSoato={selectedSoato} setSelectedSoato={setSelectedSoato} navigation={navigation} route={route} />
+                {/* <Input
                     value={address}
                     disabled={true}
                     placeholder="Местоположения"
                     containerStyle={{ paddingHorizontal: 0, padding: 0, margin: 0 }}
                     inputContainerStyle={styles.inputContainer}
                     inputStyle={styles.inputStyle}
-                />
+                /> */}
                 <AddMapPart
                     setlatlong={setlatlong}
                     latlong={latlong}

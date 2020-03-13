@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { View, StyleSheet, Button, Platform } from 'react-native'
+import { View, StyleSheet, Platform } from 'react-native'
 import RNPickerSelect from 'react-native-picker-select';
-import { Input } from 'react-native-elements'
+import { Input, Button } from 'react-native-elements'
 import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import { pickerSelectStyles, pickerSelectErrorStyles } from '../../../assets/styles/styles';
@@ -60,7 +60,7 @@ function CascaderAttrs({ navigation, route, selectedAttr, setSelectedAttr }) {
     }
     return (
         <React.Fragment>
-            <Button title={title} onPress={() => navigation.navigate('ChooseScreen')} />
+            <Button loading={cascaderLoading} title={title} onPress={() => navigation.navigate('ChooseScreen')} />
             {/* <MemoizedValue /> */}
             {attrHere && selectedAttr.length > 0 && attrHere.map((item, index) => (
                 item.attributeOptions.length > 0 ?
