@@ -10,18 +10,18 @@ function MyAdsContextProvider(props) {
     const [myAds, setMyAds] = useState([]);
 
     useEffect(() => {
-        const endpoint = "https://ttuz.azurewebsites.net/api/news/get-all-by-user";
+        const endpoint = "https://tt.delivera.uz/api/news/get-all-by-user";
         axios({
             method: "post",
             url: endpoint,
-            data: {},
+            data: { PageSize: 100 },
             headers: {
                 "content-type": "application/json",
                 Authorization: `Bearer ${userData.token}`
             }
         })
             .then(response => {
-                console.log(response.data[0])
+                console.log(response.data)
                 setMyAds(response.data);
             })
             .catch(error => {

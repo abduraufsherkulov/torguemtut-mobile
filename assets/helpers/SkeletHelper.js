@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from 'react'
-import { Text, View, FlatList, Dimensions, ActivityIndicator } from 'react-native';
+import { Text, View, FlatList, Dimensions, ActivityIndicator, ScrollView } from 'react-native';
 import { ListItem, Avatar, Button, Image } from 'react-native-elements';
 import SkeletonContent from "react-native-skeleton-content";
 
@@ -55,4 +55,67 @@ export const skeletItemHelper = ({ item, index }) => (
         }
         bottomDivider
     />
+)
+
+
+export const skeletDescriptionHelper = (
+    <ScrollView style={{ flex: 1 }}>
+        <View>
+            <SkeletonContent
+                containerStyle={{
+                    width: SCREEN_WIDTH - 32,
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                }}
+                isLoading={true}
+                layout={
+                    [
+                        { width: SCREEN_WIDTH, height: 200, marginBottom: 6, },
+                    ]}
+            />
+            <SkeletonContent
+                containerStyle={{
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                    width: SCREEN_WIDTH - 32,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between'
+                }}
+                isLoading={true}
+                layout={
+                    [{ width: SCREEN_WIDTH - 32, height: 40, marginBottom: 6, },
+                    ]}
+            />
+            <SkeletonContent
+                containerStyle={{
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                    width: SCREEN_WIDTH - 32,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                }}
+                isLoading={true}
+                layout={
+                    [{ width: SCREEN_WIDTH - 32, height: 20, marginBottom: 6, },
+                    ]}
+            />
+
+            {[1, 2, 3, 4, 5, 6].map(item => (
+                <SkeletonContent
+                    containerStyle={{
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                        width: SCREEN_WIDTH - 32,
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                    }}
+                    isLoading={true}
+                    layout={
+                        [{ width: SCREEN_WIDTH / 2 * 0.9 - 16, height: 20, marginBottom: 4 },
+                        { width: SCREEN_WIDTH / 2 * 0.9 - 16, height: 20, marginBottom: 4 },
+                        ]}
+                />
+            ))}
+        </View>
+    </ScrollView>
 )

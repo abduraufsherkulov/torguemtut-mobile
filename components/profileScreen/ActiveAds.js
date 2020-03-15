@@ -30,8 +30,8 @@ function ActiveAds({ navigation }) {
                         <View style={{ flex: 1, flexDirection: 'row' }}>
                             <View style={{ flex: 0.5 }}>
                                 <Image
-                                    PlaceholderContent={<ActivityIndicator />} style={{ width: '90%', height: 150 }} source={{ uri: `https://ttuz.azurewebsites.net/Resources/Images/${item.images[0].path}` }} />
-                                {/* <Avatar size="xlarge" title={item.title} source={{ uri: `https://ttuz.azurewebsites.net/Resources/Images/${item.images[0].path}` }} /> */}
+                                    PlaceholderContent={<ActivityIndicator />} style={{ width: '90%', height: 150 }} source={{ uri: `https://tt.delivera.uz/Resources/Images/${item.images[0].path}` }} />
+                                {/* <Avatar size="xlarge" title={item.title} source={{ uri: `https://tt.delivera.uz/Resources/Images/${item.images[0].path}` }} /> */}
                             </View>
                             <View style={{ flex: 0.5 }}>
                                 <Text>{item.title}</Text>

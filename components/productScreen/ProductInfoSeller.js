@@ -24,7 +24,7 @@ function ProductInfoSeller({ contactDetail, ownerId, navigation }) {
                     <Text style={styles.ratingText}>5 months ago</Text>
                 </View>
             } leftAvatar={{
-                source: { uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg' },
+                source: { uri: 'https://img.icons8.com/cotton/2x/person-male.png' },
                 showEditButton: true,
             }}
         />

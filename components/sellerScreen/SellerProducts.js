@@ -6,11 +6,21 @@ import axios from 'axios';
 import moment from 'moment';
 import 'moment/min/locales'
 import { AuthContext } from '../../contexts/AuthContext';
+import { skeletItemHelper } from '../../assets/helpers/SkeletHelper';
 moment.locale('ru')
 
 
 function SellerProducts({ navigation, route }) {
+    const [loading, setLoading] = useState(true)
     const [listData, setListData] = useState([{
+        ownerDetails: { name: "Torguem", surname: 'tut' },
+        images: [{ path: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg' }],
+        price: { amount: 10000, currencyLabel: 'UZS' }
+    }, {
+        ownerDetails: { name: "Torguem", surname: 'tut' },
+        images: [{ path: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg' }],
+        price: { amount: 10000, currencyLabel: 'UZS' }
+    }, {
         ownerDetails: { name: "Torguem", surname: 'tut' },
         images: [{ path: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg' }],
         price: { amount: 10000, currencyLabel: 'UZS' }
@@ -45,7 +55,7 @@ function SellerProducts({ navigation, route }) {
                     <View><Text>{item.title}</Text></View>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
                         <View style={{ flex: 0.5 }}>
-                            <Avatar size="xlarge" title={item.title} source={{ uri: `https://ttuz.azurewebsites.net/Resources/Images/${item.images[0].path}` }} />
+                            <Avatar size="xlarge" title={item.title} source={{ uri: `https://tt.delivera.uz/Resources/Images/${item.images[0].path}` }} />
                         </View>
                         <View style={{ flex: 0.5 }}>
                             <Text>{item.price.amount} {item.price.currencyLabel}</Text>
@@ -57,9 +67,9 @@ function SellerProducts({ navigation, route }) {
                     </View>
                 </View>
             }
-            // leftAvatar={{ containerStyle: { flex: 0.5, height: 100 }, rounded: false, title: item.title, source: { uri: `https://ttuz.azurewebsites.net/${item.images[0].path}` } }}
+            // leftAvatar={{ containerStyle: { flex: 0.5, height: 100 }, rounded: false, title: item.title, source: { uri: `https://tt.delivera.uz/${item.images[0].path}` } }}
             // subtitle={<Text><Ionicons name="ios-clock" size={16} color="green" />   {momentize(item.updatedDate)}</Text>}
-            // avatar={{ uri: `https://ttuz.azurewebsites.net/${item.images[0].path}` }}
+            // avatar={{ uri: `https://tt.delivera.uz/${item.images[0].path}` }}
             // badge={{ value: 3, textStyle: { color: 'orange' }, containerStyle: { marginTop: -20 } }}
             bottomDivider
             button
@@ -79,7 +89,7 @@ function SellerProducts({ navigation, route }) {
         const data = JSON.stringify({
             ownerId: ownerId
         })
-        const endpoint = `https://ttuz.azurewebsites.net/api/news/get-all`;
+        const endpoint = `https://tt.delivera.uz/api/news/get-all`;
         axios({
             method: "post",
             url: endpoint,
@@ -92,6 +102,7 @@ function SellerProducts({ navigation, route }) {
             .then(response => {
                 // console.log(response.data[0])
                 setListData(response.data);
+                setLoading(false)
             })
             .catch(error => {
                 // if (error.response.status == 401) {
@@ -121,7 +132,7 @@ function SellerProducts({ navigation, route }) {
                 </View>}
             keyExtractor={keyExtractor}
             data={listData}
-            renderItem={renderItem}
+            renderItem={loading ? skeletItemHelper : renderItem}
         />
     )
 }

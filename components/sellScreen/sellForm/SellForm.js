@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { View, Picker, Modal, Text, StyleSheet, Alert, Platform } from 'react-native'
 import { Input, Button, Divider } from 'react-native-elements'
-import { Ionicons } from '@expo/vector-icons';
-import IosPickerHelper from '../../../assets/helpers/IosPickerHelper';
 import axios from 'axios';
 import CascaderAttrs from './CascaderAttrs';
 import ImageUpload from './ImageUpload';
@@ -96,11 +94,11 @@ function SellForm({ navigation, route, userInfo }) {
             }
         })
         images = images.toString();
-        const endpoint = "https://ttuz.azurewebsites.net/api/news/add";
+        const endpoint = "https://tt.delivera.uz/api/news/add";
 
         let position = {
-            RegionId: 1,
-            DistrictId: 1,
+            RegionId: selectedSoato[0],
+            DistrictId: selectedSoato[1],
             Address: address,
             Longtitude: pinLocation.latitude,
             Latitude: pinLocation.longitude
@@ -119,6 +117,7 @@ function SellForm({ navigation, route, userInfo }) {
                 }
             });
             setSelectedAttr(showErrorMap);
+            setLoading(false);
             return false
         }
         const data = JSON.stringify({
@@ -155,6 +154,7 @@ function SellForm({ navigation, route, userInfo }) {
         }).then(response => {
             console.log(response.data);
             if (response.data.status) {
+                setLoading(false);
                 setMyAds([...myAds, response.data.data]);
                 navigation.navigate('WaitingAds')
             }
@@ -166,6 +166,7 @@ function SellForm({ navigation, route, userInfo }) {
             console.log(error.response)
         })
     };
+    console.log(route)
     return (
         <View style={{ alignItems: 'center', marginBottom: 16, flex: 1, width: '100%' }}>
             <View style={{ backgroundColor: 'white', marginVertical: 4, paddingVertical: 10, width: '100%', paddingHorizontal: 10 }}>
@@ -214,14 +215,6 @@ function SellForm({ navigation, route, userInfo }) {
             </View>
             <View style={{ backgroundColor: 'white', marginVertical: 4, paddingVertical: 10, width: '100%', paddingHorizontal: 10 }}>
                 <CascaderSoato selectedSoato={selectedSoato} setSelectedSoato={setSelectedSoato} navigation={navigation} route={route} />
-                {/* <Input
-                    value={address}
-                    disabled={true}
-                    placeholder="Местоположения"
-                    containerStyle={{ paddingHorizontal: 0, padding: 0, margin: 0 }}
-                    inputContainerStyle={styles.inputContainer}
-                    inputStyle={styles.inputStyle}
-                /> */}
                 <AddMapPart
                     setlatlong={setlatlong}
                     latlong={latlong}
@@ -262,9 +255,8 @@ function SellForm({ navigation, route, userInfo }) {
                     inputContainerStyle={styles.inputContainer}
                     inputStyle={styles.inputStyle}
                 />
-                {/* <ImageUpload /> */}
             </View>
-            <Button onPress={handleSubmit} title="Опубликовать" />
+            <Button loading={loading} onPress={handleSubmit} title="Опубликовать" />
         </View>
     )
 }

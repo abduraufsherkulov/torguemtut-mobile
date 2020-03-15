@@ -45,7 +45,7 @@ function ImageUpload({ image, setImage }) {
         if (!result.cancelled) {
             image[index].loading = true;
             setImage([...image])
-            const endpoint = "https://ttuz.azurewebsites.net/api/news/upload-image";
+            const endpoint = "https://tt.delivera.uz/api/news/upload-image";
             const data = new FormData();
 
             let base64ContentArray = result.uri.split(",")
@@ -84,7 +84,7 @@ function ImageUpload({ image, setImage }) {
 
     const handleDelete = (index, imageId) => {
         image[index].loading = true;
-        const endpoint = `https://ttuz.azurewebsites.net/api/news/delete-image?imageId=${imageId}`;
+        const endpoint = `https://tt.delivera.uz/api/news/delete-image?imageId=${imageId}`;
         axios({
             method: "post",
             url: endpoint,

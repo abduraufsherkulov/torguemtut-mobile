@@ -15,7 +15,7 @@ function CascaderAttrs({ navigation, route, selectedAttr, setSelectedAttr }) {
         if (categoryId) {
             setTitle(`${route.params.first}/${route.params.second}/${route.params.title}`)
             setCascaderLoading(true);
-            const endpoint = `https://ttuz.azurewebsites.net/api/category/get-category-attributes?Id=${route.params.id}`;
+            const endpoint = `https://tt.delivera.uz/api/category/get-category-attributes?Id=${route.params.id}`;
             axios({
                 method: 'get',
                 url: endpoint,

@@ -68,45 +68,7 @@ function ProfileStackScreen() {
         options={({ route }) => ({
           headerTitle: getHeaderTitle(route),
         })} />
-      <ProfileStack.Screen
-        name="EditProfile"
-        component={EditProfile}
-        options={({ route }) => ({
-          headerTitle: getHeaderTitle(route),
-        })} />
-      <ProfileStack.Screen
-        name="ActiveAds"
-        component={ActiveAds}
-        options={({ route }) => ({
-          headerTitle: getHeaderTitle(route),
-        })} />
-      <ProfileStack.Screen
-        name="ArchivedAds"
-        component={ArchivedAds}
-        options={({ route }) => ({
-          headerTitle: getHeaderTitle(route),
-        })} />
-      <ProfileStack.Screen
-        name="WaitingAds"
-        component={WaitingAds}
-        options={({ route }) => ({
-          headerTitle: getHeaderTitle(route),
-        })} />
     </ProfileStack.Navigator>)
-}
-
-
-
-function SellStackScreen() {
-  return (
-    <SellStack.Navigator mode="modal">
-      <SellStack.Screen
-        name="SellScreen"
-        component={SellScreen}
-        options={({ route }) => ({
-          headerTitle: getHeaderTitle(route),
-        })} />
-    </SellStack.Navigator>)
 }
 
 function MainTab({ route }) {
@@ -149,7 +111,7 @@ function MainTab({ route }) {
       <Tab.Screen options={{ title: 'Избранные' }} name="Favourite" component={FavouriteScreen} />
       <Tab.Screen options={{ title: 'Добавить' }} name="Sell" component={SellScreen} />
       <Tab.Screen options={{ title: 'Топ' }} name="TopProducts" component={TopProductsScreen} />
-      <Tab.Screen options={{ headerTitle: 'Мой профиль' }} name="Profile" component={ProfileStackScreen} />
+      <Tab.Screen options={{ headerTitle: 'Мой профиль' }} name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   )
 }
@@ -246,6 +208,34 @@ function MainApp() {
           headerTitle: getHeaderTitle(route),
           gestureEnabled: false,
         })} />
+
+
+      <MainStack.Screen
+        name="EditProfile"
+        component={EditProfile}
+        options={({ route }) => ({
+          headerTitle: getHeaderTitle(route),
+        })} />
+      <MainStack.Screen
+        name="ActiveAds"
+        component={ActiveAds}
+        options={({ route }) => ({
+          headerTitle: getHeaderTitle(route),
+        })} />
+      <MainStack.Screen
+        name="ArchivedAds"
+        component={ArchivedAds}
+        options={({ route }) => ({
+          headerTitle: getHeaderTitle(route),
+        })} />
+      <MainStack.Screen
+        name="WaitingAds"
+        component={WaitingAds}
+        options={({ route }) => ({
+          headerTitle: getHeaderTitle(route),
+        })} />
+
+
     </MainStack.Navigator>
   )
 }

@@ -6,9 +6,9 @@ export const CategoryContext = createContext();
 function CategoryContextProvider(props) {
 
     const [category, setCategory] = useState([]);
-    // https://ttuz.azurewebsites.net/api/category/get-all
+    // https://tt.delivera.uz/api/category/get-all
     useEffect(() => {
-        const endpoint = "https://ttuz.azurewebsites.net/api/category/get-with-children";
+        const endpoint = "https://tt.delivera.uz/api/category/get-with-children";
         axios({
             method: "get",
             url: endpoint

@@ -8,7 +8,7 @@ function UserInfoContextProvider(props) {
     const { userData, dispatch } = useContext(AuthContext)
     const [userInfo, setUserInfo] = useState({});
     useEffect(() => {
-        const endpoint = `https://ttuz.azurewebsites.net/api/users/get-profile?userId=${userData.id}`;
+        const endpoint = `https://tt.delivera.uz/api/users/get-profile?userId=${userData.id}`;
         axios({
             method: "post",
             url: endpoint,

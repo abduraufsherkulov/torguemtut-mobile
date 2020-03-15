@@ -9,7 +9,7 @@ function ProductCarousel({ listImages }) {
     const _renderItem = ({ item, index }) => {
         return (
             <Image
-                source={{ uri: `https://ttuz.azurewebsites.net/Resources/Images/${item.path}` }}
+                source={{ uri: `https://tt.delivera.uz/Resources/Images/${item.path}` }}
                 style={styles.image}
             />
         );

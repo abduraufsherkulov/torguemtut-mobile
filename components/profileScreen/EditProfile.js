@@ -17,7 +17,7 @@ function EditProfile({ navigation }) {
         let info = { ...userInfo };
         e.preventDefault()
 
-        const endpoint = "https://ttuz.azurewebsites.net/api/users/update-profile";
+        const endpoint = "https://tt.delivera.uz/api/users/update-profile";
 
         const data = JSON.stringify({
             Name: name,

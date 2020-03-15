@@ -49,7 +49,7 @@ function TopProductsScreen({ navigation, route }) {
                     <View style={{ flex: 1, flexDirection: 'row' }}>
                         <View style={{ flex: 0.5 }}>
                             <Image
-                                PlaceholderContent={<ActivityIndicator />} style={{ width: '90%', height: 150 }} source={{ uri: `https://ttuz.azurewebsites.net/Resources/Images/${item.images[0].path}` }} />
+                                PlaceholderContent={<ActivityIndicator />} style={{ width: '90%', height: 150 }} source={{ uri: `https://tt.delivera.uz/Resources/Images/${item.images[0].path}` }} />
                         </View>
                         <View style={{ flex: 0.5 }}>
                             <Text>{item.price.amount} {item.price.currencyLabel}</Text>
@@ -61,9 +61,9 @@ function TopProductsScreen({ navigation, route }) {
                     </View>
                 </View>
             }
-            // leftAvatar={{ containerStyle: { flex: 0.5, height: 100 }, rounded: false, title: item.title, source: { uri: `https://ttuz.azurewebsites.net/${item.images[0].path}` } }}
+            // leftAvatar={{ containerStyle: { flex: 0.5, height: 100 }, rounded: false, title: item.title, source: { uri: `https://tt.delivera.uz/${item.images[0].path}` } }}
             // subtitle={<Text><Ionicons name="ios-clock" size={16} color="green" />   {momentize(item.updatedDate)}</Text>}
-            // avatar={{ uri: `https://ttuz.azurewebsites.net/${item.images[0].path}` }}
+            // avatar={{ uri: `https://tt.delivera.uz/${item.images[0].path}` }}
             // badge={{ value: 3, textStyle: { color: 'orange' }, containerStyle: { marginTop: -20 } }}
             bottomDivider
             button
@@ -80,7 +80,7 @@ function TopProductsScreen({ navigation, route }) {
 
     useEffect(() => {
         const abortController = new AbortController();
-        const endpoint = "https://ttuz.azurewebsites.net/api/news/get-all-by-tariff";
+        const endpoint = "https://tt.delivera.uz/api/news/get-all-by-tariff";
         const data = JSON.stringify({
             Type: 1,
             pageSize: 30,

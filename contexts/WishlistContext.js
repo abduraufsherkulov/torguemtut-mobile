@@ -15,7 +15,7 @@ function WishlistContextProvider(props) {
     const { dispatch: toastDispatch } = useContext(ToastContext)
 
     useEffect(() => {
-        const endpoint = "https://ttuz.azurewebsites.net/api/news/get-all-favourites";
+        const endpoint = "https://tt.delivera.uz/api/news/get-all-favourites";
         axios({
             method: 'post',
             data: {},
@@ -42,7 +42,7 @@ function WishlistContextProvider(props) {
         listData[selectedWish].favourite = true;
         setListData([...listData]);
         toastDispatch({ type: 'loading', value: { text: "Добавление в избранных...", duration: DURATION.FOREVER } })
-        const endpoint = `https://ttuz.azurewebsites.net/api/news/post-favourite?newsId=${wish.id}`;
+        const endpoint = `https://tt.delivera.uz/api/news/post-favourite?newsId=${wish.id}`;
         axios({
             method: 'post',
             url: endpoint,
@@ -76,7 +76,7 @@ function WishlistContextProvider(props) {
         listData[selectedWish].favourite = false;
         setListData([...listData]);
         toastDispatch({ type: 'loading', value: { text: "Удаление из избранных...", duration: DURATION.FOREVER } })
-        const endpoint = `https://ttuz.azurewebsites.net/api/news/delete-favourite?newsId=${wish.id}`;
+        const endpoint = `https://tt.delivera.uz/api/news/delete-favourite?newsId=${wish.id}`;
         axios({
             method: 'post',
             url: endpoint,

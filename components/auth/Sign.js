@@ -55,7 +55,7 @@ function Sign({ navigation }) {
         }
         setLoading(true)
         const isEmail = upEmail.includes('@') ? true : false;
-        const endpoint = "https://ttuz.azurewebsites.net/api/users/register";
+        const endpoint = "https://tt.delivera.uz/api/users/register";
         const data = JSON.stringify({
             Phone: isEmail ? '' : upEmail,
             Password: password,
@@ -99,7 +99,7 @@ function Sign({ navigation }) {
         e.preventDefault();
         setLoading(true)
         const isEmail = upEmail.includes('@') ? true : false;
-        const endpoint = "https://ttuz.azurewebsites.net/api/users/validate";
+        const endpoint = "https://tt.delivera.uz/api/users/validate";
         const data = JSON.stringify({
             Phone: isEmail ? '' : upEmail,
             Code: confirmCode,
@@ -144,7 +144,7 @@ function Sign({ navigation }) {
         e.preventDefault();
         setLoading(true)
         const email = signPhone.includes('@') ? true : false;
-        const endpoint = "https://ttuz.azurewebsites.net/api/users/authenticate";
+        const endpoint = "https://tt.delivera.uz/api/users/authenticate";
         const data = JSON.stringify({
             Phone: email ? '' : signPhone,
             Password: signPassword,
