@@ -55,7 +55,7 @@ function SellerProducts({ navigation, route }) {
                     <View><Text>{item.title}</Text></View>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
                         <View style={{ flex: 0.5 }}>
-                            <Avatar size="xlarge" title={item.title} source={{ uri: `https://tt.delivera.uz/Resources/Images/${item.images[0].path}` }} />
+                            <Avatar size="xlarge" source={{ uri: `https://tt.delivera.uz/Resources/Images/${item.images[0].path}` }} />
                         </View>
                         <View style={{ flex: 0.5 }}>
                             <Text>{item.price.amount} {item.price.currencyLabel}</Text>
