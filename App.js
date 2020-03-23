@@ -12,6 +12,9 @@ import UserInfoContextProvider from './contexts/UserInfoContext';
 import MyAdsContextProvider from './contexts/MyAdsContext';
 import loader from './assets/images/loader.gif'
 import SoataContextProvider from './contexts/SoataContext';
+import AdsActiveProvider from './contexts/AdsActiveContext';
+import AdsArchiveProvider from './contexts/AdsArchiveContext';
+import AdsWaitingProvider from './contexts/AdsWaitingContext';
 
 enableScreens();
 
@@ -37,9 +40,15 @@ export default function App() {
           <WishlistContextProvider>
             <UserInfoContextProvider>
               <MyAdsContextProvider>
-                <SoataContextProvider>
-                  <AppNavigator />
-                </SoataContextProvider>
+                <AdsActiveProvider>
+                  <AdsArchiveProvider>
+                    <AdsWaitingProvider>
+                      <SoataContextProvider>
+                        <AppNavigator />
+                      </SoataContextProvider>
+                    </AdsWaitingProvider>
+                  </AdsArchiveProvider>
+                </AdsActiveProvider>
               </MyAdsContextProvider>
             </UserInfoContextProvider>
           </WishlistContextProvider>

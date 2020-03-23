@@ -45,6 +45,13 @@ function MainList({ navigation, route }) {
         return moment().format('L');
     }
 
+    navigation.setOptions({
+        headerRight: () => (
+            <Button type="clear" onPress={() => navigation.navigate('ListFilter')} title={'Фильтр'} />
+        ),
+        // headerTitle: userInfo ? `${userInfo.name} ${userInfo.surname}` : 'Мой профиль'
+    })
+
     const keyExtractor = (item, index) => index.toString()
 
     function wishIt() {
@@ -82,10 +89,6 @@ function MainList({ navigation, route }) {
                     </View>
                 </View>
             }
-            // leftAvatar={{ containerStyle: { flex: 0.5, height: 100 }, rounded: false, title: item.title, source: { uri: `https://tt.delivera.uz/${item.images[0].path}` } }}
-            // subtitle={<Text><Ionicons name="ios-clock" size={16} color="green" />   {momentize(item.updatedDate)}</Text>}
-            // avatar={{ uri: `https://tt.delivera.uz/${item.images[0].path}` }}
-            // badge={{ value: 3, textStyle: { color: 'orange' }, containerStyle: { marginTop: -20 } }}
             bottomDivider
             button
             onPress={() => {
@@ -99,57 +102,6 @@ function MainList({ navigation, route }) {
         />
     )
 
-
-    const renderItem2 = ({ item, index }, loading) => (
-        <ListItem
-            key={index}
-            title={
-                <View>
-                    <SkeletonContent
-                        containerStyle={{
-                            flex: 1,
-                            width: SCREEN_WIDTH - 32,
-                            flexDirection: 'column',
-                            justifyContent: 'space-between',
-                        }}
-                        isLoading={loading}
-                        layout={
-                            [
-                                { key: "someId2", width: SCREEN_WIDTH - 32, height: 20, marginBottom: 6, },
-                            ]}
-                    />
-
-                    <SkeletonContent
-                        containerStyle={{
-                            flex: 1,
-                            width: SCREEN_WIDTH - 32,
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                        }}
-                        isLoading={loading}
-                        layout={
-                            [{ key: "someId", width: SCREEN_WIDTH / 2 * 0.9 - 16, height: 150, marginBottom: 6 },
-                            { key: "someId3", width: SCREEN_WIDTH / 2 * 0.9 - 16, height: 20, marginBottom: 6 },
-                            ]}
-                    />
-                    <SkeletonContent
-                        containerStyle={{
-                            flex: 1,
-                            width: SCREEN_WIDTH,
-                            flexDirection: 'column',
-                            justifyContent: 'space-between',
-                        }}
-                        isLoading={loading}
-                        layout={
-                            [
-                                { key: "someOtherId", width: SCREEN_WIDTH / 2, height: 20, marginBottom: 6 },
-                            ]}
-                    />
-                </View>
-            }
-            bottomDivider
-        />
-    )
     useEffect(() => {
         const abortController = new AbortController();
         const data = JSON.stringify({

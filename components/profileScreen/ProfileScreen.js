@@ -7,13 +7,20 @@ import { ToastContext } from '../../contexts/ToastContext';
 import Constants from 'expo-constants';
 import logo from '../../assets/images/tt.png'
 import { MyAdsContext } from '../../contexts/MyAdsContext';
+import { AdsActiveContext } from '../../contexts/AdsActiveContext';
+import { AdsArchiveContext } from '../../contexts/AdsArchiveContext';
+import { AdsWaitingContext } from '../../contexts/AdsWaitingContext';
 
 function ProfileScreen({ navigation }) {
     const { userData, dispatch: dispatcher } = useContext(AuthContext);
     const { myAds, setMyAds } = useContext(MyAdsContext)
     const { dispatch } = useContext(ToastContext);
     const { userInfo, setterUserInfo } = useContext(UserInfoContext)
+    const { pagination: activePagination } = useContext(AdsActiveContext)
+    const { pagination: archivePagination } = useContext(AdsArchiveContext)
+    const { pagination: waitingPagination } = useContext(AdsWaitingContext)
     const [loading, setLoading] = useState(true);
+
 
     useEffect(() => {
         navigation.setOptions({
@@ -24,9 +31,6 @@ function ProfileScreen({ navigation }) {
         })
         dispatch({ type: 'finished' })
     }, [userInfo.name, userInfo.surname])
-    let active = myAds.filter(item => item.status == 2).length;
-    let waiting = myAds.filter(item => item.status == 1).length;
-    let archived = myAds.filter(item => item.status == 3).length;
     return (
         <ScrollView>
             {userInfo.id ? (
@@ -72,7 +76,7 @@ function ProfileScreen({ navigation }) {
                 <ListItem
                     onPress={() => navigation.navigate('ActiveAds')}
                     title="Активные"
-                    badge={{ value: active, textStyle: { color: 'white' } }}
+                    badge={{ value: activePagination.TotalCount, textStyle: { color: 'white' } }}
                     chevron
                     bottomDivider
                     button
@@ -80,15 +84,15 @@ function ProfileScreen({ navigation }) {
                 <ListItem
                     onPress={() => navigation.navigate('WaitingAds')}
                     title="На проверке"
-                    badge={{ value: waiting, textStyle: { color: 'white' } }}
+                    badge={{ value: waitingPagination.TotalCount, textStyle: { color: 'white' } }}
                     chevron
                     bottomDivider
                     button
                 />
                 <ListItem
-                    onPress={() => navigation.navigate('ArchivedAds')}
+                    onPress={() => navigation.navigate('ArchiveAds')}
                     title="Архивные"
-                    badge={{ value: archived, textStyle: { color: 'white' } }}
+                    badge={{ value: archivePagination.TotalCount, textStyle: { color: 'white' } }}
                     chevron
                     bottomDivider
                     button

@@ -100,8 +100,9 @@ export const skeletDescriptionHelper = (
                     ]}
             />
 
-            {[1, 2, 3, 4, 5, 6].map(item => (
+            {[1, 2, 3, 4, 5, 6].map((item, index) => (
                 <SkeletonContent
+                    key={index}
                     containerStyle={{
                         marginLeft: 'auto',
                         marginRight: 'auto',

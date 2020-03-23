@@ -17,7 +17,7 @@ import ProductLocation from '../components/productScreen/ProductLocation';
 import Seller from '../components/sellerScreen/Seller';
 import SellerNewProducts from '../components/sellerScreen/SellerAllProducts';
 import EditProfile from '../components/profileScreen/EditProfile';
-import ArchivedAds from '../components/profileScreen/ArchivedAds';
+import ArchiveAds from '../components/profileScreen/ArchiveAds';
 import ActiveAds from '../components/profileScreen/ActiveAds';
 import ChooseScreen from '../components/sellScreen/chooseCategory/ChooseScreen';
 import ChooseSubScreen from '../components/sellScreen/chooseCategory/ChooseSubScreen';
@@ -27,6 +27,7 @@ import WaitingAds from '../components/profileScreen/WaitingAds';
 import Sign from '../components/auth/Sign';
 import ChooseRegion from '../components/sellScreen/chooseSoato/ChooseRegion';
 import ChooseDistrict from '../components/sellScreen/chooseSoato/ChooseDistrict';
+import ListFilter from '../components/homeScreen/ListFilter';
 
 
 const MainStack = createStackNavigator();
@@ -223,8 +224,8 @@ function MainApp() {
           headerTitle: getHeaderTitle(route),
         })} />
       <MainStack.Screen
-        name="ArchivedAds"
-        component={ArchivedAds}
+        name="ArchiveAds"
+        component={ArchiveAds}
         options={({ route }) => ({
           headerTitle: getHeaderTitle(route),
         })} />
@@ -269,6 +270,9 @@ export default function AppNavigator() {
         <ModalStack.Screen
           name="Sign"
           component={Sign} />
+        <ModalStack.Screen
+          name="ListFilter"
+          component={ListFilter} />
       </ModalStack.Navigator>
     </NavigationContainer>
   );
